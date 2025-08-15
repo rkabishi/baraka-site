@@ -161,71 +161,7 @@
     "title": "Photos",
     "subtitle": "A glimpse of life at Baraka",
     "images": [
-      {
-        "src": "assets/IMG-20250815-WA0001.jpg",
-        "alt": "Photo",
-        "caption": "Img 20250815 Wa0001"
-      },
-      {
-        "src": "assets/IMG-20250815-WA0002.jpg",
-        "alt": "Photo",
-        "caption": "Img 20250815 Wa0002"
-      },
-      {
-        "src": "assets/IMG-20250815-WA0003.jpg",
-        "alt": "Photo",
-        "caption": "Img 20250815 Wa0003"
-      },
-      {
-        "src": "assets/IMG-20250815-WA0004.jpg",
-        "alt": "Photo",
-        "caption": "Img 20250815 Wa0004"
-      },
-      {
-        "src": "assets/IMG-20250815-WA0005.jpg",
-        "alt": "Photo",
-        "caption": "Img 20250815 Wa0005"
-      },
-      {
-        "src": "assets/IMG-20250815-WA0006.jpg",
-        "alt": "Photo",
-        "caption": "Img 20250815 Wa0006"
-      },
-      {
-        "src": "assets/IMG-20250815-WA0007.jpg",
-        "alt": "Photo",
-        "caption": "Img 20250815 Wa0007"
-      },
-      {
-        "src": "assets/IMG-20250815-WA0008.jpg",
-        "alt": "Photo",
-        "caption": "Img 20250815 Wa0008"
-      },
-      {
-        "src": "assets/IMG-20250815-WA0009.jpg",
-        "alt": "Photo",
-        "caption": "Img 20250815 Wa0009"
-      },
-      {
-        "src": "assets/IMG-20250815-WA0010.jpg",
-        "alt": "Photo",
-        "caption": "Img 20250815 Wa0010"
-      },
-      {
-        "src": "assets/IMG-20250815-WA0011.jpg",
-        "alt": "Photo",
-        "caption": "Img 20250815 Wa0011"
-      },
-      {
-        "src": "assets/IMG-20250815-WA0012.jpg",
-        "alt": "Photo",
-        "caption": "Img 20250815 Wa0012"
-      },
-      {
-        "src": "assets/IMG-20250815-WA0013.jpg",
-        "alt": "Photo",
-        "caption": "Img 20250815 Wa0013"
-      },
+     
       {
         "src": "assets/IMG-20250815-WA0014.jpg",
         "alt": "Photo",
