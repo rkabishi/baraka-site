@@ -1,0 +1,14 @@
+[build]
+  publish = "."
+
+# Make sure the browser/CDN doesn’t cache your JSON config
+[[headers]]
+  for = "/data/content.json"
+  [headers.values]
+    Cache-Control = "no-store"
+
+# Cache images aggressively for speed
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
