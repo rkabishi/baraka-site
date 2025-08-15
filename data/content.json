@@ -1,0 +1,286 @@
+{
+  "site": {
+    "name": "Baraka Community & Family Centre",
+    "logo": "assets/baraka-logo.png",
+    "brand": {
+      "primary": "#6B3F18",
+      "accent": "#22C55E",
+      "bg": "#EAF7F1"
+    }
+  },
+  "hero": {
+    "eyebrow": "Scottish Charitable Incorporated Organisation (SCIO)",
+    "title": "Safe spaces, practical support, and community for families in West Glasgow.",
+    "lead": "Created by people with lived experience of seeking asylum, Baraka helps young people, women, families, and refugees thrive socially, emotionally, and economically.",
+    "image": "assets/IMG-20250815-WA0001.jpg",
+    "image_alt": "Families at Baraka",
+    "actions": [
+      {
+        "label": "Donate",
+        "href": "#donate"
+      },
+      {
+        "label": "Volunteer",
+        "href": "#get-involved",
+        "style": "secondary"
+      }
+    ],
+    "stats": [
+      {
+        "value": "4+",
+        "label": "Active programmes"
+      },
+      {
+        "value": "2024–25",
+        "label": "Lottery & Corra funded"
+      },
+      {
+        "value": "Weekly",
+        "label": "Food distribution"
+      }
+    ],
+    "right_kicker": "This month",
+    "right_title": "What’s on at Baraka",
+    "this_month": [
+      "Family Connection Hub — Saturdays, community activities for parents & kids.",
+      "Digital Hub — weekly sessions for parents and youths.",
+      "Wellness Hub — peer support & wellbeing cafés.",
+      "Food Distribution — weekly with FareShare."
+    ],
+    "right_note": "Want to join? "
+  },
+  "about": {
+    "title": "Our story & mission",
+    "story": "Baraka Community & Family Centre is a SCIO based in West Glasgow...",
+    "values": "We provide culturally sensitive, community-led services...",
+    "bullets": [
+      "Mission: Support young people, women, families, and refugees to thrive.",
+      "Funding: National Lottery, Corra Foundation, and Scottish Sadaqah."
+    ],
+    "values_title": "Empathy • Dignity • Solidarity • Empowerment",
+    "values_para": "Our programmes are co-designed with participants.",
+    "cta_title": "Need support?",
+    "cta_note": "We’ll listen and connect you to the right activity or service.",
+    "cta_label": "Get in touch",
+    "cta_href": "#contact"
+  },
+  "programmes_title": "What we run",
+  "programmes": [
+    {
+      "title": "Family Connection Hub",
+      "description": "Monthly family activities...",
+      "image": "assets/IMG-20250815-WA0001.jpg",
+      "image_alt": "Family activities",
+      "bullets": [
+        "Activities and creative play",
+        "Peer support",
+        "Open to West Glasgow"
+      ]
+    },
+    {
+      "title": "Digital Hub",
+      "description": "Weekly digital skills sessions...",
+      "image": "assets/IMG-20250815-WA0002.jpg",
+      "image_alt": "Digital skills",
+      "bullets": [
+        "Digital skills",
+        "CV & job search",
+        "Online safety"
+      ]
+    },
+    {
+      "title": "Wellness Hub",
+      "description": "Peer-led wellbeing cafés...",
+      "image": "assets/IMG-20250815-WA0003.jpg",
+      "image_alt": "Wellbeing",
+      "bullets": [
+        "Women’s café",
+        "Support circles"
+      ]
+    },
+    {
+      "title": "Food Distribution Service",
+      "description": "Weekly food support with partners.",
+      "image": "assets/IMG-20250815-WA0004.jpg",
+      "image_alt": "Food distribution",
+      "bullets": [
+        "Fresh & ambient foods",
+        "Volunteer-led",
+        "Dignified access"
+      ]
+    },
+    {
+      "title": "Baraka Thrive",
+      "description": "Workshops and community events.",
+      "image": "assets/IMG-20250815-WA0005.jpg",
+      "image_alt": "Baraka Thrive"
+    },
+    {
+      "title": "EmpowerHer (Women)",
+      "description": "Sewing & crochet; support circles.",
+      "image": "assets/IMG-20250815-WA0006.jpg",
+      "image_alt": "EmpowerHer"
+    }
+  ],
+  "get_involved": {
+    "title": "Volunteer or partner with us",
+    "volunteer": {
+      "intro": "We welcome friendly volunteers...",
+      "roles": [
+        "Food distribution",
+        "Family activities",
+        "Digital skills",
+        "Wellbeing support",
+        "Other"
+      ],
+      "email": "hello@baraka-centre.org"
+    },
+    "partner": {
+      "intro": "We work with schools, faith groups, and local services.",
+      "email": "hello@baraka-centre.org",
+      "note": "West Glasgow. By appointment."
+    }
+  },
+  "news_title": "Latest news",
+  "news": [
+    {
+      "title": "New: Weekly Food Collection",
+      "body": "We’ve partnered with FareShare...",
+      "date": "1 Aug 2025"
+    }
+  ],
+  "donate_title": "Support our work",
+  "donate": {
+    "intro": "Your donation helps us run community spaces...",
+    "paypal": "",
+    "stripe": "",
+    "justgiving": "",
+    "note": "Registered SCIO (Gift Aid where eligible)."
+  },
+  "gallery": {
+    "title": "Photos",
+    "subtitle": "A glimpse of life at Baraka",
+    "images": [
+      {
+        "src": "assets/IMG-20250815-WA0001.jpg",
+        "alt": "Photo",
+        "caption": "Img 20250815 Wa0001"
+      },
+      {
+        "src": "assets/IMG-20250815-WA0002.jpg",
+        "alt": "Photo",
+        "caption": "Img 20250815 Wa0002"
+      },
+      {
+        "src": "assets/IMG-20250815-WA0003.jpg",
+        "alt": "Photo",
+        "caption": "Img 20250815 Wa0003"
+      },
+      {
+        "src": "assets/IMG-20250815-WA0004.jpg",
+        "alt": "Photo",
+        "caption": "Img 20250815 Wa0004"
+      },
+      {
+        "src": "assets/IMG-20250815-WA0005.jpg",
+        "alt": "Photo",
+        "caption": "Img 20250815 Wa0005"
+      },
+      {
+        "src": "assets/IMG-20250815-WA0006.jpg",
+        "alt": "Photo",
+        "caption": "Img 20250815 Wa0006"
+      },
+      {
+        "src": "assets/IMG-20250815-WA0007.jpg",
+        "alt": "Photo",
+        "caption": "Img 20250815 Wa0007"
+      },
+      {
+        "src": "assets/IMG-20250815-WA0008.jpg",
+        "alt": "Photo",
+        "caption": "Img 20250815 Wa0008"
+      },
+      {
+        "src": "assets/IMG-20250815-WA0009.jpg",
+        "alt": "Photo",
+        "caption": "Img 20250815 Wa0009"
+      },
+      {
+        "src": "assets/IMG-20250815-WA0010.jpg",
+        "alt": "Photo",
+        "caption": "Img 20250815 Wa0010"
+      },
+      {
+        "src": "assets/IMG-20250815-WA0011.jpg",
+        "alt": "Photo",
+        "caption": "Img 20250815 Wa0011"
+      },
+      {
+        "src": "assets/IMG-20250815-WA0012.jpg",
+        "alt": "Photo",
+        "caption": "Img 20250815 Wa0012"
+      },
+      {
+        "src": "assets/IMG-20250815-WA0013.jpg",
+        "alt": "Photo",
+        "caption": "Img 20250815 Wa0013"
+      },
+      {
+        "src": "assets/IMG-20250815-WA0014.jpg",
+        "alt": "Photo",
+        "caption": "Img 20250815 Wa0014"
+      },
+      {
+        "src": "assets/IMG-20250815-WA0015.jpg",
+        "alt": "Photo",
+        "caption": "Img 20250815 Wa0015"
+      },
+      {
+        "src": "assets/IMG-20250815-WA0016.jpg",
+        "alt": "Photo",
+        "caption": "Img 20250815 Wa0016"
+      },
+      {
+        "src": "assets/IMG-20250815-WA0017.jpg",
+        "alt": "Photo",
+        "caption": "Img 20250815 Wa0017"
+      },
+      {
+        "src": "assets/IMG-20250815-WA0018.jpg",
+        "alt": "Photo",
+        "caption": "Img 20250815 Wa0018"
+      },
+      {
+        "src": "assets/IMG-20250815-WA0019.jpg",
+        "alt": "Photo",
+        "caption": "Img 20250815 Wa0019"
+      },
+      {
+        "src": "assets/IMG-20250815-WA0020.jpg",
+        "alt": "Photo",
+        "caption": "Img 20250815 Wa0020"
+      },
+      {
+        "src": "assets/IMG-20250815-WA0021.jpg",
+        "alt": "Photo",
+        "caption": "Img 20250815 Wa0021"
+      }
+    ]
+  },
+  "contact_title": "Get in touch",
+  "contact": {
+    "email": "hello@baraka-centre.org",
+    "visit_note": "West Glasgow (meetings by appointment).",
+    "socials": {
+      "facebook": "#",
+      "instagram": "#",
+      "whatsapp": "#"
+    },
+    "map_embed": ""
+  },
+  "legal": {
+    "scio": "SC052268",
+    "oscr_badge": "assets/oscr-badge.jpg"
+  }
+}
