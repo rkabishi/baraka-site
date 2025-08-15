@@ -73,6 +73,28 @@
     details#tests { margin: 24px auto; max-width: 1100px; }
     details#tests summary { cursor: pointer; font-weight: 700; }
     details#tests pre { background:#0b1220; color:#d1e7ff; padding:12px; border-radius:8px; overflow:auto; }
+  
+
+    /* --- Bigger header (scalable) --- */
+:root { --header-scale: 1.25; }  /* try 1.15–1.35 */
+
+header .nav { height: calc(64px * var(--header-scale)); }
+.logo img   { width:  calc(36px * var(--header-scale));
+              height: calc(36px * var(--header-scale)); }
+
+/* site name and menu links scale up too */
+#siteName { font-size: calc(1rem * var(--header-scale)); }
+.nav a    { font-size: calc(0.95rem * var(--header-scale));
+            margin-left: calc(18px * var(--header-scale)); }
+
+/* keep it comfortable on phones */
+@media (max-width: 900px) {
+  :root { --header-scale: 1.10; }
+  .nav a { margin-left: 14px; }
+}
+
+  
+  
   </style>
 </head>
 <body>
