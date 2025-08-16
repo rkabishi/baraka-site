@@ -157,6 +157,64 @@ header .nav { height: calc(100px * var(--header-scale)); }
 }
 
 
+
+/* === Slideshow styles (Photos) === */
+.slideshow {
+  position: relative;
+  border-radius: 16px;
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  overflow: hidden;
+  /* Size: pick one of these – keep both if you like */
+  aspect-ratio: 16 / 9;         /* modern browsers */
+  min-height: 320px;            /* fallback height */
+}
+.slideshow .slides { position: relative; width: 100%; height: 100%; }
+.slideshow .slide {
+  position: absolute; inset: 0;
+  opacity: 0; transition: opacity .5s ease-in-out;
+}
+.slideshow .slide.active { opacity: 1; }
+.slideshow .slide img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+.slideshow .caption {
+  position: absolute; left: 12px; bottom: 12px;
+  background: rgba(0,0,0,.45); color: #fff;
+  padding: 6px 10px; border-radius: 8px; font-size: 12px;
+}
+
+/* Prev/Next buttons */
+.slideshow .nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 42px; height: 42px; border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.6);
+  background: rgba(0,0,0,.25);
+  color: #fff; font-size: 22px; font-weight: 800; line-height: 1;
+  display: grid; place-items: center; cursor: pointer;
+  transition: filter .15s ease, transform .05s ease;
+  z-index: 2;
+}
+.slideshow .nav:hover { filter: brightness(1.15); transform: translateY(-50%) scale(1.03); }
+.slideshow .nav.prev { left: 10px; }
+.slideshow .nav.next { right: 10px; }
+
+/* Dots */
+.slideshow .dots {
+  position: absolute; left: 0; right: 0; bottom: 10px;
+  display: flex; justify-content: center; gap: 8px; z-index: 2;
+}
+.slideshow .dot {
+  width: 8px; height: 8px; border-radius: 999px;
+  background: rgba(255,255,255,.6); border: 0; padding: 0; cursor: pointer;
+}
+.slideshow .dot.active { background: #fff; }
+
+/* Mobile tweaks */
+@media (max-width: 900px) {
+  .slideshow { min-height: 240px; }
+}
+
   
   
   </style>
@@ -442,6 +500,79 @@ header .nav { height: calc(100px * var(--header-scale)); }
         <div class=\"donate-row\" style=\"margin:14px 0 6px;\">${dlinks.join('\n')}</div>
         <p class=\"notice\">${esc(d.donate?.note || '')}</p>`;
 
+      // GALLERY → Slideshow
+      const gal = document.getElementById('gallery');
+      const images = d.gallery?.images || [];
+      const slidesHtml = images.map((g,i)=>`
+        <div class="slide ${i===0?'active':''}">
+          <img src="${esc(g.src)}" alt="${esc(g.alt||'Photo')}" loading="lazy"/>
+          ${g.caption?`<div class="caption">${esc(g.caption)}</div>`:''}
+        </div>
+      `).join('');
+      const dotsHtml = images.map((_,i)=>`<button class="dot ${i===0?'active':''}" aria-label="Go to slide ${i+1}"></button>`).join('');
+
+      const slideshowId = "baraka-slideshow";
+      gal.innerHTML = `
+        <div class="kicker">${esc(d.gallery?.title || 'Photos')}</div>
+        <h2 class="section-title">${esc(d.gallery?.subtitle || 'A glimpse of life at Baraka')}</h2>
+        <div class="slideshow" id="${slideshowId}" aria-label="Photo slideshow">
+          <div class="slides">${slidesHtml}</div>
+          <button class="nav prev" data-prev aria-label="Previous slide">‹</button>
+          <button class="nav next" data-next aria-label="Next slide">›</button>
+          <div class="dots">${dotsHtml}</div>
+        </div>`;
+
+      // Hook up behaviour (auto-rotate + controls + pause-on-hover)
+      initSlideshow(slideshowId, images, { interval: 4000 });
+
+
+
+    function initSlideshow(id, images, {interval=4000}={}) {
+  const root = document.getElementById(id);
+  if (!root || !images.length) return;
+
+  const slides = root.querySelectorAll('.slide');
+  const dots = root.querySelectorAll('.dot');
+  const prevBtn = root.querySelector('[data-prev]');
+  const nextBtn = root.querySelector('[data-next]');
+
+  let idx = 0, timer = null;
+
+  function render() {
+    slides.forEach((s,i)=> s.classList.toggle('active', i===idx));
+    dots.forEach((d,i)=> d.classList.toggle('active', i===idx));
+  }
+  function go(n){ idx = (n + images.length) % images.length; render(); }
+  function next(){ go(idx + 1); }
+  function prev(){ go(idx - 1); }
+
+  function start(){ stop(); timer = setInterval(next, interval); }
+  function stop(){ if (timer) clearInterval(timer); timer = null; }
+  function restart(){ stop(); start(); }
+
+  prevBtn?.addEventListener('click', ()=>{ prev(); restart(); });
+  nextBtn?.addEventListener('click', ()=>{ next(); restart(); });
+  dots.forEach((d,i)=> d.addEventListener('click', ()=>{ idx=i; render(); restart(); }));
+
+  // Pause on hover / focus for accessibility
+  root.addEventListener('mouseenter', stop);
+  root.addEventListener('mouseleave', start);
+  root.addEventListener('focusin', stop);
+  root.addEventListener('focusout', start);
+
+  // Keyboard
+  root.addEventListener('keydown', (e)=>{
+    if (e.key === 'ArrowLeft') { prev(); restart(); }
+    if (e.key === 'ArrowRight'){ next(); restart(); }
+  });
+  root.tabIndex = 0; // make focusable
+
+  render(); start();
+}
+  
+
+      /*
+
       const gal = document.getElementById('gallery');
       const gitems = (d.gallery?.images||[]).map(g=>`
         <figure class=\"gimg\">
@@ -453,6 +584,8 @@ header .nav { height: calc(100px * var(--header-scale)); }
         <div class=\"kicker\">${esc(d.gallery?.title || 'Photos')}</div>
         <h2 class=\"section-title\">${esc(d.gallery?.subtitle || 'A glimpse of life at Baraka')}</h2>
         <div class=\"gallery\">${gitems}</div>`;
+
+      */
 
       const contact = document.getElementById('contact');
       const fb = d.contact?.socials?.facebook ? `<a href=\"${esc(d.contact.socials.facebook)}\">Facebook</a>`:'';
