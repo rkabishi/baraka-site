@@ -215,6 +215,40 @@ header .nav { height: calc(100px * var(--header-scale)); }
   .slideshow { min-height: 240px; }
 }
 
+
+/* === Body background using the logo === */
+body.logo-bg { /* base: keep your light green as fallback */
+  background-color: var(--bg);
+}
+
+/* A) Subtle repeating watermark pattern */
+body.logo-bg.pattern {
+  background:
+    /* soft white film for readability */
+    linear-gradient(rgba(255,255,255,.85), rgba(255,255,255,.85)),
+    var(--logo-image) 0 0 / 120px auto repeat,
+    var(--bg);
+}
+
+/* B) One big centred logo */
+body.logo-bg.centered {
+  background:
+    linear-gradient(rgba(255,255,255,.85), rgba(255,255,255,.85)),
+    var(--logo-image) center 24px / 480px auto no-repeat fixed,
+    var(--bg);
+}
+
+/* (optional) smaller/lighter overlay on phones */
+@media (max-width: 900px) {
+  body.logo-bg.pattern {
+    background:
+      linear-gradient(rgba(255,255,255,.90), rgba(255,255,255,.90)),
+      var(--logo-image) 0 0 / 96px auto repeat,
+      var(--bg);
+  }
+}
+
+
   
   
   </style>
@@ -383,6 +417,15 @@ header .nav { height: calc(100px * var(--header-scale)); }
       applyBrand(d.site && d.site.brand || {});
       if(d.site?.name) document.getElementById('siteName').textContent = d.site.name;
       if(d.site?.logo) document.getElementById('logo').src = d.site.logo;
+
+            // NEW: set body background to the logo image via a CSS variable
+      if (d.site?.logo) {
+        document.documentElement.style.setProperty('--logo-image', `url("${esc(d.site.logo)}")`);
+        document.body.classList.add('logo-bg', 'pattern');   // use 'pattern' OR 'centered'
+        // To use the big centred logo instead, do:
+        // document.body.classList.remove('pattern'); document.body.classList.add('centered');
+      }
+
 
       const heroL = document.getElementById('heroLeft');
       const eyebrow = d.hero?.eyebrow ? `<span class=\"eyebrow\">${esc(d.hero.eyebrow)}</span>` : '';
