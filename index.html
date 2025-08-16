@@ -421,7 +421,7 @@ body.logo-bg.centered {
             // NEW: set body background to the logo image via a CSS variable
       if (d.site?.logo) {
         document.documentElement.style.setProperty('--logo-image', `url("${esc(d.site.logo)}")`);
-        document.body.classList.add('logo-bg', 'pattern');   // use 'pattern' OR 'centered'
+        document.body.classList.add('logo-bg', 'centered');   // use 'pattern' OR 'centered'
         // To use the big centred logo instead, do:
         // document.body.classList.remove('pattern'); document.body.classList.add('centered');
       }
