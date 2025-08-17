@@ -114,6 +114,10 @@
     applyBrand(d.site?.brand || {});
     buildHeader(d);
     buildFooter(d);
+
+    
+  // ✅ tell pages the content is ready
+  document.dispatchEvent(new CustomEvent('site:loaded', { detail: d }));
   });
 })();
 

@@ -163,146 +163,132 @@
 
   <!-- Homepage render (uses shared helpers; no duplicate header code) -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const F = JSON.parse(document.getElementById('default-content').textContent || '{}');
-      const d = (window.__SITE__ && Object.keys(window.__SITE__).length) ? window.__SITE__ : F;
-      const E = SITE.esc;
+  // --- helpers for optional gallery auto-discovery ---
+  function checkImage(src){ return new Promise(res => { const i=new Image(); i.onload=()=>res(true); i.onerror=()=>res(false); i.src=src; }); }
+  async function autoDiscoverGallery({prefix='assets/gallery-', exts=['.jpg','.jpeg','.png','.webp'], max=50, stopAfterMisses=8}={}){
+    const out=[]; let misses=0;
+    for(let n=1;n<=max;n++){
+      let added=false;
+      for(const ext of exts){
+        const p = `${prefix}${n}${ext}`;
+        // eslint-disable-next-line no-await-in-loop
+        if(await checkImage(p)){ out.push({src:p, alt:'Photo'}); added=true; break; }
+      }
+      if(!added){ if(++misses>=stopAfterMisses) break; } else { misses=0; }
+    }
+    return out;
+  }
 
-      /* HERO LEFT */
-      const heroL = document.getElementById('heroLeft');
-      const eyebrow = d.hero?.eyebrow ? `<span class="eyebrow">${E(d.hero.eyebrow)}</span>` : '';
-      const actions = (d.hero?.actions||[]).map(a=>`<a class="btn ${a.style==='secondary'?'secondary':''}" href="${E(a.href)}">${E(a.label)}</a>`).join(' ');
-      const stats = (d.hero?.stats||[]).map(s=>`<div class="stat"><h3>${E(s.value)}</h3><div class="notice">${E(s.label)}</div></div>`).join('');
-      heroL.innerHTML = `
-        ${eyebrow}
-        <h1>${E(d.hero?.title||'')}</h1>
-        <p class="lead">${E(d.hero?.lead||'')}</p>
-        <div style="display:flex;gap:12px;margin-top:18px;flex-wrap:wrap">${actions}<a href="programmes.html" style="align-self:center;font-weight:700">See our programmes →</a></div>
-        <div class="stats">${stats}</div>
-      `;
+  // --- main render; identical output, just wrapped as a function ---
+  async function renderHome(d){
+    const E = SITE.esc;
 
-      /* HERO RIGHT */
-      const heroR = document.getElementById('heroRight');
-      const heroImg = d.hero?.image ? `<img src="${E(d.hero.image)}" alt="${E(d.hero.image_alt||'Photo')}" loading="lazy" style="width:100%;border-radius:12px;margin-bottom:10px">` : '';
-      const items = (d.hero?.this_month||[]).map(i=>`<li>${E(i)}</li>`).join('');
-      heroR.innerHTML = `
-        ${heroImg}
-        <div class="kicker">${E(d.hero?.right_kicker || 'This month')}</div>
-        <h3 style="margin:6px 0 10px">${E(d.hero?.right_title || 'What’s on at Baraka')}</h3>
-        <ul style="margin:0;padding-left:18px;color:var(--muted);line-height:1.6">${items}</ul>
-        <p class="notice" style="margin-top:12px">${d.hero?.right_note ? E(d.hero.right_note) : 'Want to join? '}<a href="contact.html">Contact us</a> to check times and locations.</p>
-      `;
+    /* HERO LEFT */
+    const heroL = document.getElementById('heroLeft');
+    const eyebrow = d.hero?.eyebrow ? `<span class="eyebrow">${E(d.hero.eyebrow)}</span>` : '';
+    const actions = (d.hero?.actions||[]).map(a=>`<a class="btn ${a.style==='secondary'?'secondary':''}" href="${E(a.href)}">${E(a.label)}</a>`).join(' ');
+    const stats = (d.hero?.stats||[]).map(s=>`<div class="stat"><h3>${E(s.value)}</h3><div class="notice">${E(s.label)}</div></div>`).join('');
+    heroL.innerHTML = `
+      ${eyebrow}
+      <h1>${E(d.hero?.title||'')}</h1>
+      <p class="lead">${E(d.hero?.lead||'')}</p>
+      <div style="display:flex;gap:12px;margin-top:18px;flex-wrap:wrap">${actions}<a href="programmes.html" style="align-self:center;font-weight:700">See our programmes →</a></div>
+      <div class="stats">${stats}</div>
+    `;
 
-      /* ABOUT */
-      const about = document.getElementById('about');
-      const bullets = (d.about?.bullets||[]).map(b=>`<li>${E(b)}</li>`).join('');
-      about.innerHTML = `
-        <div class="two">
-          <div class="card">
-            <div class="kicker">About us</div>
-            <h2 class="section-title">${E(d.about?.title || 'Our story & mission')}</h2>
-            <p>${E(d.about?.story || '')}</p>
-            <p>${E(d.about?.values || '')}</p>
-            <ul>${bullets}</ul>
-          </div>
-          <div class="card">
-            <div class="kicker">What we value</div>
-            <h2 class="section-title">${E(d.about?.values_title || 'Empathy • Dignity • Solidarity • Empowerment')}</h2>
-            <p>${E(d.about?.values_para || '')}</p>
-            <div class="card" style="margin-top:10px">
-              <h3 style="margin:0 0 6px">${E(d.about?.cta_title || 'Need support?')}</h3>
-              <p class="notice" style="margin:0 0 10px">${E(d.about?.cta_note || 'We’ll listen and connect you to the right activity or service.')}</p>
-              <a href="contact.html" class="btn">${E(d.about?.cta_label || 'Get in touch')}</a>
-            </div>
-          </div>
-        </div>
-      `;
+    /* HERO RIGHT */
+    const heroR = document.getElementById('heroRight');
+    const heroImg = d.hero?.image ? `<img src="${E(d.hero.image)}" alt="${E(d.hero.image_alt||'Photo')}" loading="lazy" style="width:100%;border-radius:12px;margin-bottom:10px">` : '';
+    const items = (d.hero?.this_month||[]).map(i=>`<li>${E(i)}</li>`).join('');
+    heroR.innerHTML = `
+      ${heroImg}
+      <div class="kicker">${E(d.hero?.right_kicker || 'This month')}</div>
+      <h3 style="margin:6px 0 10px">${E(d.hero?.right_title || 'What’s on at Baraka')}</h3>
+      <ul style="margin:0;padding-left:18px;color:var(--muted);line-height:1.6">${items}</ul>
+      <p class="notice" style="margin-top:12px">${d.hero?.right_note ? E(d.hero.right_note) : 'Want to join? '}<a href="contact.html">Contact us</a> to check times and locations.</p>
+    `;
 
-      /* PROGRAMMES (make card clickable if link is present) */
-      const programmes = document.getElementById('programmes');
-      const progs = (d.programmes || []).map(p => {
-        // ensure Family Connection Hub uses your asset + detail page
-        if (p.title && /family connection/i.test(p.title)) {
-          p = {...p, image: 'assets/2.jpg', image_alt: 'Family Connection Hub', link: 'family-connection-hub.html'};
-        }
-        const inner = `
-          ${p.image ? `<img class="prog-img" src="${E(p.image)}" alt="${E(p.image_alt || p.title || 'Programme image')}" loading="lazy">` : ''}
-          <h3>${E(p.title||'')}</h3>
-          <p>${E(p.description||'')}</p>
-          ${p.bullets ? `<ul>${p.bullets.map(li => `<li>${E(li)}</li>`).join('')}</ul>` : ''}
-        `;
-        return p.link ? `<a class="card program" href="${E(p.link)}" aria-label="${E(p.title)}">${inner}</a>`
-                      : `<div class="card program">${inner}</div>`;
-      }).join('');
-      programmes.innerHTML = `
-        <div class="kicker">Programmes</div>
-        <h2 class="section-title">${E(d.programmes_title || 'What we run')}</h2>
-        <div class="grid">${progs}</div>
-      `;
-
-      /* GET INVOLVED (mini block on homepage) */
-      const gi = document.getElementById('get-involved');
-      const roleOptions = (d.get_involved?.volunteer?.roles || []).map(r=>`<option>${E(r)}</option>`).join('');
-      const volunteerEmail = E(d.get_involved?.volunteer?.email || d.contact?.email || '');
-      const partnerEmail = E(d.get_involved?.partner?.email || d.contact?.email || '');
-      gi.innerHTML = `
-        <div class="kicker">Get involved</div>
-        <h2 class="section-title">${E(d.get_involved?.title || 'Volunteer or partner with us')}</h2>
-        <div class="two">
-          <div class="card">
-            <h3>Volunteer</h3>
-            <p>${E(d.get_involved?.volunteer?.intro || 'We welcome friendly volunteers for activities, mentoring, logistics, and translation.')}</p>
-            <form action="mailto:${volunteerEmail}" method="post" enctype="text/plain" onsubmit="alert('Thank you! We\\'ll be in touch.');">
-              <div class="two">
-                <div><label class="notice">Name</label><input required placeholder="Your full name"></div>
-                <div><label class="notice">Email</label><input required type="email" placeholder="you@example.com"></div>
-              </div>
-              <div style="margin-top:10px"><label class="notice">How would you like to help?</label><select>${roleOptions}</select></div>
-              <div style="margin-top:10px"><label class="notice">Message</label><textarea rows="4" placeholder="Tell us a bit about yourself"></textarea></div>
-              <div style="margin-top:12px"><button class="btn secondary" type="submit">Send</button></div>
-            </form>
-            <p class="notice" style="margin-top:8px">Prefer email? Write to <a href="mailto:${volunteerEmail}">${volunteerEmail}</a></p>
-          </div>
-          <div class="card">
-            <h3>Partner or refer</h3>
-            <p>${E(d.get_involved?.partner?.intro || 'We work with schools, faith groups, and local services. Refer a family or propose a joint activity.')}</p>
-            <a class="btn" href="mailto:${partnerEmail}?subject=Partnership%20enquiry">Email us</a>
-            <p class="notice" style="margin-top:8px">${E(d.get_involved?.partner?.note || 'We are based in West Glasgow. Meetings by appointment.')}</p>
-          </div>
-        </div>
-      `;
-
-      /* NEWS */
-      const news = document.getElementById('news');
-      const newsCards = (d.news||[]).map(n=>`
+    /* ABOUT */
+    const about = document.getElementById('about');
+    const bullets = (d.about?.bullets||[]).map(b=>`<li>${E(b)}</li>`).join('');
+    about.innerHTML = `
+      <div class="two">
         <div class="card">
-          <h3>${E(n.title)}</h3>
-          <p>${E(n.body)}</p>
-          ${n.date?`<p class="notice">Posted: <time>${E(n.date)}</time></p>`:''}
-        </div>`).join('');
-      news.innerHTML = `
-        <div class="kicker">Updates</div>
-        <h2 class="section-title">${E(d.news_title || 'Latest news')}</h2>
-        <div class="grid">${newsCards}</div>
-      `;
+          <div class="kicker">About us</div>
+          <h2 class="section-title">${E(d.about?.title || 'Our story & mission')}</h2>
+          <p>${E(d.about?.story || '')}</p>
+          <p>${E(d.about?.values || '')}</p>
+          <ul>${bullets}</ul>
+        </div>
+        <div class="card">
+          <div class="kicker">What we value</div>
+          <h2 class="section-title">${E(d.about?.values_title || 'Empathy • Dignity • Solidarity • Empowerment')}</h2>
+          <p>${E(d.about?.values_para || '')}</p>
+          <div class="card" style="margin-top:10px">
+            <h3 style="margin:0 0 6px">${E(d.about?.cta_title || 'Need support?')}</h3>
+            <p class="notice" style="margin:0 0 10px">${E(d.about?.cta_note || 'We’ll listen and connect you to the right activity or service.')}</p>
+            <a href="contact.html" class="btn">${E(d.about?.cta_label || 'Get in touch')}</a>
+          </div>
+        </div>
+      </div>
+    `;
 
-      /* DONATE */
-      const donate = document.getElementById('donate');
-      const dlinks = [];
-      if(d.donate?.paypal) dlinks.push(`<a class="btn" href="${E(d.donate.paypal)}">Donate via PayPal</a>`);
-      if(d.donate?.stripe) dlinks.push(`<a class="btn secondary" href="${E(d.donate.stripe)}">Donate via Stripe</a>`);
-      if(d.donate?.justgiving) dlinks.push(`<a class="btn" href="${E(d.donate.justgiving)}">JustGiving</a>`);
-      donate.innerHTML = `
-        <div class="kicker">Donate</div>
-        <h2 class="section-title">${E(d.donate_title || 'Support our work')}</h2>
-        <p>${E(d.donate?.intro || 'Your donation helps us run weekly food support, skills workshops, and safe community spaces.')}</p>
-        <div class="donate-row" style="margin:14px 0 6px">${dlinks.join(' ')}</div>
-        <p class="notice">${E(d.donate?.note || '')}</p>
+    /* PROGRAMMES */
+    const programmes = document.getElementById('programmes');
+    const progs = (d.programmes || []).map(p => {
+      if (p.title && /family connection/i.test(p.title)) {
+        p = {...p, image:'assets/2.jpg', image_alt:'Family Connection Hub', link:'family-connection-hub.html'};
+      }
+      const inner = `
+        ${p.image ? `<img class="prog-img" src="${E(p.image)}" alt="${E(p.image_alt || p.title || 'Programme image')}" loading="lazy">` : ''}
+        <h3>${E(p.title||'')}</h3>
+        <p>${E(p.description||'')}</p>
+        ${p.bullets ? `<ul>${p.bullets.map(li => `<li>${E(li)}</li>`).join('')}</ul>` : ''}
       `;
+      return p.link ? `<a class="card program" href="${E(p.link)}" aria-label="${E(p.title)}">${inner}</a>` : `<div class="card program">${inner}</div>`;
+    }).join('');
+    programmes.innerHTML = `
+      <div class="kicker">Programmes</div>
+      <h2 class="section-title">${E(d.programmes_title || 'What we run')}</h2>
+      <div class="grid">${progs}</div>
+    `;
 
-      /* GALLERY → slideshow (uses shared init) */
-      const gal = document.getElementById('gallery');
-      const imgs = d.gallery?.images || [];
+    /* NEWS */
+    const news = document.getElementById('news');
+    const newsCards = (d.news||[]).map(n=>`
+      <div class="card">
+        <h3>${E(n.title)}</h3>
+        <p>${E(n.body)}</p>
+        ${n.date?`<p class="notice">Posted: <time>${E(n.date)}</time></p>`:''}
+      </div>`).join('');
+    news.innerHTML = `
+      <div class="kicker">Updates</div>
+      <h2 class="section-title">${E(d.news_title || 'Latest news')}</h2>
+      <div class="grid">${newsCards}</div>
+    `;
+
+    /* DONATE */
+    const donate = document.getElementById('donate');
+    const dlinks = [];
+    if(d.donate?.paypal) dlinks.push(`<a class="btn" href="${E(d.donate.paypal)}">Donate via PayPal</a>`);
+    if(d.donate?.stripe) dlinks.push(`<a class="btn secondary" href="${E(d.donate.stripe)}">Donate via Stripe</a>`);
+    if(d.donate?.justgiving) dlinks.push(`<a class="btn" href="${E(d.donate.justgiving)}">JustGiving</a>`);
+    donate.innerHTML = `
+      <div class="kicker">Donate</div>
+      <h2 class="section-title">${E(d.donate_title || 'Support our work')}</h2>
+      <p>${E(d.donate?.intro || 'Your donation helps us run weekly food support, skills workshops, and safe community spaces.')}</p>
+      <div class="donate-row" style="margin:14px 0 6px">${dlinks.join(' ')}</div>
+      <p class="notice">${E(d.donate?.note || '')}</p>
+    `;
+
+    /* GALLERY → slideshow */
+    const gal = document.getElementById('gallery');
+    let imgs = d.gallery?.images || [];
+    if (!imgs.length) {  // optional auto-discover fallback
+      imgs = await autoDiscoverGallery();
+    }
+
+    if (imgs.length) {
       const slidesHtml = imgs.map((g,i)=>`
         <div class="slide ${i===0?'active':''}">
           <img src="${E(g.src)}" alt="${E(g.alt||'Photo')}" loading="lazy">
@@ -320,38 +306,59 @@
           <div class="dots">${dotsHtml}</div>
         </div>`;
       SITE.initSlideshow(slideshowId, imgs, { interval: 4000 });
+    } else {
+      gal.innerHTML = `
+        <div class="kicker">${E(d.gallery?.title || 'Photos')}</div>
+        <h2 class="section-title">${E(d.gallery?.subtitle || 'A glimpse of life at Baraka')}</h2>
+        <p class="notice">Add images to <code>data/content.json → gallery.images</code> or upload files named <code>assets/gallery-1.jpg</code>, <code>gallery-2.jpg</code>, …</p>`;
+    }
 
-      /* CONTACT (homepage block) */
-      const contact = document.getElementById('contact');
-      const fb = d.contact?.socials?.facebook ? `<a href="${E(d.contact.socials.facebook)}">Facebook</a>`:'';
-      const ig = d.contact?.socials?.instagram ? `<a href="${E(d.contact.socials.instagram)}">Instagram</a>`:'';
-      const wa = d.contact?.socials?.whatsapp ? `<a href="${E(d.contact.socials.whatsapp)}">WhatsApp</a>`:'';
-      const socials = [fb,ig,wa].filter(Boolean).join(' · ');
-      contact.innerHTML = `
-        <div class="kicker">Contact</div>
-        <h2 class="section-title">${E(d.contact_title || 'Get in touch')}</h2>
-        <div class="two">
-          <div class="card">
-            <h3>Message us</h3>
-            <form action="mailto:${E(d.contact?.email || '')}" method="post" enctype="text/plain" onsubmit="alert('Thanks! We\\'ll reply soon.');">
-              <div class="two">
-                <div><label class="notice">Name</label><input required placeholder="Your name"></div>
-                <div><label class="notice">Email</label><input required type="email" placeholder="you@example.com"></div>
-              </div>
-              <div style="margin-top:10px"><label class="notice">Your message</label><textarea rows="4" placeholder="How can we help?"></textarea></div>
-              <div style="margin-top:12px"><button class="btn" type="submit">Send</button></div>
-            </form>
-            ${d.contact?.email ? `<p class="notice" style="margin-top:8px">Email: <a href="mailto:${E(d.contact.email)}">${E(d.contact.email)}</a></p>`:''}
-          </div>
-          <div class="card">
-            <h3>Visit</h3>
-            <p>${E(d.contact?.visit_note || 'West Glasgow (meetings by appointment).')}</p>
-            ${d.contact?.map_embed || ''}
-            ${socials?`<p class="notice">Follow us: ${socials}</p>`:''}
-          </div>
-        </div>`;
-    });
-  </script>
+    /* CONTACT (homepage block) */
+    const contact = document.getElementById('contact');
+    const fb = d.contact?.socials?.facebook ? `<a href="${E(d.contact.socials.facebook)}">Facebook</a>`:'';
+    const ig = d.contact?.socials?.instagram ? `<a href="${E(d.contact.socials.instagram)}">Instagram</a>`:'';
+    const wa = d.contact?.socials?.whatsapp ? `<a href="${E(d.contact.socials.whatsapp)}">WhatsApp</a>`:'';
+    const socials = [fb,ig,wa].filter(Boolean).join(' · ');
+    contact.innerHTML = `
+      <div class="kicker">Contact</div>
+      <h2 class="section-title">${E(d.contact_title || 'Get in touch')}</h2>
+      <div class="two">
+        <div class="card">
+          <h3>Message us</h3>
+          <form action="mailto:${E(d.contact?.email || '')}" method="post" enctype="text/plain" onsubmit="alert('Thanks! We\\'ll reply soon.');">
+            <div class="two">
+              <div><label class="notice">Name</label><input required placeholder="Your name"></div>
+              <div><label class="notice">Email</label><input required type="email" placeholder="you@example.com"></div>
+            </div>
+            <div style="margin-top:10px"><label class="notice">Your message</label><textarea rows="4" placeholder="How can we help?"></textarea></div>
+            <div style="margin-top:12px"><button class="btn" type="submit">Send</button></div>
+          </form>
+          ${d.contact?.email ? `<p class="notice" style="margin-top:8px">Email: <a href="mailto:${E(d.contact.email)}">${E(d.contact.email)}</a></p>`:''}
+        </div>
+        <div class="card">
+          <h3>Visit</h3>
+          <p>${E(d.contact?.visit_note || 'West Glasgow (meetings by appointment).')}</p>
+          ${d.contact?.map_embed || ''}
+          ${socials?`<p class="notice">Follow us: ${socials}</p>`:''}
+        </div>
+      </div>`;
+  }
+
+  // --- wait for site data, with a graceful fallback ---
+  document.addEventListener('site:loaded', (e)=> { renderHome(e.detail); });
+  if (window.__SITE__) {
+    renderHome(window.__SITE__);
+  } else {
+    // fallback after 0.8s if content.json can't be fetched (e.g., local file preview)
+    setTimeout(async ()=>{
+      if (!window.__SITE__) {
+        const F = JSON.parse(document.getElementById('default-content').textContent || '{}');
+        await renderHome(F);
+      }
+    }, 800);
+  }
+</script>
+
 </body>
 </html>
 
