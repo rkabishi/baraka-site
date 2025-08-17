@@ -162,7 +162,7 @@
   <script src="assets/site.js"></script>
 
   <!-- Homepage render (uses shared helpers; no duplicate header code) -->
-  <script>
+<script>
   // --- helpers for optional gallery auto-discovery ---
   function checkImage(src){ return new Promise(res => { const i=new Image(); i.onload=()=>res(true); i.onerror=()=>res(false); i.src=src; }); }
   async function autoDiscoverGallery({prefix='assets/gallery-', exts=['.jpg','.jpeg','.png','.webp'], max=50, stopAfterMisses=8}={}){
