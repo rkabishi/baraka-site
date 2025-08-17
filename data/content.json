@@ -164,45 +164,76 @@
     "images": [
      
       {
-        "src": "assets/IMG-20250815-WA0014.jpg",
-        "alt": "Photo",
-        "caption": "Img 20250815 Wa0014"
+        "src": "assets/9.jpg",
+        "alt": "Families",
+        "caption": "Family Hub"
       },
       {
-        "src": "assets/IMG-20250815-WA0015.jpg",
-        "alt": "Photo",
-        "caption": "Img 20250815 Wa0015"
+        "src": "assets/10.jpg",
+        "alt": "Families",
+        "caption": "Family Hub"
       },
       {
-        "src": "assets/IMG-20250815-WA0016.jpg",
-        "alt": "Photo",
-        "caption": "Img 20250815 Wa0016"
+        "src": "assets/11.jpg",
+        "alt": "Families",
+        "caption": "Family Hub"
       },
       {
-        "src": "assets/IMG-20250815-WA0017.jpg",
-        "alt": "Photo",
-        "caption": "Img 20250815 Wa0017"
+        "src": "assets/12.jpg",
+        "alt": "Families",
+        "caption": "Family Hub"
       },
       {
-        "src": "assets/IMG-20250815-WA0018.jpg",
-        "alt": "Photo",
-        "caption": "Img 20250815 Wa0018"
+        "src": "assets/13.jpg",
+        "alt": "Workshop",
+        "caption": "Digital Hub"
       },
       {
-        "src": "assets/IMG-20250815-WA0019.jpg",
-        "alt": "Photo",
-        "caption": "Img 20250815 Wa0019"
+        "src": "assets/14.jpg",
+        "alt": "Workshop",
+        "caption": "Digital Hub"
       },
       {
-        "src": "assets/IMG-20250815-WA0020.jpg",
-        "alt": "Photo",
-        "caption": "Img 20250815 Wa0020"
+        "src": "assets/15.jpg",
+        "alt": "Workshop",
+        "caption": "Digital Hub"
       },
       {
-        "src": "assets/IMG-20250815-WA0021.jpg",
-        "alt": "Photo",
-        "caption": "Img 20250815 Wa0021"
+        "src": "assets/16.jpg",
+        "alt": "Workshop",
+        "caption": "Digital Hub"
+      },
+      {
+        "src": "assets/17.jpg",
+        "alt": "Food Service",
+        "caption": "Food Collection"
+      },
+      {
+        "src": "assets/18.jpg",
+        "alt": "Food Service",
+        "caption": "Food Collection"
+      },
+      {
+        "src": "assets/19.jpg",
+        "alt": "Food Service",
+        "caption": "Food Collection"
+      },
+      {
+        "src": "assets/20.jpg",
+        "alt": "Food Service",
+        "caption": "Food Collection"
+      },
+      {
+        "src": "assets/21.jpg",
+        "alt": "Food Service",
+        "caption": "Food Collection"
       }
+
+
+
+
+
+
     ]
   },
   "contact_title": "Get in touch",
