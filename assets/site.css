@@ -1,0 +1,82 @@
+:root{
+  --brand:#0ea5e9; --brand-dark:#0369a1; --accent:#22c55e;
+  --ink:#0f172a; --muted:#475569; --bg:#EAF7F1;
+  --card:#EAF7F1; --card-border:#d1e7dd; --ring:rgba(14,165,233,.35);
+
+  /* nav sizing that "fits the space" */
+  --nav-gap: clamp(8px, 1.2vw, 14px);
+  --nav-h: clamp(36px, 4.2vw, 44px);
+  --nav-pad-x: clamp(10px, 1.6vw, 16px);
+  --nav-fs: clamp(13px, 1.4vw, 16px);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--brand-dark);text-decoration:none}
+
+/* Layout */
+.container{max-width:1100px;margin:0 auto;padding:0 20px}
+main.container{padding:32px 20px}
+.kicker{color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-bottom:8px;font-size:12px}
+.section-title{font-size:28px;margin:0 0 12px}
+.card{background:var(--card);border:1px solid var(--card-border);border-radius:18px;padding:18px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.lead{color:var(--muted);font-size:18px}
+.notice{font-size:13px;color:#64748b}
+.btn{display:inline-block;padding:12px 18px;border-radius:12px;font-weight:700;background:var(--brand);color:#fff;box-shadow:0 6px 16px rgba(2,132,199,.25)}
+.btn.secondary{background:var(--accent);box-shadow:0 6px 16px rgba(34,197,94,.25)}
+.footer{padding:28px 0 40px;color:var(--muted);font-size:14px;border-top:1px solid #e2e8f0}
+.oscr img{height:40px;border-radius:6px}
+
+/* Header */
+header.site-header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(248,250,252,.85);backdrop-filter:blur(8px);
+  border-bottom:1px solid #e2e8f0;
+}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--ink)}
+.logo img{width:36px;height:36px;border-radius:8px;object-fit:cover;background:#e2e8f0}
+#siteName{font-size:clamp(16px,2.2vw,20px)}
+
+/* Menu fits space + aligned */
+.menu{display:flex;align-items:center;gap:var(--nav-gap);flex-wrap:wrap}
+.menu a{
+  display:inline-flex;align-items:center;justify-content:center;
+  height:var(--nav-h);padding:0 var(--nav-pad-x);
+  font-weight:700;font-size:var(--nav-fs);line-height:1;border-radius:10px;
+  background:var(--accent);color:#fff;border:1px solid color-mix(in srgb, var(--accent) 70%, transparent);
+  box-shadow:0 6px 16px rgba(34,197,94,.25);
+  transition:transform .05s ease, filter .15s ease
+}
+.menu a:hover{filter:brightness(.95);transform:translateY(-1px)}
+.menu a.active{outline:2px solid var(--brand);}
+
+/* Mobile menu */
+.menu-toggle{
+  display:none;appearance:none;border:1px solid #cbd5e1;background:#fff;
+  border-radius:10px;padding:8px 10px;font-weight:700;color:#0f172a;
+}
+@media (max-width:900px){
+  .menu-toggle{display:inline-block}
+  .menu{display:none;width:100%;margin-top:10px}
+  .nav{flex-wrap:wrap;gap:10px}
+  .menu.open{display:flex}
+  .grid{grid-template-columns:1fr}
+  .two{grid-template-columns:1fr}
+}
+
+/* Slideshow (shared) */
+.slideshow{position:relative;border-radius:16px;border:1px solid var(--card-border);background:var(--card);overflow:hidden;aspect-ratio:16/9;min-height:320px}
+.slideshow .slides{position:relative;width:100%;height:100%}
+.slideshow .slide{position:absolute;inset:0;opacity:0;transition:opacity .5s ease-in-out}
+.slideshow .slide.active{opacity:1}
+.slideshow .slide img{width:100%;height:100%;object-fit:cover;display:block}
+.slideshow .caption{position:absolute;left:12px;bottom:12px;background:rgba(0,0,0,.45);color:#fff;padding:6px 10px;border-radius:8px;font-size:12px}
+.slideshow .nav{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:999px;border:1px solid rgba(255,255,255,.6);background:rgba(0,0,0,.25);color:#fff;font-size:22px;font-weight:800;display:grid;place-items:center;cursor:pointer;z-index:2}
+.slideshow .nav.prev{left:10px}.slideshow .nav.next{right:10px}
+.slideshow .dots{position:absolute;left:0;right:0;bottom:10px;display:flex;justify-content:center;gap:8px;z-index:2}
+.slideshow .dot{width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.6);border:0;padding:0;cursor:pointer}
+.slideshow .dot.active{background:#fff}
+@media (max-width:900px){.slideshow{min-height:240px}}

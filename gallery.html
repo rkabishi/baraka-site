@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gallery — Baraka Community & Family Centre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head><body>
+
+<header class="site-header">
+  <div class="container nav">
+    <a class="logo" href="index.html"><img id="logo" src="assets/baraka-logo.png" alt="Baraka logo"><span id="siteName">Baraka Community & Family Centre</span></a>
+    <button class="menu-toggle" aria-expanded="false" aria-controls="site-menu">Menu</button>
+    <nav id="site-menu" class="menu" aria-label="Main menu"></nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="kicker">Gallery</div>
+  <h1 class="section-title">Photos & videos</h1>
+
+  <section class="card">
+    <h3>Photos</h3>
+    <div class="slideshow" id="gallery-slideshow" aria-label="Gallery slideshow">
+      <div class="slides"></div>
+      <button class="nav prev" data-prev aria-label="Previous slide">‹</button>
+      <button class="nav next" data-next aria-label="Next slide">›</button>
+      <div class="dots"></div>
+    </div>
+  </section>
+
+  <section class="card" style="margin-top:18px">
+    <h3>Videos</h3>
+    <div id="video-grid" class="grid"></div>
+    <p class="notice" id="video-note" style="margin-top:8px"></p>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;">
+    <div>© <span id="year"></span> <span id="footerName">Baraka Community & Family Centre</span> · All rights reserved.<br><span class="notice">Registered SCIO <span id="scio"></span></span></div>
+    <div class="oscr"><img id="oscrBadge" src="assets/oscr-badge.jpg" alt="OSCR badge"/></div>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const g = (window.__SITE__?.gallery)||{};
+    const imgs = g.images||[];
+    if(imgs.length){
+      SITE.initSlideshow('gallery-slideshow', imgs, {interval:4000});
+    } else {
+      document.getElementById('gallery-slideshow').outerHTML = '<p class="notice">Add gallery.images in data/content.json to show photos.</p>';
+    }
+
+    const vids = g.videos||[]; // array of YouTube IDs or full embed URLs
+    const grid = document.getElementById('video-grid');
+    if(vids.length){
+      grid.innerHTML = vids.map(v=>{
+        if(String(v).includes('<iframe')) return `<div class="card" style="padding:0">${v}</div>`;
+        const id = String(v).replace(/^.*v=/,'').replace(/^.*be\//,'');
+        return `<div class="card" style="padding:0">
+          <iframe width="100%" height="260" src="https://www.youtube.com/embed/${SITE.esc(id)}"
+          title="Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        </div>`;
+      }).join('');
+    } else {
+      document.getElementById('video-note').textContent = 'Add gallery.videos (YouTube IDs or iframe strings) in data/content.json.';
+    }
+  });
+</script>
+</body></html>

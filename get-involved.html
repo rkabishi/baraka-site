@@ -1,0 +1,80 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Get involved — Baraka Community & Family Centre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head><body>
+
+<header class="site-header">
+  <div class="container nav">
+    <a class="logo" href="index.html"><img id="logo" src="assets/baraka-logo.png" alt="Baraka logo"><span id="siteName">Baraka Community & Family Centre</span></a>
+    <button class="menu-toggle" aria-expanded="false" aria-controls="site-menu">Menu</button>
+    <nav id="site-menu" class="menu" aria-label="Main menu"></nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="kicker">Get involved</div>
+  <h1 class="section-title">Volunteer, partner, or donate</h1>
+
+  <section class="two" style="margin-top:18px">
+    <div class="card" id="vol-card"></div>
+    <div class="card" id="partner-card"></div>
+  </section>
+
+  <section class="card" style="margin-top:18px">
+    <h3>Donate</h3>
+    <p id="donate-intro" class="lead"></p>
+    <div id="donate-links" style="display:flex;gap:12px;flex-wrap:wrap"></div>
+    <p id="donate-note" class="notice" style="margin-top:8px"></p>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;">
+    <div>© <span id="year"></span> <span id="footerName">Baraka Community & Family Centre</span> · All rights reserved.<br><span class="notice">Registered SCIO <span id="scio"></span></span></div>
+    <div class="oscr"><img id="oscrBadge" src="assets/oscr-badge.jpg" alt="OSCR badge"/></div>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const d = window.__SITE__;
+    const emailV = d.get_involved?.volunteer?.email || d.contact?.email || '';
+    const roles = (d.get_involved?.volunteer?.roles||[]).map(r=>`<option>${SITE.esc(r)}</option>`).join('');
+    document.getElementById('vol-card').innerHTML = `
+      <h3>Volunteer</h3>
+      <p>${SITE.esc(d.get_involved?.volunteer?.intro||'We welcome friendly volunteers for activities, logistics, and translation.')}</p>
+      <form action="mailto:${SITE.esc(emailV)}" method="post" enctype="text/plain" onsubmit="alert('Thanks! We\\'ll be in touch.');">
+        <div class="two">
+          <div><label class="notice">Name</label><input required placeholder="Your full name"></div>
+          <div><label class="notice">Email</label><input required type="email" placeholder="you@example.com"></div>
+        </div>
+        <div style="margin-top:10px"><label class="notice">How would you like to help?</label><select>${roles}</select></div>
+        <div style="margin-top:10px"><label class="notice">Message</label><textarea rows="4" placeholder="Tell us a bit about yourself"></textarea></div>
+        <div style="margin-top:12px"><button class="btn secondary" type="submit">Send</button></div>
+      </form>
+    `;
+
+    const emailP = d.get_involved?.partner?.email || d.contact?.email || '';
+    document.getElementById('partner-card').innerHTML = `
+      <h3>Partners & referrals</h3>
+      <p>${SITE.esc(d.get_involved?.partner?.intro||'We work with schools, faith groups, and local services. Refer a family or propose a joint activity.')}</p>
+      <a class="btn" href="mailto:${SITE.esc(emailP)}?subject=Partnership%20enquiry">Email us</a>
+      <p class="notice" style="margin-top:8px">${SITE.esc(d.get_involved?.partner?.note||'Based in West Glasgow. Meetings by appointment.')}</p>
+    `;
+
+    const dn = d.donate||{};
+    document.getElementById('donate-intro').textContent = dn.intro || 'Your donation helps us run weekly food support, skills workshops, and safe community spaces.';
+    const links = [];
+    if(dn.paypal) links.push(`<a class="btn" href="${SITE.esc(dn.paypal)}">Donate via PayPal</a>`);
+    if(dn.stripe) links.push(`<a class="btn secondary" href="${SITE.esc(dn.stripe)}">Donate via Stripe</a>`);
+    if(dn.justgiving) links.push(`<a class="btn" href="${SITE.esc(dn.justgiving)}">JustGiving</a>`);
+    document.getElementById('donate-links').innerHTML = links.join('');
+    document.getElementById('donate-note').textContent = dn.note || '';
+  });
+</script>
+</body></html>
+

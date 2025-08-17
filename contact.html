@@ -1,0 +1,80 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Contact — Baraka Community & Family Centre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head><body>
+
+<header class="site-header">
+  <div class="container nav">
+    <a class="logo" href="index.html"><img id="logo" src="assets/baraka-logo.png" alt="Baraka logo"><span id="siteName">Baraka Community & Family Centre</span></a>
+    <button class="menu-toggle" aria-expanded="false" aria-controls="site-menu">Menu</button>
+    <nav id="site-menu" class="menu" aria-label="Main menu"></nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="kicker">Contact</div>
+  <h1 class="section-title">Get in touch</h1>
+
+  <section class="two" style="margin-top:18px">
+    <div class="card" id="contact-card"></div>
+    <div class="card" id="visit-card"></div>
+  </section>
+
+  <section class="card" style="margin-top:18px">
+    <h3>Our YouTube</h3>
+    <div id="yt-area" class="two"></div>
+    <p class="notice" id="yt-note" style="margin-top:8px"></p>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;">
+    <div>© <span id="year"></span> <span id="footerName">Baraka Community & Family Centre</span> · All rights reserved.<br><span class="notice">Registered SCIO <span id="scio"></span></span></div>
+    <div class="oscr"><img id="oscrBadge" src="assets/oscr-badge.jpg" alt="OSCR badge"/></div>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const d = window.__SITE__;
+    const c = d.contact||{};
+    document.getElementById('contact-card').innerHTML = `
+      <h3>Message us</h3>
+      <p>Email: ${c.email?`<a href="mailto:${SITE.esc(c.email)}">${SITE.esc(c.email)}</a>`:'(add contact.email in content.json)'}</p>
+      <p>Socials:
+        ${(c.socials?.facebook)?`<a href="${SITE.esc(c.socials.facebook)}">Facebook</a>`:''}
+        ${(c.socials?.instagram)?` · <a href="${SITE.esc(c.socials.instagram)}">Instagram</a>`:''}
+        ${(c.socials?.whatsapp)?` · <a href="${SITE.esc(c.socials.whatsapp)}">WhatsApp</a>`:''}
+      </p>
+    `;
+    document.getElementById('visit-card').innerHTML = `
+      <h3>Visit</h3>
+      <p>${SITE.esc(c.visit_note||'West Glasgow (meetings by appointment).')}</p>
+      ${c.map_embed || '<p class="notice">Add a Google Maps embed in content.json → contact.map_embed</p>'}
+    `;
+
+    const yt = c.youtube_playlist || c.youtube_embed || '';
+    if(yt){
+      // If it's a playlist ID, embed it; if it's a full iframe HTML, just show it.
+      if(!yt.includes('<iframe')){
+        const pid = yt.replace(/^.*list=/,''); // accept raw ID or full URL
+        document.getElementById('yt-area').innerHTML = `
+          <div class="card" style="padding:0">
+            <iframe width="100%" height="360" src="https://www.youtube.com/embed/videoseries?list=${SITE.esc(pid)}"
+              title="YouTube playlist" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+          </div>`;
+      } else {
+        document.getElementById('yt-area').innerHTML = yt;
+      }
+    } else {
+      document.getElementById('yt-note').textContent = 'Add contact.youtube_playlist (playlist ID or URL) or contact.youtube_embed (iframe) in data/content.json.';
+    }
+  });
+</script>
+</body></html>
+
+
