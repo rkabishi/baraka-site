@@ -5,340 +5,85 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Baraka Community & Family Centre</title>
   <meta name="description" content="Baraka Community & Family Centre — a SCIO in West Glasgow supporting young people, women, families, and refugees to thrive." />
+
+  <!-- Shared styles -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/site.css">
+
+  <!-- Page-specific (hero + stats + gallery layout only; header comes from site.css) -->
   <style>
-    :root {
-      --brand: #0ea5e9;
-      --brand-dark: #0369a1;
-      --accent: #22c55e;
-      --ink: #0f172a;
-      --muted: #475569;
-      --bg: #EAF7F1;          /* page background (light green) */
-      --card: #EAF7F1;        /* tinted card bg; JS may override */
-      --card-border: #d1e7dd; /* tinted card border; JS may override */
-      --ring: rgba(14,165,233,.35);
+    :root{
+      --bg:#EAF7F1;
     }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color: var(--ink); background: var(--bg); }
-    a { color: var(--brand-dark); text-decoration: none; }
-    a.btn { display: inline-block; padding: 12px 18px; border-radius: 12px; font-weight: 600; background: var(--brand); color: #fff; box-shadow: 0 6px 16px rgba(2,132,199,.25); transition: transform .05s ease; }
-    a.btn:hover { transform: translateY(-1px); filter: brightness(0.95); }
-    a.btn.secondary { background: var(--accent); box-shadow: 0 6px 16px rgba(34,197,94,.25); }
-    header { position: sticky; top: 0; z-index: 50;
-  overflow: hidden;
-  border-bottom: 1px solid #e2e8f0;
-
-  /* background image + soft white overlay for readability */
-  background:
-    linear-gradient(rgba(255,255,255,.75), rgba(255,255,255,.75)),
-    url('assets/header-bg.jpg') center / cover no-repeat;}
-    .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-    .nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
-    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing:.2px; }
-    .logo img { width: 36px; height: 36px; border-radius: 8px; object-fit: cover; background: #e2e8f0; }
-    .nav a { margin-left: 18px; color: var(--muted); font-weight: 600; }
-    .nav a:hover { color: var(--ink); }
-    .hero { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 28px; padding: 64px 0 32px; align-items: center; }
-    .hero h1 { font-size: clamp(28px, 5vw, 44px); line-height: 1.1; margin: 0 0 14px; }
-    .eyebrow { display:inline-block; padding: 6px 10px; border-radius: 999px; background: #e0f2fe; color: #075985; font-weight: 700; font-size: 12px; letter-spacing: .3px; text-transform: uppercase; }
-    .lead { color: var(--muted); font-size: 18px; }
-    .hero-card { background: var(--card); border: 1px solid var(--card-border); border-radius: 18px; padding: 20px; box-shadow: 0 10px 30px rgba(15,23,42,.06); }
-    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 18px; }
-    .stat { background: var(--card); border: 1px solid var(--card-border); border-radius: 14px; padding: 14px; text-align:center; }
-    .stat h3{ margin:0; font-size: 24px; }
-    section { padding: 36px 0; }
-    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-    .card { background: var(--card); border: 1px solid var(--card-border); border-radius: 18px; padding: 18px; box-shadow: 0 10px 30px rgba(15,23,42,.06); }
-    .card h3 { margin: 0 0 8px; }
-    .card p { color: var(--muted); }
-    .kicker { color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .3px; margin-bottom: 8px; font-size: 12px; }
-    .section-title { font-size: 28px; margin: 0 0 12px; }
-    .program li { margin: 8px 0; }
-    .cta { text-align: center; padding: 40px 18px; background: var(--card); border: 1px solid var(--card-border); border-radius: 20px; }
-    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-    form input, form textarea, form select { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid #cbd5e1; outline: none; font: inherit; }
-    form input:focus, form textarea:focus, form select:focus { border-color: var(--brand); box-shadow: 0 0 0 4px var(--ring); }
-    form button { padding: 12px 16px; border-radius: 12px; border: 0; background: var(--brand); color:#fff; font-weight:700; cursor:pointer; }
-    .footer { padding: 28px 0 40px; color: var(--muted); font-size: 14px; }
-    .pill { display:inline-block; padding:6px 10px; border-radius:999px; background:#f1f5f9; color:#0f172a; font-weight:600; font-size:12px; }
-    .donate-row { display:flex; flex-wrap:wrap; gap:12px; }
-    .notice { font-size: 13px; color:#64748b; }
-    .oscr { display:flex; align-items:center; gap:10px; }
-    .prog-img { width: 100%; height: 160px; object-fit: cover; border-radius: 12px; margin-bottom: 8px; }
-    .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-    .gimg { background: var(--card); border: 1px solid var(--card-border); border-radius: 14px; padding: 8px; }
-    .gimg img { width: 100%; height: 200px; object-fit: cover; border-radius: 10px; }
-    .gimg figcaption { font-size: 12px; color: var(--muted); margin-top: 6px; }
-    @media (max-width: 900px) {
-      .hero { grid-template-columns: 1fr; }
-      .grid { grid-template-columns: 1fr; }
-      .two { grid-template-columns: 1fr; }
-      .gallery { grid-template-columns: 1fr; }
+    html,body{background:var(--bg)}
+    .hero{display:grid;grid-template-columns:1.1fr 0.9fr;gap:28px;align-items:center;padding:32px 0}
+    .eyebrow{display:inline-block;padding:8px 12px;border-radius:999px;background:#e0f2fe;color:#075985;font-weight:700;font-size:clamp(14px,1.8vw,18px);letter-spacing:.4px;text-transform:uppercase}
+    .lead{color:#475569;font-size:18px}
+    .hero-card{background:var(--card);border:1px solid var(--card-border);border-radius:18px;padding:20px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+    .stat{background:var(--card);border:1px solid var(--card-border);border-radius:14px;padding:14px;text-align:center}
+    .stat h3{margin:0;font-size:24px}
+    .donate-row{display:flex;gap:12px;flex-wrap:wrap}
+    .prog-img{width:100%;height:160px;object-fit:cover;border-radius:12px;margin-bottom:8px}
+    @media (max-width:900px){
+      .hero{grid-template-columns:1fr}
     }
-    details#tests { margin: 24px auto; max-width: 1100px; }
-    details#tests summary { cursor: pointer; font-weight: 700; }
-    details#tests pre { background:#0b1220; color:#d1e7ff; padding:12px; border-radius:8px; overflow:auto; }
-  
-
-    /* --- Bigger header (scalable) --- */
-:root { --header-scale: 1.25; }  /* try 1.15–1.35 */
-
-header .nav { height: calc(100px * var(--header-scale)); }
-.logo img   { width:  calc(60px * var(--header-scale));
-              height: calc(60px * var(--header-scale)); }
-
-/* site name and menu links scale up too */
-#siteName { font-size: calc(1.5rem * var(--header-scale)); }
-.nav a    { font-size: calc(0.95rem * var(--header-scale));
-            margin-left: calc(18px * var(--header-scale)); }
-
-/* keep it comfortable on phones */
-@media (max-width: 900px) {
-  :root { --header-scale: 1.10; }
-  .nav a { margin-left: 14px; }
-}
-
-/* --- NAV: make all links green buttons & align them --- */
-:root {
-  /* You can tweak these if you want */
-  --nav-btn-bg: var(--accent); /* uses your brand green from content.json */
-  --nav-btn-fg: #fff;
-  --nav-btn-h: 40px;
-  --nav-btn-radius: 10px;
-  --nav-btn-pad-x: 14px;
-  --nav-gap: 9px;
-}
-
-.nav > nav {
-  display: flex;
-  align-items: center;
-  gap: var(--nav-gap);
-  flex-wrap: wrap;            /* keeps layout tidy on smaller widths */
-}
-
-/* override any previous .nav a spacing so gap controls layout */
-.nav a { margin-left: 0 !important; }
-
-.nav > nav a,
-.nav > nav a.btn,
-.nav > nav a.pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: var(--nav-btn-h);
-  padding: 0 var(--nav-btn-pad-x);
-  border-radius: var(--nav-btn-radius);
-  background: var(--nav-btn-bg) !important;
-  color: var(--nav-btn-fg) !important;
-  font-weight: 400;
-  line-height: 1;
-  text-decoration: none;
-  border: 1px solid color-mix(in srgb, var(--nav-btn-bg) 70%, transparent);
-  box-shadow: 0 6px 16px rgba(34,197,94,.25);
-  transform: translateY(0);
-  transition: transform .05s ease, filter .15s ease, box-shadow .15s ease;
-}
-
-.nav > nav a:hover {
-  filter: brightness(.95);
-  transform: translateY(-1px);
-}
-
-.nav > nav a:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px var(--ring), 0 6px 16px rgba(34,197,94,.30);
-}
-
-/* comfy on mobile */
-@media (max-width: 900px) {
-  :root { --nav-btn-h: 36px; --nav-btn-pad-x: 12px; }
-}
-
-
-
-/* === Slideshow styles (Photos) === */
-.slideshow {
-  position: relative;
-  border-radius: 16px;
-  border: 1px solid var(--card-border);
-  background: var(--card);
-  overflow: hidden;
-  /* Size: pick one of these – keep both if you like */
-  aspect-ratio: 16 / 9;         /* modern browsers */
-  min-height: 320px;            /* fallback height */
-}
-.slideshow .slides { position: relative; width: 100%; height: 100%; }
-.slideshow .slide {
-  position: absolute; inset: 0;
-  opacity: 0; transition: opacity .5s ease-in-out;
-}
-.slideshow .slide.active { opacity: 1; }
-.slideshow .slide img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
-}
-.slideshow .caption {
-  position: absolute; left: 12px; bottom: 12px;
-  background: rgba(0,0,0,.45); color: #fff;
-  padding: 6px 10px; border-radius: 8px; font-size: 12px;
-}
-
-/* Prev/Next buttons */
-.slideshow .nav {
-  position: absolute; top: 50%; transform: translateY(-50%);
-  width: 42px; height: 42px; border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.6);
-  background: rgba(0,0,0,.25);
-  color: #fff; font-size: 22px; font-weight: 800; line-height: 1;
-  display: grid; place-items: center; cursor: pointer;
-  transition: filter .15s ease, transform .05s ease;
-  z-index: 2;
-}
-.slideshow .nav:hover { filter: brightness(1.15); transform: translateY(-50%) scale(1.03); }
-.slideshow .nav.prev { left: 10px; }
-.slideshow .nav.next { right: 10px; }
-
-/* Dots */
-.slideshow .dots {
-  position: absolute; left: 0; right: 0; bottom: 10px;
-  display: flex; justify-content: center; gap: 8px; z-index: 2;
-}
-.slideshow .dot {
-  width: 8px; height: 8px; border-radius: 999px;
-  background: rgba(255,255,255,.6); border: 0; padding: 0; cursor: pointer;
-}
-.slideshow .dot.active { background: #fff; }
-
-/* Mobile tweaks */
-@media (max-width: 900px) {
-  .slideshow { min-height: 240px; }
-}
-
-
-/* === Body background using the logo === */
-body.logo-bg { /* base: keep your light green as fallback */
-  background-color: var(--bg);
-}
-
-/* A) Subtle repeating watermark pattern */
-body.logo-bg.pattern {
-  background:
-    /* soft white film for readability */
-    linear-gradient(rgba(255,255,255,.85), rgba(255,255,255,.85)),
-    var(--logo-image) 0 0 / 120px auto repeat,
-    var(--bg);
-}
-
-/* B) One big centred logo */
-body.logo-bg.centered {
-  background:
-    linear-gradient(rgba(255,255,255,.85), rgba(255,255,255,.85)),
-    var(--logo-image) center 48px / 960px auto no-repeat fixed,
-    var(--bg);
-}
-
-/* (optional) smaller/lighter overlay on phones */
-@media (max-width: 900px) {
-  body.logo-bg.pattern {
-    background:
-      linear-gradient(rgba(255,255,255,.90), rgba(255,255,255,.90)),
-      var(--logo-image) 0 0 / 96px auto repeat,
-      var(--bg);
-  }
-}
-
-/* Bigger SCIO eyebrow badge (site-wide) */
-.eyebrow {
-  font-size: clamp(14px, 1.8vw, 18px); /* was 12px */
-  padding: 8px 12px;                   /* was 6px 10px */
-  line-height: 1.2;
-  letter-spacing: .4px;
-}
-
-
-/* Make entire programme cards clickable if they are <a> links */
-a.card.program {
-  display: block;
-  color: inherit;
-  text-decoration: none;
-}
-a.card.program:hover {
-  filter: brightness(.98);
-  transform: translateY(-1px);
-  transition: transform .05s ease, filter .15s ease;
-}
-
-/* === NAV: aligned green buttons, auto-fit === */
-:root {
-  --nav-btn-bg: var(--accent);
-  --nav-btn-fg: #fff;
-  --nav-btn-h: 40px;
-  --nav-btn-radius: 10px;
-  --nav-btn-pad-x: 14px;
-  --nav-gap: 10px;
-}
-
-.nav { display:flex; align-items:center; justify-content:space-between; height:64px }
-.nav > nav {
-  display:flex; align-items:center; gap: var(--nav-gap);
-  flex-wrap: wrap;               /* wraps nicely on narrow widths */
-}
-.nav a { margin-left: 0 !important; }
-
-.nav > nav a {
-  display:inline-flex; align-items:center; justify-content:center;
-  height: var(--nav-btn-h);
-  padding: 0 var(--nav-btn-pad-x);
-  border-radius: var(--nav-btn-radius);
-  background: var(--nav-btn-bg) !important;
-  color: var(--nav-btn-fg) !important;
-  font-weight: 700; line-height: 1; text-decoration: none;
-  border: 1px solid color-mix(in srgb, var(--nav-btn-bg) 70%, transparent);
-  box-shadow: 0 6px 16px rgba(34,197,94,.25);
-  white-space: nowrap;           /* keep single-line labels */
-  max-width: 100%;
-}
-
-@media (max-width: 1100px){
-  :root { --nav-btn-pad-x: 12px; --nav-gap: 8px; }
-  #siteName { display:none; }    /* hide long name to free space */
-}
-@media (max-width: 900px){
-  :root { --nav-btn-h: 36px; --nav-btn-pad-x: 10px; --nav-gap: 6px; }
-}
-
-
-
-
-
-  
-  
   </style>
 </head>
 <body>
-  <!-- HEADER (same on all pages) -->
-<header class="site-header">
-  <div class="container nav">
-    <a class="logo" href="index.html">
-      <img id="logo" src="assets/baraka-logo.png" alt="Baraka logo">
-      <span id="siteName">Baraka Community & Family Centre</span>
-    </a>
-    <button class="menu-toggle" aria-expanded="false" aria-controls="site-menu">Menu</button>
-    <nav id="site-menu" class="menu" aria-label="Main menu"></nav>
-  </div>
-</header>
 
-<!-- FOOTER (same on all pages) -->
-<footer class="footer">
-  <div class="container" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;">
-    <div>© <span id="year"></span> <span id="footerName">Baraka Community & Family Centre</span> · All rights reserved.<br><span class="notice">Registered SCIO <span id="scio"></span></span></div>
-    <div class="oscr"><img id="oscrBadge" src="assets/oscr-badge.jpg" alt="OSCR badge"/></div>
-  </div>
-</footer>
+  <!-- HEADER (shared skeleton; menu populated by assets/site.js) -->
+  <header class="site-header">
+    <div class="container nav">
+      <a class="logo" href="index.html">
+        <img id="logo" src="assets/baraka-logo.png" alt="Baraka logo">
+        <span id="siteName">Baraka Community & Family Centre</span>
+      </a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="site-menu">Menu</button>
+      <nav id="site-menu" class="menu" aria-label="Main menu"></nav>
+    </div>
+  </header>
 
-  <!-- Default content as JSON so you can edit /data/content.json without touching code -->
+  <main class="container">
+    <!-- HERO -->
+    <section id="home" class="hero" aria-label="Intro">
+      <div id="heroLeft"></div>
+      <div id="heroRight" class="hero-card"></div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" aria-label="About Baraka"></section>
+
+    <!-- PROGRAMMES -->
+    <section id="programmes" aria-label="What we run"></section>
+
+    <!-- GET INVOLVED -->
+    <section id="get-involved" aria-label="Get involved"></section>
+
+    <!-- NEWS -->
+    <section id="news" aria-label="Latest news"></section>
+
+    <!-- DONATE -->
+    <section id="donate" aria-label="Donate"></section>
+
+    <!-- GALLERY (slideshow) -->
+    <section id="gallery" aria-label="Photos"></section>
+
+    <!-- CONTACT (homepage block) -->
+    <section id="contact" aria-label="Contact"></section>
+  </main>
+
+  <!-- FOOTER (shared skeleton; details populated by assets/site.js) -->
+  <footer class="footer">
+    <div class="container" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;">
+      <div>© <span id="year"></span> <span id="footerName">Baraka Community & Family Centre</span> · All rights reserved.<br><span class="notice">Registered SCIO <span id="scio"></span></span></div>
+      <div class="oscr"><img id="oscrBadge" src="assets/oscr-badge.jpg" alt="OSCR badge"/></div>
+    </div>
+  </footer>
+
+  <!-- Default content fallback (used if data/content.json is missing) -->
   <script id="default-content" type="application/json">
   {
     "site": {
@@ -354,7 +99,7 @@ a.card.program:hover {
       "image_alt": "Community photo",
       "actions": [
         {"label":"Donate","href":"#donate"},
-        {"label":"Volunteer","href":"#get-involved","style":"secondary"}
+        {"label":"Volunteer","href":"get-involved.html","style":"secondary"}
       ],
       "stats": [
         {"value":"4+","label":"Active programmes"},
@@ -384,16 +129,14 @@ a.card.program:hover {
       "cta_title": "Need support?",
       "cta_note": "We’ll listen and connect you to the right activity or service.",
       "cta_label": "Get in touch",
-      "cta_href": "#contact"
+      "cta_href": "contact.html"
     },
     "programmes_title":"What we run",
     "programmes": [
-      {"title":"Family Connection Hub","description":"Monthly family activities to build confidence, connection, and joy for parents and children.","image":"assets/baraka-logo.png","image_alt":"Family activities","bullets":["Group activities and creative play","Peer support and signposting","Open to families across West Glasgow"]},
-      {"title":"Digital Hub","description":"Weekly digital skills sessions for parents and youths to boost confidence and employability.","image":"assets/baraka-logo.png","image_alt":"Digital skills","bullets":["Basic to intermediate digital skills","CV, job search & online safety","Device support available"]},
-      {"title":"Wellness Hub","description":"Peer-led wellbeing cafés and support circles focused on mental health, connection, and resilience.","image":"assets/baraka-logo.png","image_alt":"Wellbeing","bullets":["Women’s Wellbeing Café (monthly)","Support circles (domestic-abuse-informed)"]},
-      {"title":"Food Distribution Service","description":"Weekly food support in partnership with FareShare, prioritising families and refugees in need.","image":"assets/baraka-logo.png","image_alt":"Food distribution","bullets":["Fresh & ambient foods","Volunteer-led distribution","Fair, dignified access"]},
-      {"title":"Baraka Thrive","description":"Family well-being and empowerment activities—from parenting workshops to community events.","image":"assets/baraka-logo.png","image_alt":"Baraka Thrive"},
-      {"title":"EmpowerHer (Women)","description":"Sewing & crochet workshops; support circles for women affected by domestic abuse; signposting.","image":"assets/baraka-logo.png","image_alt":"EmpowerHer"}
+      {"title":"Family Connection Hub","description":"Monthly family activities to build confidence, connection, and joy for parents and children.","image":"assets/2.jpg","image_alt":"Family Connection Hub","link":"family-connection-hub.html","bullets":["Group activities and creative play","Peer support and signposting","Open to families across West Glasgow"]},
+      {"title":"Digital Hub","description":"Weekly digital skills sessions for parents and youths to boost confidence and employability.","image":"assets/baraka-logo.png","image_alt":"Digital skills"},
+      {"title":"Wellness Hub","description":"Peer-led wellbeing cafés and support circles focused on mental health, connection, and resilience.","image":"assets/baraka-logo.png","image_alt":"Wellbeing"},
+      {"title":"Food Distribution Service","description":"Weekly food support in partnership with FareShare, prioritising families and refugees in need.","image":"assets/baraka-logo.png","image_alt":"Food distribution"}
     ],
     "get_involved": {
       "title":"Volunteer or partner with us",
@@ -410,361 +153,205 @@ a.card.program:hover {
     "donate": {"intro":"Your donation helps us run weekly food support, skills workshops, and safe community spaces.","paypal":"","stripe":"","justgiving":"","note":"Baraka Community & Family Centre is a registered Scottish charity (SCIO). Gift Aid where eligible."},
     "gallery": { "title":"Photos", "subtitle":"A glimpse of life at Baraka", "images": [] },
     "contact_title":"Get in touch",
-    "contact": {"email":"hello@baraka-centre.org","visit_note":"West Glasgow (meetings by appointment). Exact address shared upon confirmation for safeguarding.","socials":{"facebook":"#","instagram":"#","whatsapp":"#"},"map_embed":""},
+    "contact": {"email":"hello@baraka-centre.org","visit_note":"West Glasgow (meetings by appointment).","socials":{"facebook":"#","instagram":"#","whatsapp":"#"},"map_embed":""},
     "legal": {"scio":"SC052268","oscr_badge":"assets/oscr-badge.jpg"}
   }
   </script>
 
-  <details id="tests"><summary>Developer tests (click to open)</summary>
-    <pre id="test-log">Running…</pre>
-  </details>
+  <!-- Shared logic (builds header/footer + brand + helpers) -->
+  <script src="assets/site.js"></script>
 
+  <!-- Homepage render (uses shared helpers; no duplicate header code) -->
   <script>
-    const tlog = document.getElementById('test-log');
-    const results = [];
-    function assert(name, cond){ results.push((cond? '✔︎ ':'✘ ') + name); }
-    function finish(){ tlog.textContent = results.join('\n'); }
-    const esc = (s) => String(s ?? '').replace(/[&<>\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-    function parseDefault(){ try { return JSON.parse(document.getElementById('default-content').textContent); } catch(e){ return {}; } }
-    const HEX = (n) => n.toString(16).padStart(2,'0');
-    function hexToRgb(h){ const m = /^#?([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(h||''); return m?{r:parseInt(m[1],16),g:parseInt(m[2],16),b:parseInt(m[3],16)}:{r:255,g:255,b:255}; }
-    function mix(a,b,t){ const A=hexToRgb(a),B=hexToRgb(b); const r=Math.round(A.r*(1-t)+B.r*t), g=Math.round(A.g*(1-t)+B.g*t), b2=Math.round(A.b*(1-t)+B.b*t); return `#${HEX(r)}${HEX(g)}${HEX(b2)}`; }
+    document.addEventListener('DOMContentLoaded', () => {
+      const F = JSON.parse(document.getElementById('default-content').textContent || '{}');
+      const d = (window.__SITE__ && Object.keys(window.__SITE__).length) ? window.__SITE__ : F;
+      const E = SITE.esc;
 
-    async function loadContent(){
-      const fallback = parseDefault();
-      try {
-        const res = await fetch('data/content.json', {cache:'no-store'});
-        if(!res.ok) throw new Error('HTTP '+res.status);
-        const data = await res.json();
-        renderSite(data);
-      } catch(e){
-        renderSite(fallback);
-      }
-    }
-
-    function applyBrand(brand={}){
-      const root = document.documentElement;
-      const primary = brand.primary || getComputedStyle(root).getPropertyValue('--brand').trim() || '#6B3F18';
-      const accent  = brand.accent  || getComputedStyle(root).getPropertyValue('--accent').trim() || '#22C55E';
-      const bg      = brand.bg      || getComputedStyle(root).getPropertyValue('--bg').trim()     || '#EAF7F1';
-      root.style.setProperty('--brand', primary);
-      root.style.setProperty('--brand-dark', primary);
-      root.style.setProperty('--accent', accent);
-      root.style.setProperty('--bg', bg);
-      const card   = mix(bg, accent, 0.08);
-      const border = mix(card, accent, 0.15);
-      root.style.setProperty('--card', card);
-      root.style.setProperty('--card-border', border);
-    }
-
-    function renderSite(d){
-      applyBrand(d.site && d.site.brand || {});
-      if(d.site?.name) document.getElementById('siteName').textContent = d.site.name;
-      if(d.site?.logo) document.getElementById('logo').src = d.site.logo;
-
-            // NEW: set body background to the logo image via a CSS variable
-      if (d.site?.logo) {
-        document.documentElement.style.setProperty('--logo-image', `url("${esc(d.site.logo)}")`);
-        document.body.classList.add('logo-bg', 'centered');   // use 'pattern' OR 'centered'
-        // To use the big centred logo instead, do:
-        // document.body.classList.remove('pattern'); document.body.classList.add('centered');
-      }
-
-
+      /* HERO LEFT */
       const heroL = document.getElementById('heroLeft');
-      const eyebrow = d.hero?.eyebrow ? `<span class=\"eyebrow\">${esc(d.hero.eyebrow)}</span>` : '';
-      const actions = (d.hero?.actions||[]).map(a=>`<a class=\"btn ${a.style==='secondary'?'secondary':''}\" href=\"${esc(a.href)}\">${esc(a.label)}</a>`).join(' ');
-      const stats = (d.hero?.stats||[]).map(s=>`<div class=\"stat\"><h3>${esc(s.value)}</h3><div class=\"notice\">${esc(s.label)}</div></div>`).join('');
+      const eyebrow = d.hero?.eyebrow ? `<span class="eyebrow">${E(d.hero.eyebrow)}</span>` : '';
+      const actions = (d.hero?.actions||[]).map(a=>`<a class="btn ${a.style==='secondary'?'secondary':''}" href="${E(a.href)}">${E(a.label)}</a>`).join(' ');
+      const stats = (d.hero?.stats||[]).map(s=>`<div class="stat"><h3>${E(s.value)}</h3><div class="notice">${E(s.label)}</div></div>`).join('');
       heroL.innerHTML = `
         ${eyebrow}
-        <h1>${esc(d.hero?.title)}</h1>
-        <p class=\"lead\">${esc(d.hero?.lead)}</p>
-        <div style=\"display:flex; gap:12px; margin-top:18px; flex-wrap:wrap;\">${actions} <a href=\"#programmes\" style=\"align-self:center; font-weight:700;\">See our programmes →</a></div>
-        <div class=\"stats\">${stats}</div>
+        <h1>${E(d.hero?.title||'')}</h1>
+        <p class="lead">${E(d.hero?.lead||'')}</p>
+        <div style="display:flex;gap:12px;margin-top:18px;flex-wrap:wrap">${actions}<a href="programmes.html" style="align-self:center;font-weight:700">See our programmes →</a></div>
+        <div class="stats">${stats}</div>
       `;
 
+      /* HERO RIGHT */
       const heroR = document.getElementById('heroRight');
-      const heroImg = d.hero?.image ? `<img src=\"${esc(d.hero.image)}\" alt=\"${esc(d.hero.image_alt||'Photo')}\" loading=\"lazy\" style=\"width:100%;border-radius:12px;margin-bottom:10px;\"/>` : '';
-      const items = (d.hero?.this_month||[]).map(i=>`<li>${esc(i)}</li>`).join('');
+      const heroImg = d.hero?.image ? `<img src="${E(d.hero.image)}" alt="${E(d.hero.image_alt||'Photo')}" loading="lazy" style="width:100%;border-radius:12px;margin-bottom:10px">` : '';
+      const items = (d.hero?.this_month||[]).map(i=>`<li>${E(i)}</li>`).join('');
       heroR.innerHTML = `
         ${heroImg}
-        <div class=\"kicker\">${esc(d.hero?.right_kicker || 'This month')}</div>
-        <h3 style=\"margin:6px 0 10px;\">${esc(d.hero?.right_title || 'What’s on at Baraka')}</h3>
-        <ul style=\"margin:0; padding-left:18px; color:var(--muted); line-height:1.6;\">${items}</ul>
-        <p class=\"notice\" style=\"margin-top:12px;\">${d.hero?.right_note ? esc(d.hero.right_note) : 'Want to join? '}<a href=\"#contact\">Contact us</a> to check times and locations.</p>
+        <div class="kicker">${E(d.hero?.right_kicker || 'This month')}</div>
+        <h3 style="margin:6px 0 10px">${E(d.hero?.right_title || 'What’s on at Baraka')}</h3>
+        <ul style="margin:0;padding-left:18px;color:var(--muted);line-height:1.6">${items}</ul>
+        <p class="notice" style="margin-top:12px">${d.hero?.right_note ? E(d.hero.right_note) : 'Want to join? '}<a href="contact.html">Contact us</a> to check times and locations.</p>
       `;
 
+      /* ABOUT */
       const about = document.getElementById('about');
-      const bullets = (d.about?.bullets||[]).map(b=>`<li>${esc(b)}</li>`).join('');
+      const bullets = (d.about?.bullets||[]).map(b=>`<li>${E(b)}</li>`).join('');
       about.innerHTML = `
-        <div class=\"two\">
-          <div class=\"card\">
-            <div class=\"kicker\">About us</div>
-            <h2 class=\"section-title\">${esc(d.about?.title || 'Our story & mission')}</h2>
-            <p>${esc(d.about?.story)}</p>
-            <p>${esc(d.about?.values)}</p>
+        <div class="two">
+          <div class="card">
+            <div class="kicker">About us</div>
+            <h2 class="section-title">${E(d.about?.title || 'Our story & mission')}</h2>
+            <p>${E(d.about?.story || '')}</p>
+            <p>${E(d.about?.values || '')}</p>
             <ul>${bullets}</ul>
           </div>
-          <div class=\"card\">
-            <div class=\"kicker\">What we value</div>
-            <h2 class=\"section-title\">${esc(d.about?.values_title || 'Empathy • Dignity • Solidarity • Empowerment')}</h2>
-            <p>${esc(d.about?.values_para)}</p>
-            <div class=\"cta\" style=\"margin-top:10px;\">
-              <h3 style=\"margin:0 0 6px;\">${esc(d.about?.cta_title || 'Need support?')}</h3>
-              <p class=\"notice\" style=\"margin:0 0 10px;\">${esc(d.about?.cta_note || 'We’ll listen and connect you to the right activity or service.')}</p>
-              <a href=\"${esc(d.about?.cta_href || '#contact')}\" class=\"btn\">${esc(d.about?.cta_label || 'Get in touch')}</a>
+          <div class="card">
+            <div class="kicker">What we value</div>
+            <h2 class="section-title">${E(d.about?.values_title || 'Empathy • Dignity • Solidarity • Empowerment')}</h2>
+            <p>${E(d.about?.values_para || '')}</p>
+            <div class="card" style="margin-top:10px">
+              <h3 style="margin:0 0 6px">${E(d.about?.cta_title || 'Need support?')}</h3>
+              <p class="notice" style="margin:0 0 10px">${E(d.about?.cta_note || 'We’ll listen and connect you to the right activity or service.')}</p>
+              <a href="contact.html" class="btn">${E(d.about?.cta_label || 'Get in touch')}</a>
             </div>
           </div>
-        </div>`;
+        </div>
+      `;
 
-
-      // PROGRAMMES
-            // PROGRAMMES
+      /* PROGRAMMES (make card clickable if link is present) */
       const programmes = document.getElementById('programmes');
-      const cards = (d.programmes || []).map(p => {
+      const progs = (d.programmes || []).map(p => {
+        // ensure Family Connection Hub uses your asset + detail page
+        if (p.title && /family connection/i.test(p.title)) {
+          p = {...p, image: 'assets/2.jpg', image_alt: 'Family Connection Hub', link: 'family-connection-hub.html'};
+        }
         const inner = `
-          ${p.image ? `<img class="prog-img" src="${esc(p.image)}" alt="${esc(p.image_alt || p.title || 'Programme image')}" loading="lazy"/>` : ''}
-          <h3>${esc(p.title)}</h3>
-          <p>${esc(p.description || '')}</p>
-          ${p.bullets ? `<ul>${p.bullets.map(li => `<li>${esc(li)}</li>`).join('')}</ul>` : ''}
+          ${p.image ? `<img class="prog-img" src="${E(p.image)}" alt="${E(p.image_alt || p.title || 'Programme image')}" loading="lazy">` : ''}
+          <h3>${E(p.title||'')}</h3>
+          <p>${E(p.description||'')}</p>
+          ${p.bullets ? `<ul>${p.bullets.map(li => `<li>${E(li)}</li>`).join('')}</ul>` : ''}
         `;
-        // If a link is provided, wrap the entire card in <a>
-        return p.link
-          ? `<a class="card program" href="${esc(p.link)}" aria-label="${esc(p.title)}">${inner}</a>`
-          : `<div class="card program">${inner}</div>`;
+        return p.link ? `<a class="card program" href="${E(p.link)}" aria-label="${E(p.title)}">${inner}</a>`
+                      : `<div class="card program">${inner}</div>`;
       }).join('');
-
       programmes.innerHTML = `
         <div class="kicker">Programmes</div>
-        <h2 class="section-title">${esc(d.programmes_title || 'What we run')}</h2>
-        <div class="grid">${cards}</div>`;
+        <h2 class="section-title">${E(d.programmes_title || 'What we run')}</h2>
+        <div class="grid">${progs}</div>
+      `;
 
-
-
-      /*
-
-      const programmes = document.getElementById('programmes');
-      const cards = (d.programmes||[]).map(p=>`
-        <div class=\"card program\">
-          ${p.image?`<img class=\\\"prog-img\\\" src=\\\"${esc(p.image)}\\\" alt=\\\"${esc(p.image_alt||p.title||'Programme image')}\\\" loading=\\\"lazy\\\"/>`:''}
-          <h3>${esc(p.title)}</h3>
-          <p>${esc(p.description||'')}</p>
-          ${p.bullets?`<ul>${p.bullets.map(li=>`<li>${esc(li)}</li>`).join('')}</ul>`:''}
-        </div>
-      `).join('');
-      programmes.innerHTML = `
-        <div class=\"kicker\">Programmes</div>
-        <h2 class=\"section-title\">${esc(d.programmes_title || 'What we run')}</h2>
-        <div class=\"grid\">${cards}</div>`;
-
-      */
-
+      /* GET INVOLVED (mini block on homepage) */
       const gi = document.getElementById('get-involved');
-      const roleOptions = (d.get_involved?.volunteer?.roles || []).map(r=>`<option>${esc(r)}</option>`).join('');
-      const volunteerEmail = esc(d.get_involved?.volunteer?.email || d.contact?.email || '');
-      const partnerEmail = esc(d.get_involved?.partner?.email || d.contact?.email || '');
+      const roleOptions = (d.get_involved?.volunteer?.roles || []).map(r=>`<option>${E(r)}</option>`).join('');
+      const volunteerEmail = E(d.get_involved?.volunteer?.email || d.contact?.email || '');
+      const partnerEmail = E(d.get_involved?.partner?.email || d.contact?.email || '');
       gi.innerHTML = `
-        <div class=\"kicker\">Get involved</div>
-        <h2 class=\"section-title\">${esc(d.get_involved?.title || 'Volunteer or partner with us')}</h2>
-        <div class=\"two\">
-          <div class=\"card\">
+        <div class="kicker">Get involved</div>
+        <h2 class="section-title">${E(d.get_involved?.title || 'Volunteer or partner with us')}</h2>
+        <div class="two">
+          <div class="card">
             <h3>Volunteer</h3>
-            <p>${esc(d.get_involved?.volunteer?.intro || 'We welcome friendly volunteers for activities, mentoring, logistics, and translation.')}</p>
-            <form action=\\\"mailto:${volunteerEmail}\\\" method=\\\"post\\\" enctype=\\\"text/plain\\\" onsubmit=\\\"alert('Thank you! We\\\\'ll be in touch.');\\\">
-              <div class=\"two\">
-                <div><label class=\"notice\">Name</label><input required placeholder=\"Your full name\" /></div>
-                <div><label class=\"notice\">Email</label><input required type=\"email\" placeholder=\"you@example.com\" /></div>
+            <p>${E(d.get_involved?.volunteer?.intro || 'We welcome friendly volunteers for activities, mentoring, logistics, and translation.')}</p>
+            <form action="mailto:${volunteerEmail}" method="post" enctype="text/plain" onsubmit="alert('Thank you! We\\'ll be in touch.');">
+              <div class="two">
+                <div><label class="notice">Name</label><input required placeholder="Your full name"></div>
+                <div><label class="notice">Email</label><input required type="email" placeholder="you@example.com"></div>
               </div>
-              <div style=\"margin-top:10px;\"><label class=\"notice\">How would you like to help?</label>
-                <select>${roleOptions}</select>
-              </div>
-              <div style=\"margin-top:10px;\"><label class=\"notice\">Message</label><textarea rows=\"4\" placeholder=\"Tell us a bit about yourself\"></textarea></div>
-              <div style=\"margin-top:12px;\"><button type=\"submit\">Send</button></div>
+              <div style="margin-top:10px"><label class="notice">How would you like to help?</label><select>${roleOptions}</select></div>
+              <div style="margin-top:10px"><label class="notice">Message</label><textarea rows="4" placeholder="Tell us a bit about yourself"></textarea></div>
+              <div style="margin-top:12px"><button class="btn secondary" type="submit">Send</button></div>
             </form>
-            <p class=\"notice\" style=\"margin-top:8px;\">Prefer email? Write to <a href=\"mailto:${volunteerEmail}\">${volunteerEmail}</a></p>
+            <p class="notice" style="margin-top:8px">Prefer email? Write to <a href="mailto:${volunteerEmail}">${volunteerEmail}</a></p>
           </div>
-          <div class=\"card\">
+          <div class="card">
             <h3>Partner or refer</h3>
-            <p>${esc(d.get_involved?.partner?.intro || 'We work with schools, faith groups, and local services. Refer a family or propose a joint activity.')}</p>
-            <a class=\"btn\" href=\"mailto:${partnerEmail}?subject=Partnership%20enquiry\">Email us</a>
-            <p class=\"notice\" style=\"margin-top:8px;\">${esc(d.get_involved?.partner?.note || 'We are based in West Glasgow. Meetings by appointment.')}</p>
+            <p>${E(d.get_involved?.partner?.intro || 'We work with schools, faith groups, and local services. Refer a family or propose a joint activity.')}</p>
+            <a class="btn" href="mailto:${partnerEmail}?subject=Partnership%20enquiry">Email us</a>
+            <p class="notice" style="margin-top:8px">${E(d.get_involved?.partner?.note || 'We are based in West Glasgow. Meetings by appointment.')}</p>
           </div>
-        </div>`;
+        </div>
+      `;
 
+      /* NEWS */
       const news = document.getElementById('news');
       const newsCards = (d.news||[]).map(n=>`
-        <div class=\"card\">
-          <h3>${esc(n.title)}</h3>
-          <p>${esc(n.body)}</p>
-          ${n.date?`<p class=\"notice\">Posted: <time>${esc(n.date)}</time></p>`:''}
+        <div class="card">
+          <h3>${E(n.title)}</h3>
+          <p>${E(n.body)}</p>
+          ${n.date?`<p class="notice">Posted: <time>${E(n.date)}</time></p>`:''}
         </div>`).join('');
       news.innerHTML = `
-        <div class=\"kicker\">Updates</div>
-        <h2 class=\"section-title\">${esc(d.news_title || 'Latest news')}</h2>
-        <div class=\"grid\">${newsCards}</div>`;
+        <div class="kicker">Updates</div>
+        <h2 class="section-title">${E(d.news_title || 'Latest news')}</h2>
+        <div class="grid">${newsCards}</div>
+      `;
 
+      /* DONATE */
       const donate = document.getElementById('donate');
       const dlinks = [];
-      if(d.donate?.paypal) dlinks.push(`<a class=\"btn\" href=\"${esc(d.donate.paypal)}\">Donate via PayPal</a>`);
-      if(d.donate?.stripe) dlinks.push(`<a class=\"btn secondary\" href=\"${esc(d.donate.stripe)}\">Donate via Stripe</a>`);
-      if(d.donate?.justgiving) dlinks.push(`<a class=\"pill\" href=\"${esc(d.donate.justgiving)}\">JustGiving page</a>`);
+      if(d.donate?.paypal) dlinks.push(`<a class="btn" href="${E(d.donate.paypal)}">Donate via PayPal</a>`);
+      if(d.donate?.stripe) dlinks.push(`<a class="btn secondary" href="${E(d.donate.stripe)}">Donate via Stripe</a>`);
+      if(d.donate?.justgiving) dlinks.push(`<a class="btn" href="${E(d.donate.justgiving)}">JustGiving</a>`);
       donate.innerHTML = `
-        <div class=\"kicker\">Donate</div>
-        <h2 class=\"section-title\">${esc(d.donate_title || 'Support our work')}</h2>
-        <p>${esc(d.donate?.intro || 'Your donation helps us run weekly food support, skills workshops, and safe community spaces.')}</p>
-        <div class=\"donate-row\" style=\"margin:14px 0 6px;\">${dlinks.join('\n')}</div>
-        <p class=\"notice\">${esc(d.donate?.note || '')}</p>`;
+        <div class="kicker">Donate</div>
+        <h2 class="section-title">${E(d.donate_title || 'Support our work')}</h2>
+        <p>${E(d.donate?.intro || 'Your donation helps us run weekly food support, skills workshops, and safe community spaces.')}</p>
+        <div class="donate-row" style="margin:14px 0 6px">${dlinks.join(' ')}</div>
+        <p class="notice">${E(d.donate?.note || '')}</p>
+      `;
 
-      // GALLERY → Slideshow
+      /* GALLERY → slideshow (uses shared init) */
       const gal = document.getElementById('gallery');
-      const images = d.gallery?.images || [];
-      const slidesHtml = images.map((g,i)=>`
+      const imgs = d.gallery?.images || [];
+      const slidesHtml = imgs.map((g,i)=>`
         <div class="slide ${i===0?'active':''}">
-          <img src="${esc(g.src)}" alt="${esc(g.alt||'Photo')}" loading="lazy"/>
-          ${g.caption?`<div class="caption">${esc(g.caption)}</div>`:''}
-        </div>
-      `).join('');
-      const dotsHtml = images.map((_,i)=>`<button class="dot ${i===0?'active':''}" aria-label="Go to slide ${i+1}"></button>`).join('');
-
-      const slideshowId = "baraka-slideshow";
+          <img src="${E(g.src)}" alt="${E(g.alt||'Photo')}" loading="lazy">
+          ${g.caption?`<div class="caption">${E(g.caption)}</div>`:''}
+        </div>`).join('');
+      const dotsHtml = imgs.map((_,i)=>`<button class="dot ${i===0?'active':''}" aria-label="Go to slide ${i+1}"></button>`).join('');
+      const slideshowId = 'baraka-slideshow';
       gal.innerHTML = `
-        <div class="kicker">${esc(d.gallery?.title || 'Photos')}</div>
-        <h2 class="section-title">${esc(d.gallery?.subtitle || 'A glimpse of life at Baraka')}</h2>
+        <div class="kicker">${E(d.gallery?.title || 'Photos')}</div>
+        <h2 class="section-title">${E(d.gallery?.subtitle || 'A glimpse of life at Baraka')}</h2>
         <div class="slideshow" id="${slideshowId}" aria-label="Photo slideshow">
           <div class="slides">${slidesHtml}</div>
           <button class="nav prev" data-prev aria-label="Previous slide">‹</button>
           <button class="nav next" data-next aria-label="Next slide">›</button>
           <div class="dots">${dotsHtml}</div>
         </div>`;
+      SITE.initSlideshow(slideshowId, imgs, { interval: 4000 });
 
-      // Hook up behaviour (auto-rotate + controls + pause-on-hover)
-      initSlideshow(slideshowId, images, { interval: 4000 });
-
-
-
-    function initSlideshow(id, images, {interval=4000}={}) {
-  const root = document.getElementById(id);
-  if (!root || !images.length) return;
-
-  const slides = root.querySelectorAll('.slide');
-  const dots = root.querySelectorAll('.dot');
-  const prevBtn = root.querySelector('[data-prev]');
-  const nextBtn = root.querySelector('[data-next]');
-
-  let idx = 0, timer = null;
-
-  function render() {
-    slides.forEach((s,i)=> s.classList.toggle('active', i===idx));
-    dots.forEach((d,i)=> d.classList.toggle('active', i===idx));
-  }
-  function go(n){ idx = (n + images.length) % images.length; render(); }
-  function next(){ go(idx + 1); }
-  function prev(){ go(idx - 1); }
-
-  function start(){ stop(); timer = setInterval(next, interval); }
-  function stop(){ if (timer) clearInterval(timer); timer = null; }
-  function restart(){ stop(); start(); }
-
-  prevBtn?.addEventListener('click', ()=>{ prev(); restart(); });
-  nextBtn?.addEventListener('click', ()=>{ next(); restart(); });
-  dots.forEach((d,i)=> d.addEventListener('click', ()=>{ idx=i; render(); restart(); }));
-
-  // Pause on hover / focus for accessibility
-  root.addEventListener('mouseenter', stop);
-  root.addEventListener('mouseleave', start);
-  root.addEventListener('focusin', stop);
-  root.addEventListener('focusout', start);
-
-  // Keyboard
-  root.addEventListener('keydown', (e)=>{
-    if (e.key === 'ArrowLeft') { prev(); restart(); }
-    if (e.key === 'ArrowRight'){ next(); restart(); }
-  });
-  root.tabIndex = 0; // make focusable
-
-  render(); start();
-}
-  
-
-      /*
-
-      const gal = document.getElementById('gallery');
-      const gitems = (d.gallery?.images||[]).map(g=>`
-        <figure class=\"gimg\">
-          <img src=\"${esc(g.src)}\" alt=\"${esc(g.alt||'Photo')}\" loading=\"lazy\"/>
-          ${g.caption?`<figcaption>${esc(g.caption)}</figcaption>`:''}
-        </figure>
-      `).join('');
-      gal.innerHTML = `
-        <div class=\"kicker\">${esc(d.gallery?.title || 'Photos')}</div>
-        <h2 class=\"section-title\">${esc(d.gallery?.subtitle || 'A glimpse of life at Baraka')}</h2>
-        <div class=\"gallery\">${gitems}</div>`;
-
-      */
-
+      /* CONTACT (homepage block) */
       const contact = document.getElementById('contact');
-      const fb = d.contact?.socials?.facebook ? `<a href=\"${esc(d.contact.socials.facebook)}\">Facebook</a>`:'';
-      const ig = d.contact?.socials?.instagram ? `<a href=\"${esc(d.contact.socials.instagram)}\">Instagram</a>`:'';
-      const wa = d.contact?.socials?.whatsapp ? `<a href=\"${esc(d.contact.socials.whatsapp)}\">WhatsApp</a>`:'';
+      const fb = d.contact?.socials?.facebook ? `<a href="${E(d.contact.socials.facebook)}">Facebook</a>`:'';
+      const ig = d.contact?.socials?.instagram ? `<a href="${E(d.contact.socials.instagram)}">Instagram</a>`:'';
+      const wa = d.contact?.socials?.whatsapp ? `<a href="${E(d.contact.socials.whatsapp)}">WhatsApp</a>`:'';
       const socials = [fb,ig,wa].filter(Boolean).join(' · ');
       contact.innerHTML = `
-        <div class=\"kicker\">Contact</div>
-        <h2 class=\"section-title\">${esc(d.contact_title || 'Get in touch')}</h2>
-        <div class=\"two\">
-          <div class=\"card\">
+        <div class="kicker">Contact</div>
+        <h2 class="section-title">${E(d.contact_title || 'Get in touch')}</h2>
+        <div class="two">
+          <div class="card">
             <h3>Message us</h3>
-            <form action=\"mailto:${esc(d.contact?.email || '')}\" method=\"post\" enctype=\"text/plain\" onsubmit=\"alert('Thanks! We\\'ll reply soon.');\">
-              <div class=\"two\">
-                <div><label class=\"notice\">Name</label><input required placeholder=\"Your name\" /></div>
-                <div><label class=\"notice\">Email</label><input required type=\"email\" placeholder=\"you@example.com\" /></div>
+            <form action="mailto:${E(d.contact?.email || '')}" method="post" enctype="text/plain" onsubmit="alert('Thanks! We\\'ll reply soon.');">
+              <div class="two">
+                <div><label class="notice">Name</label><input required placeholder="Your name"></div>
+                <div><label class="notice">Email</label><input required type="email" placeholder="you@example.com"></div>
               </div>
-              <div style=\"margin-top:10px;\"><label class=\"notice\">Your message</label><textarea rows=\"4\" placeholder=\"How can we help?\"></textarea></div>
-              <div style=\"margin-top:12px;\"><button type=\"submit\">Send</button></div>
+              <div style="margin-top:10px"><label class="notice">Your message</label><textarea rows="4" placeholder="How can we help?"></textarea></div>
+              <div style="margin-top:12px"><button class="btn" type="submit">Send</button></div>
             </form>
-            ${d.contact?.email ? `<p class=\"notice\" style=\"margin-top:8px;\">Email: <a href=\"mailto:${esc(d.contact.email)}\">${esc(d.contact.email)}</a></p>`:''}
+            ${d.contact?.email ? `<p class="notice" style="margin-top:8px">Email: <a href="mailto:${E(d.contact.email)}">${E(d.contact.email)}</a></p>`:''}
           </div>
-          <div class=\"card\">
+          <div class="card">
             <h3>Visit</h3>
-            <p>${esc(d.contact?.visit_note || 'West Glasgow (meetings by appointment). Exact address shared upon confirmation for safeguarding.')}</p>
+            <p>${E(d.contact?.visit_note || 'West Glasgow (meetings by appointment).')}</p>
             ${d.contact?.map_embed || ''}
-            ${socials?`<p class=\"notice\">Follow us: ${socials}</p>`:''}
+            ${socials?`<p class="notice">Follow us: ${socials}</p>`:''}
           </div>
         </div>`;
-
-      document.getElementById('year').textContent = new Date().getFullYear();
-      if(d.site?.name) document.getElementById('footerName').textContent = d.site.name;
-      if(d.legal?.scio) document.getElementById('scio').textContent = d.legal.scio;
-      if(d.legal?.oscr_badge) document.getElementById('oscrBadge').src = d.legal.oscr_badge;
-    }
-
-    (function runTests(){
-      try {
-        assert('esc() escapes &', esc('&') === '&amp;');
-        assert('esc() escapes < and >', esc('<>') === '&lt;&gt;');
-        assert('esc() escapes "', esc('"') === '&quot;');
-        assert('esc() handles null/undefined', esc(null) === '');
-        const fallback = parseDefault();
-        assert('default-content JSON is an object', typeof fallback === 'object' && !!fallback);
-        renderSite({site:{brand:{bg:'#ABCDEF'},name:'X'}, hero:{title:'T',lead:'L',actions:[],stats:[]}, about:{}, programmes:[], get_involved:{}, news:[], donate:{}, gallery:{images:[]}, contact:{}, legal:{}});
-        const bg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
-        assert('brand.bg sets --bg', bg === '#ABCDEF');
-        renderSite({site:{name:'X'}, hero:{title:'T',lead:'L',actions:[],stats:[]}, about:{}, programmes:[], get_involved:{}, news:[], donate:{}, gallery:{images:[{src:'assets/baraka-logo.png'}]}, contact:{}, legal:{}});
-        assert('gallery renders images', document.querySelectorAll('#gallery img').length === 1);
-        renderSite({site:{name:'X'}, hero:{title:'T',lead:'L',actions:[],stats:[]}, about:{}, programmes:[{title:'P', image:'assets/baraka-logo.png'}], get_involved:{}, news:[], donate:{}, gallery:{images:[]}, contact:{}, legal:{}});
-        assert('programme image renders', document.querySelectorAll('.prog-img').length === 1);
-        const dlinks = ['<a>1</a>','<a>2</a>'];
-        const html = `<div>${dlinks.join('\n')}</div>`;
-        assert('join("\\n") does not break template', html.includes('\n'));
-        renderSite({site:{name:'Baraka Test'}, hero:{title:'T',lead:'L',actions:[],stats:[]}, about:{}, programmes:[], get_involved:{}, news:[], donate:{}, gallery:{images:[]}, contact:{}, legal:{}});
-        assert('siteName updated', document.getElementById('siteName').textContent === 'Baraka Test');
-        const cardColor = getComputedStyle(document.documentElement).getPropertyValue('--card').trim();
-        assert('tinted card variable exists', !!cardColor && cardColor.startsWith('#'));
-      } catch(err){ results.push('✘ Test harness error: '+ err.message); }
-      finally { finish(); }
-    })();
-    loadContent();
+    });
   </script>
-
-  <script src="assets/site.js"></script>
 </body>
 </html>
+
