@@ -69,13 +69,14 @@
   "programmes": [
     {
       "title": "Family Connection Hub",
-      "description": "Monthly family activities...",
-      "image": "assets/IMG-20250815-WA0001.jpg",
-      "image_alt": "Family activities",
+      "description": "Monthly family activities to build confidence, connection, and joy for parents and children.",
+      "image": "assets/2.jpg",
+      "image_alt": "Family Connection Hub",
+      "link": "family-connection-hub.html",
       "bullets": [
-        "Activities and creative play",
-        "Peer support",
-        "Open to West Glasgow"
+        "Group activities and creative play",
+        "Peer support and signposting",
+        "Open to families across West Glasgow"
       ]
     },
     {

@@ -1,0 +1,15 @@
+{
+  "images": [
+    { "src": "assets/1.jpg", "alt": "Arts & crafts", "caption": "Creative session" },
+    { "src": "assets/2.jpg", "alt": "Parents and kids", "caption": "Family games" },
+    { "src": "assets/3.jpg", "alt": "Group activity", "caption": "Community time" },
+    { "src": "assets/4.jpg", "alt": "Group activity", "caption": "Community time" },
+    { "src": "assets/5.jpg", "alt": "Group activity", "caption": "Community time" },
+    { "src": "assets/6.jpg", "alt": "Group activity", "caption": "Community time" },
+    { "src": "assets/7.jpg", "alt": "Group activity", "caption": "Community time" },
+    { "src": "assets/8.jpg", "alt": "Group activity", "caption": "Community time" },
+    { "src": "assets/9.jpg", "alt": "Group activity", "caption": "Community time" },
+    { "src": "assets/10.jpg", "alt": "Group activity", "caption": "Community time" },
+    { "src": "assets/11.jpg", "alt": "Group activity", "caption": "Community time" }
+  ]
+}

@@ -257,6 +257,20 @@ body.logo-bg.centered {
 }
 
 
+/* Make entire programme cards clickable if they are <a> links */
+a.card.program {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+a.card.program:hover {
+  filter: brightness(.98);
+  transform: translateY(-1px);
+  transition: transform .05s ease, filter .15s ease;
+}
+
+
+
 
   
   
@@ -482,6 +496,32 @@ body.logo-bg.centered {
           </div>
         </div>`;
 
+
+      // PROGRAMMES
+            // PROGRAMMES
+      const programmes = document.getElementById('programmes');
+      const cards = (d.programmes || []).map(p => {
+        const inner = `
+          ${p.image ? `<img class="prog-img" src="${esc(p.image)}" alt="${esc(p.image_alt || p.title || 'Programme image')}" loading="lazy"/>` : ''}
+          <h3>${esc(p.title)}</h3>
+          <p>${esc(p.description || '')}</p>
+          ${p.bullets ? `<ul>${p.bullets.map(li => `<li>${esc(li)}</li>`).join('')}</ul>` : ''}
+        `;
+        // If a link is provided, wrap the entire card in <a>
+        return p.link
+          ? `<a class="card program" href="${esc(p.link)}" aria-label="${esc(p.title)}">${inner}</a>`
+          : `<div class="card program">${inner}</div>`;
+      }).join('');
+
+      programmes.innerHTML = `
+        <div class="kicker">Programmes</div>
+        <h2 class="section-title">${esc(d.programmes_title || 'What we run')}</h2>
+        <div class="grid">${cards}</div>`;
+
+
+
+      /*
+
       const programmes = document.getElementById('programmes');
       const cards = (d.programmes||[]).map(p=>`
         <div class=\"card program\">
@@ -495,6 +535,8 @@ body.logo-bg.centered {
         <div class=\"kicker\">Programmes</div>
         <h2 class=\"section-title\">${esc(d.programmes_title || 'What we run')}</h2>
         <div class=\"grid\">${cards}</div>`;
+
+      */
 
       const gi = document.getElementById('get-involved');
       const roleOptions = (d.get_involved?.volunteer?.roles || []).map(r=>`<option>${esc(r)}</option>`).join('');
