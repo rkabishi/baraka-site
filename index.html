@@ -12,13 +12,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/site.css">
 
-  <!-- Page-specific (hero + stats + gallery layout only; header comes from site.css) -->
+  <!-- Page-specific (hero + stats + gallery layout only) -->
   <style>
-    :root{
-      --bg:#EAF7F1;
-    }
-    html,body{background:var(--bg)}
-    .hero{display:grid;grid-template-columns:1.1fr 0.9fr;gap:28px;align-items:center;padding:32px 0}
+    :root{ --bg:#EAF7F1; }
+    html,body{ background:var(--bg) }
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center;padding:32px 0}
     .eyebrow{display:inline-block;padding:8px 12px;border-radius:999px;background:#e0f2fe;color:#075985;font-weight:700;font-size:clamp(14px,1.8vw,18px);letter-spacing:.4px;text-transform:uppercase}
     .lead{color:#475569;font-size:18px}
     .hero-card{background:var(--card);border:1px solid var(--card-border);border-radius:18px;padding:20px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
@@ -27,14 +25,12 @@
     .stat h3{margin:0;font-size:24px}
     .donate-row{display:flex;gap:12px;flex-wrap:wrap}
     .prog-img{width:100%;height:160px;object-fit:cover;border-radius:12px;margin-bottom:8px}
-    @media (max-width:900px){
-      .hero{grid-template-columns:1fr}
-    }
+    @media (max-width:900px){ .hero{grid-template-columns:1fr} }
   </style>
 </head>
 <body>
 
-  <!-- HEADER (shared skeleton; menu populated by assets/site.js) -->
+  <!-- HEADER (shared skeleton; menu populated by assets/site.js or fallback below) -->
   <header class="site-header">
     <div class="container nav">
       <a class="logo" href="index.html">
@@ -75,7 +71,7 @@
     <section id="contact" aria-label="Contact"></section>
   </main>
 
-  <!-- FOOTER (shared skeleton; details populated by assets/site.js) -->
+  <!-- FOOTER (shared skeleton) -->
   <footer class="footer">
     <div class="container" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;">
       <div>© <span id="year"></span> <span id="footerName">Baraka Community & Family Centre</span> · All rights reserved.<br><span class="notice">Registered SCIO <span id="scio"></span></span></div>
@@ -161,204 +157,153 @@
   <!-- Shared logic (builds header/footer + brand + helpers) -->
   <script src="assets/site.js"></script>
 
-  <!-- Homepage render (uses shared helpers; no duplicate header code) -->
-<script>
-  // --- helpers for optional gallery auto-discovery ---
-  function checkImage(src){ return new Promise(res => { const i=new Image(); i.onload=()=>res(true); i.onerror=()=>res(false); i.src=src; }); }
-  async function autoDiscoverGallery({prefix='assets/gallery-', exts=['.jpg','.jpeg','.png','.webp'], max=50, stopAfterMisses=8}={}){
-    const out=[]; let misses=0;
-    for(let n=1;n<=max;n++){
-      let added=false;
-      for(const ext of exts){
-        const p = `${prefix}${n}${ext}`;
-        // eslint-disable-next-line no-await-in-loop
-        if(await checkImage(p)){ out.push({src:p, alt:'Photo'}); added=true; break; }
-      }
-      if(!added){ if(++misses>=stopAfterMisses) break; } else { misses=0; }
+  <!-- Homepage render (with built-in fallbacks if site.js isn't ready) -->
+  <script>
+    /************ FALLBACK HELPERS (used only if SITE isn't ready) ************/
+    const F_ESC = (s)=>String(s??'').replace(/[&<>\\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const F_HEX=(n)=>n.toString(16).padStart(2,'0');
+    function F_hexToRgb(h){const m=/^#?([\\da-f]{2})([\\da-f]{2})([\\da-f]{2})$/i.exec(h||'');return m?{r:parseInt(m[1],16),g:parseInt(m[2],16),b:parseInt(m[3],16)}:{r:255,g:255,b:255};}
+    function F_mix(a,b,t){const A=F_hexToRgb(a),B=F_hexToRgb(b);const r=Math.round(A.r*(1-t)+B.r*t),g=Math.round(A.g*(1-t)+B.g*t),b2=Math.round(A.b*(1-t)+B.b*t);return `#${F_HEX(r)}${F_HEX(g)}${F_HEX(b2)}`;}
+    function F_applyBrand(brand={}){
+      const root=document.documentElement;
+      const primary=brand.primary||getComputedStyle(root).getPropertyValue('--brand').trim()||'#6B3F18';
+      const accent =brand.accent ||getComputedStyle(root).getPropertyValue('--accent').trim()||'#22C55E';
+      const bg     =brand.bg     ||getComputedStyle(root).getPropertyValue('--bg').trim()    ||'#EAF7F1';
+      root.style.setProperty('--brand',primary);
+      root.style.setProperty('--brand-dark',primary);
+      root.style.setProperty('--accent',accent);
+      root.style.setProperty('--bg',bg);
+      const card=F_mix(bg,accent,0.08), border=F_mix(F_mix(bg,accent,0.08),accent,0.15);
+      root.style.setProperty('--card',card); root.style.setProperty('--card-border',border);
     }
-    return out;
-  }
-
-  // --- main render; identical output, just wrapped as a function ---
-  async function renderHome(d){
-    const E = SITE.esc;
-
-    /* HERO LEFT */
-    const heroL = document.getElementById('heroLeft');
-    const eyebrow = d.hero?.eyebrow ? `<span class="eyebrow">${E(d.hero.eyebrow)}</span>` : '';
-    const actions = (d.hero?.actions||[]).map(a=>`<a class="btn ${a.style==='secondary'?'secondary':''}" href="${E(a.href)}">${E(a.label)}</a>`).join(' ');
-    const stats = (d.hero?.stats||[]).map(s=>`<div class="stat"><h3>${E(s.value)}</h3><div class="notice">${E(s.label)}</div></div>`).join('');
-    heroL.innerHTML = `
-      ${eyebrow}
-      <h1>${E(d.hero?.title||'')}</h1>
-      <p class="lead">${E(d.hero?.lead||'')}</p>
-      <div style="display:flex;gap:12px;margin-top:18px;flex-wrap:wrap">${actions}<a href="programmes.html" style="align-self:center;font-weight:700">See our programmes →</a></div>
-      <div class="stats">${stats}</div>
-    `;
-
-    /* HERO RIGHT */
-    const heroR = document.getElementById('heroRight');
-    const heroImg = d.hero?.image ? `<img src="${E(d.hero.image)}" alt="${E(d.hero.image_alt||'Photo')}" loading="lazy" style="width:100%;border-radius:12px;margin-bottom:10px">` : '';
-    const items = (d.hero?.this_month||[]).map(i=>`<li>${E(i)}</li>`).join('');
-    heroR.innerHTML = `
-      ${heroImg}
-      <div class="kicker">${E(d.hero?.right_kicker || 'This month')}</div>
-      <h3 style="margin:6px 0 10px">${E(d.hero?.right_title || 'What’s on at Baraka')}</h3>
-      <ul style="margin:0;padding-left:18px;color:var(--muted);line-height:1.6">${items}</ul>
-      <p class="notice" style="margin-top:12px">${d.hero?.right_note ? E(d.hero.right_note) : 'Want to join? '}<a href="contact.html">Contact us</a> to check times and locations.</p>
-    `;
-
-    /* ABOUT */
-    const about = document.getElementById('about');
-    const bullets = (d.about?.bullets||[]).map(b=>`<li>${E(b)}</li>`).join('');
-    about.innerHTML = `
-      <div class="two">
-        <div class="card">
-          <div class="kicker">About us</div>
-          <h2 class="section-title">${E(d.about?.title || 'Our story & mission')}</h2>
-          <p>${E(d.about?.story || '')}</p>
-          <p>${E(d.about?.values || '')}</p>
-          <ul>${bullets}</ul>
-        </div>
-        <div class="card">
-          <div class="kicker">What we value</div>
-          <h2 class="section-title">${E(d.about?.values_title || 'Empathy • Dignity • Solidarity • Empowerment')}</h2>
-          <p>${E(d.about?.values_para || '')}</p>
-          <div class="card" style="margin-top:10px">
-            <h3 style="margin:0 0 6px">${E(d.about?.cta_title || 'Need support?')}</h3>
-            <p class="notice" style="margin:0 0 10px">${E(d.about?.cta_note || 'We’ll listen and connect you to the right activity or service.')}</p>
-            <a href="contact.html" class="btn">${E(d.about?.cta_label || 'Get in touch')}</a>
-          </div>
-        </div>
-      </div>
-    `;
-
-    /* PROGRAMMES */
-    const programmes = document.getElementById('programmes');
-    const progs = (d.programmes || []).map(p => {
-      if (p.title && /family connection/i.test(p.title)) {
-        p = {...p, image:'assets/2.jpg', image_alt:'Family Connection Hub', link:'family-connection-hub.html'};
+    function F_buildHeader(d){
+      const header=document.querySelector('header.site-header'); if(!header) return;
+      const menu=header.querySelector('#site-menu'); const logo=header.querySelector('#logo'); const name=header.querySelector('#siteName');
+      if(d.site?.logo && logo) logo.src=d.site.logo; if(d.site?.name && name) name.textContent=d.site.name;
+      if(menu && !menu.children.length){
+        const links=[{label:'Home',href:'index.html'},{label:'Programmes',href:'programmes.html'},{label:'Get involved',href:'get-involved.html'},{label:'Gallery',href:'gallery.html'},{label:'Contact',href:'contact.html'}];
+        const here=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+        menu.innerHTML=links.map(l=>`<a class="${here===l.href.toLowerCase()?'active':''}" href="${l.href}">${F_ESC(l.label)}</a>`).join('');
       }
-      const inner = `
-        ${p.image ? `<img class="prog-img" src="${E(p.image)}" alt="${E(p.image_alt || p.title || 'Programme image')}" loading="lazy">` : ''}
-        <h3>${E(p.title||'')}</h3>
-        <p>${E(p.description||'')}</p>
-        ${p.bullets ? `<ul>${p.bullets.map(li => `<li>${E(li)}</li>`).join('')}</ul>` : ''}
-      `;
-      return p.link ? `<a class="card program" href="${E(p.link)}" aria-label="${E(p.title)}">${inner}</a>` : `<div class="card program">${inner}</div>`;
-    }).join('');
-    programmes.innerHTML = `
-      <div class="kicker">Programmes</div>
-      <h2 class="section-title">${E(d.programmes_title || 'What we run')}</h2>
-      <div class="grid">${progs}</div>
-    `;
+      const toggle=header.querySelector('.menu-toggle'); if(toggle && menu){
+        toggle.addEventListener('click',()=>{ const open=menu.classList.toggle('open'); toggle.setAttribute('aria-expanded',open?'true':'false'); toggle.textContent=open?'Close':'Menu'; });
+      }
+    }
+    function F_buildFooter(d){
+      const y=document.getElementById('year'), fn=document.getElementById('footerName'), sc=document.getElementById('scio'), os=document.getElementById('oscrBadge');
+      if(y) y.textContent=new Date().getFullYear(); if(fn && d.site?.name) fn.textContent=d.site.name; if(sc && d.legal?.scio) sc.textContent=d.legal.scio; if(os && d.legal?.oscr_badge) os.src=d.legal.oscr_badge;
+    }
+    function F_initSlideshow(id, images, {interval=4000}={}){
+      const root=document.getElementById(id); if(!root||!images?.length) return;
+      const slides=root.querySelector('.slides'), dots=root.querySelector('.dots'); if(!slides||!dots) return;
+      slides.innerHTML=images.map((g,i)=>`<div class="slide ${i===0?'active':''}"><img src="${F_ESC(g.src)}" alt="${F_ESC(g.alt||'Photo')}" loading="lazy"/>${g.caption?`<div class="caption">${F_ESC(g.caption)}</div>`:''}</div>`).join('');
+      dots.innerHTML=images.map((_,i)=>`<button class="dot ${i===0?'active':''}" aria-label="Go to slide ${i+1}"></button>`).join('');
+      const S=root.querySelectorAll('.slide'), D=root.querySelectorAll('.dot'), P=root.querySelector('[data-prev]'), N=root.querySelector('[data-next]');
+      let idx=0,t=null; const render=()=>{S.forEach((s,i)=>s.classList.toggle('active',i===idx)); D.forEach((d,i)=>d.classList.toggle('active',i===idx));};
+      const go=n=>{idx=(n+images.length)%images.length;render();}; const start=()=>{stop(); t=setInterval(()=>go(idx+1),interval);}; const stop=()=>{if(t) clearInterval(t); t=null;};
+      P?.addEventListener('click',()=>{go(idx-1);start();}); N?.addEventListener('click',()=>{go(idx+1);start();}); D.forEach((d,i)=>d.addEventListener('click',()=>{idx=i;start();}));
+      root.addEventListener('mouseenter',stop); root.addEventListener('mouseleave',start); render(); start();
+    }
+    function F_parseDefault(){ try{return JSON.parse(document.getElementById('default-content').textContent||'{}');}catch{return {};} }
+    async function F_loadContent(){ try{ const r=await fetch('data/content.json',{cache:'no-store'}); if(!r.ok) throw 0; return await r.json(); }catch{ return F_parseDefault(); } }
+    function F_E(){ return (window.SITE && SITE.esc) ? SITE.esc : F_ESC; }
 
-    /* NEWS */
-    const news = document.getElementById('news');
-    const newsCards = (d.news||[]).map(n=>`
-      <div class="card">
-        <h3>${E(n.title)}</h3>
-        <p>${E(n.body)}</p>
-        ${n.date?`<p class="notice">Posted: <time>${E(n.date)}</time></p>`:''}
-      </div>`).join('');
-    news.innerHTML = `
-      <div class="kicker">Updates</div>
-      <h2 class="section-title">${E(d.news_title || 'Latest news')}</h2>
-      <div class="grid">${newsCards}</div>
-    `;
-
-    /* DONATE */
-    const donate = document.getElementById('donate');
-    const dlinks = [];
-    if(d.donate?.paypal) dlinks.push(`<a class="btn" href="${E(d.donate.paypal)}">Donate via PayPal</a>`);
-    if(d.donate?.stripe) dlinks.push(`<a class="btn secondary" href="${E(d.donate.stripe)}">Donate via Stripe</a>`);
-    if(d.donate?.justgiving) dlinks.push(`<a class="btn" href="${E(d.donate.justgiving)}">JustGiving</a>`);
-    donate.innerHTML = `
-      <div class="kicker">Donate</div>
-      <h2 class="section-title">${E(d.donate_title || 'Support our work')}</h2>
-      <p>${E(d.donate?.intro || 'Your donation helps us run weekly food support, skills workshops, and safe community spaces.')}</p>
-      <div class="donate-row" style="margin:14px 0 6px">${dlinks.join(' ')}</div>
-      <p class="notice">${E(d.donate?.note || '')}</p>
-    `;
-
-    /* GALLERY → slideshow */
-    const gal = document.getElementById('gallery');
-    let imgs = d.gallery?.images || [];
-    if (!imgs.length) {  // optional auto-discover fallback
-      imgs = await autoDiscoverGallery();
+    // Auto-discover gallery-#.ext if JSON gallery is empty
+    function checkImage(src){ return new Promise(res=>{const i=new Image(); i.onload=()=>res(true); i.onerror=()=>res(false); i.src=src;}); }
+    async function autoDiscoverGallery({prefix='assets/gallery-',exts=['.jpg','.jpeg','.png','.webp'],max=50,stopAfterMisses=8}={}){
+      const out=[]; let misses=0;
+      for(let n=1;n<=max;n++){
+        let added=false;
+        for(const ext of exts){ const p=`${prefix}${n}${ext}`; /* eslint-disable-next-line no-await-in-loop */ if(await checkImage(p)){ out.push({src:p,alt:'Photo'}); added=true; break; } }
+        if(!added){ if(++misses>=stopAfterMisses) break; } else misses=0;
+      }
+      return out;
     }
 
-    if (imgs.length) {
-      const slidesHtml = imgs.map((g,i)=>`
-        <div class="slide ${i===0?'active':''}">
-          <img src="${E(g.src)}" alt="${E(g.alt||'Photo')}" loading="lazy">
-          ${g.caption?`<div class="caption">${E(g.caption)}</div>`:''}
-        </div>`).join('');
-      const dotsHtml = imgs.map((_,i)=>`<button class="dot ${i===0?'active':''}" aria-label="Go to slide ${i+1}"></button>`).join('');
-      const slideshowId = 'baraka-slideshow';
-      gal.innerHTML = `
-        <div class="kicker">${E(d.gallery?.title || 'Photos')}</div>
-        <h2 class="section-title">${E(d.gallery?.subtitle || 'A glimpse of life at Baraka')}</h2>
-        <div class="slideshow" id="${slideshowId}" aria-label="Photo slideshow">
-          <div class="slides">${slidesHtml}</div>
-          <button class="nav prev" data-prev aria-label="Previous slide">‹</button>
-          <button class="nav next" data-next aria-label="Next slide">›</button>
-          <div class="dots">${dotsHtml}</div>
-        </div>`;
-      SITE.initSlideshow(slideshowId, imgs, { interval: 4000 });
-    } else {
-      gal.innerHTML = `
-        <div class="kicker">${E(d.gallery?.title || 'Photos')}</div>
-        <h2 class="section-title">${E(d.gallery?.subtitle || 'A glimpse of life at Baraka')}</h2>
-        <p class="notice">Add images to <code>data/content.json → gallery.images</code> or upload files named <code>assets/gallery-1.jpg</code>, <code>gallery-2.jpg</code>, …</p>`;
+    /********************** PAGE RENDER ***************************************/
+    async function renderHome(data){
+      const E = F_E();
+
+      // Brand + header/footer (prefer shared helpers if present)
+      (window.SITE?.applyBrand || F_applyBrand)(data.site?.brand||{});
+      (window.SITE?.buildHeader || F_buildHeader)(data);
+      (window.SITE?.buildFooter || F_buildFooter)(data);
+
+      /* HERO LEFT */
+      const heroL=document.getElementById('heroLeft');
+      const eyebrow=data.hero?.eyebrow?`<span class="eyebrow">${E(data.hero.eyebrow)}</span>`:'';
+      const actions=(data.hero?.actions||[]).map(a=>`<a class="btn ${a.style==='secondary'?'secondary':''}" href="${E(a.href)}">${E(a.label)}</a>`).join(' ');
+      const stats=(data.hero?.stats||[]).map(s=>`<div class="stat"><h3>${E(s.value)}</h3><div class="notice">${E(s.label)}</div></div>`).join('');
+      heroL.innerHTML=`${eyebrow}<h1>${E(data.hero?.title||'')}</h1><p class="lead">${E(data.hero?.lead||'')}</p><div style="display:flex;gap:12px;margin-top:18px;flex-wrap:wrap">${actions}<a href="programmes.html" style="align-self:center;font-weight:700">See our programmes →</a></div><div class="stats">${stats}</div>`;
+
+      /* HERO RIGHT */
+      const heroR=document.getElementById('heroRight');
+      const heroImg=data.hero?.image?`<img src="${E(data.hero.image)}" alt="${E(data.hero.image_alt||'Photo')}" loading="lazy" style="width:100%;border-radius:12px;margin-bottom:10px">`:'';
+      const items=(data.hero?.this_month||[]).map(i=>`<li>${E(i)}</li>`).join('');
+      heroR.innerHTML=`${heroImg}<div class="kicker">${E(data.hero?.right_kicker||'This month')}</div><h3 style="margin:6px 0 10px">${E(data.hero?.right_title||'What’s on at Baraka')}</h3><ul style="margin:0;padding-left:18px;color:var(--muted);line-height:1.6">${items}</ul><p class="notice" style="margin-top:12px">${data.hero?.right_note?E(data.hero.right_note):'Want to join? '}<a href="contact.html">Contact us</a> to check times and locations.</p>`;
+
+      /* ABOUT */
+      const about=document.getElementById('about');
+      const bullets=(data.about?.bullets||[]).map(b=>`<li>${E(b)}</li>`).join('');
+      about.innerHTML=`<div class="two"><div class="card"><div class="kicker">About us</div><h2 class="section-title">${E(data.about?.title||'Our story & mission')}</h2><p>${E(data.about?.story||'')}</p><p>${E(data.about?.values||'')}</p><ul>${bullets}</ul></div><div class="card"><div class="kicker">What we value</div><h2 class="section-title">${E(data.about?.values_title||'Empathy • Dignity • Solidarity • Empowerment')}</h2><p>${E(data.about?.values_para||'')}</p><div class="card" style="margin-top:10px"><h3 style="margin:0 0 6px">${E(data.about?.cta_title||'Need support?')}</h3><p class="notice" style="margin:0 0 10px">${E(data.about?.cta_note||'We’ll listen and connect you to the right activity or service.')}</p><a href="contact.html" class="btn">${E(data.about?.cta_label||'Get in touch')}</a></div></div></div>`;
+
+      /* PROGRAMMES */
+      const progEl=document.getElementById('programmes');
+      const progs=(data.programmes||[]).map(p=>{
+        if(p.title && /family connection/i.test(p.title)){ p={...p,image:'assets/2.jpg',image_alt:'Family Connection Hub',link:'family-connection-hub.html'}; }
+        const inner=`${p.image?`<img class="prog-img" src="${E(p.image)}" alt="${E(p.image_alt||p.title||'Programme image')}" loading="lazy">`:''}<h3>${E(p.title||'')}</h3><p>${E(p.description||'')}</p>${p.bullets?`<ul>${p.bullets.map(li=>`<li>${E(li)}</li>`).join('')}</ul>`:''}`;
+        return p.link?`<a class="card program" href="${E(p.link)}" aria-label="${E(p.title)}">${inner}</a>`:`<div class="card program">${inner}</div>`;
+      }).join('');
+      progEl.innerHTML=`<div class="kicker">Programmes</div><h2 class="section-title">${E(data.programmes_title||'What we run')}</h2><div class="grid">${progs}</div>`;
+
+      /* NEWS */
+      const news=document.getElementById('news');
+      const newsCards=(data.news||[]).map(n=>`<div class="card"><h3>${E(n.title)}</h3><p>${E(n.body)}</p>${n.date?`<p class="notice">Posted: <time>${E(n.date)}</time></p>`:''}</div>`).join('');
+      news.innerHTML=`<div class="kicker">Updates</div><h2 class="section-title">${E(data.news_title||'Latest news')}</h2><div class="grid">${newsCards}</div>`;
+
+      /* DONATE */
+      const donate=document.getElementById('donate'); const dlinks=[];
+      if(data.donate?.paypal) dlinks.push(`<a class="btn" href="${E(data.donate.paypal)}">Donate via PayPal</a>`);
+      if(data.donate?.stripe) dlinks.push(`<a class="btn secondary" href="${E(data.donate.stripe)}">Donate via Stripe</a>`);
+      if(data.donate?.justgiving) dlinks.push(`<a class="btn" href="${E(data.donate.justgiving)}">JustGiving</a>`);
+      donate.innerHTML=`<div class="kicker">Donate</div><h2 class="section-title">${E(data.donate_title||'Support our work')}</h2><p>${E(data.donate?.intro||'Your donation helps us run weekly food support, skills workshops, and safe community spaces.')}</p><div class="donate-row" style="margin:14px 0 6px">${dlinks.join(' ')}</div><p class="notice">${E(data.donate?.note||'')}</p>`;
+
+      /* GALLERY → slideshow (JSON first, then auto-discover) */
+      const gal=document.getElementById('gallery');
+      let imgs=data.gallery?.images||[];
+      if(!imgs.length){ imgs = await autoDiscoverGallery(); }
+      if(imgs.length){
+        const slidesHtml=imgs.map((g,i)=>`<div class="slide ${i===0?'active':''}"><img src="${E(g.src)}" alt="${E(g.alt||'Photo')}" loading="lazy">${g.caption?`<div class="caption">${E(g.caption)}</div>`:''}</div>`).join('');
+        const dotsHtml=imgs.map((_,i)=>`<button class="dot ${i===0?'active':''}" aria-label="Go to slide ${i+1}"></button>`).join('');
+        const id='baraka-slideshow';
+        gal.innerHTML=`<div class="kicker">${E(data.gallery?.title||'Photos')}</div><h2 class="section-title">${E(data.gallery?.subtitle||'A glimpse of life at Baraka')}</h2><div class="slideshow" id="${id}" aria-label="Photo slideshow"><div class="slides">${slidesHtml}</div><button class="nav prev" data-prev aria-label="Previous slide">‹</button><button class="nav next" data-next aria-label="Next slide">›</button><div class="dots">${dotsHtml}</div></div>`;
+        (window.SITE?.initSlideshow || F_initSlideshow)(id, imgs, {interval:4000});
+      } else {
+        gal.innerHTML=`<div class="kicker">${E(data.gallery?.title||'Photos')}</div><h2 class="section-title">${E(data.gallery?.subtitle||'A glimpse of life at Baraka')}</h2><p class="notice">Add images to <code>data/content.json → gallery.images</code> or upload files named <code>assets/gallery-1.jpg</code>, <code>gallery-2.jpg</code>, …</p>`;
+      }
+
+      /* CONTACT (homepage block) */
+      const contact=document.getElementById('contact');
+      const fb=data.contact?.socials?.facebook?`<a href="${E(data.contact.socials.facebook)}">Facebook</a>`:''; const ig=data.contact?.socials?.instagram?`<a href="${E(data.contact.socials.instagram)}">Instagram</a>`:''; const wa=data.contact?.socials?.whatsapp?`<a href="${E(data.contact.socials.whatsapp)}">WhatsApp</a>`:''; const socials=[fb,ig,wa].filter(Boolean).join(' · ');
+      contact.innerHTML=`<div class="kicker">Contact</div><h2 class="section-title">${E(data.contact_title||'Get in touch')}</h2><div class="two"><div class="card"><h3>Message us</h3><form action="mailto:${E(data.contact?.email||'')}" method="post" enctype="text/plain" onsubmit="alert('Thanks! We\\'ll reply soon.');"><div class="two"><div><label class="notice">Name</label><input required placeholder="Your name"></div><div><label class="notice">Email</label><input required type="email" placeholder="you@example.com"></div></div><div style="margin-top:10px"><label class="notice">Your message</label><textarea rows="4" placeholder="How can we help?"></textarea></div><div style="margin-top:12px"><button class="btn" type="submit">Send</button></div></form>${data.contact?.email?`<p class="notice" style="margin-top:8px">Email: <a href="mailto:${E(data.contact.email)}">${E(data.contact.email)}</a></p>`:''}</div><div class="card"><h3>Visit</h3><p>${E(data.contact?.visit_note||'West Glasgow (meetings by appointment).')}</p>${data.contact?.map_embed||''}${socials?`<p class="notice">Follow us: ${socials}</p>`:''}</div></div>`;
     }
 
-    /* CONTACT (homepage block) */
-    const contact = document.getElementById('contact');
-    const fb = d.contact?.socials?.facebook ? `<a href="${E(d.contact.socials.facebook)}">Facebook</a>`:'';
-    const ig = d.contact?.socials?.instagram ? `<a href="${E(d.contact.socials.instagram)}">Instagram</a>`:'';
-    const wa = d.contact?.socials?.whatsapp ? `<a href="${E(d.contact.socials.whatsapp)}">WhatsApp</a>`:'';
-    const socials = [fb,ig,wa].filter(Boolean).join(' · ');
-    contact.innerHTML = `
-      <div class="kicker">Contact</div>
-      <h2 class="section-title">${E(d.contact_title || 'Get in touch')}</h2>
-      <div class="two">
-        <div class="card">
-          <h3>Message us</h3>
-          <form action="mailto:${E(d.contact?.email || '')}" method="post" enctype="text/plain" onsubmit="alert('Thanks! We\\'ll reply soon.');">
-            <div class="two">
-              <div><label class="notice">Name</label><input required placeholder="Your name"></div>
-              <div><label class="notice">Email</label><input required type="email" placeholder="you@example.com"></div>
-            </div>
-            <div style="margin-top:10px"><label class="notice">Your message</label><textarea rows="4" placeholder="How can we help?"></textarea></div>
-            <div style="margin-top:12px"><button class="btn" type="submit">Send</button></div>
-          </form>
-          ${d.contact?.email ? `<p class="notice" style="margin-top:8px">Email: <a href="mailto:${E(d.contact.email)}">${E(d.contact.email)}</a></p>`:''}
-        </div>
-        <div class="card">
-          <h3>Visit</h3>
-          <p>${E(d.contact?.visit_note || 'West Glasgow (meetings by appointment).')}</p>
-          ${d.contact?.map_embed || ''}
-          ${socials?`<p class="notice">Follow us: ${socials}</p>`:''}
-        </div>
-      </div>`;
-  }
-
-  // --- wait for site data, with a graceful fallback ---
-  document.addEventListener('site:loaded', (e)=> { renderHome(e.detail); });
-  if (window.__SITE__) {
-    renderHome(window.__SITE__);
-  } else {
-    // fallback after 0.8s if content.json can't be fetched (e.g., local file preview)
-    setTimeout(async ()=>{
-      if (!window.__SITE__) {
-        const F = JSON.parse(document.getElementById('default-content').textContent || '{}');
-        await renderHome(F);
+    /********************** BOOTSTRAP: get data then render ********************/
+    (async function boot(){
+      // Prefer data loaded by assets/site.js if present
+      let data = window.__SITE__;
+      // If the shared script dispatches site:loaded, use it
+      if(!data){
+        document.addEventListener('site:loaded', (e)=>{ renderHome(e.detail); }, { once:true });
       }
-    }, 800);
-  }
-</script>
-
+      // Fallback: fetch content.json (or use default JSON) and render
+      if(!data){
+        data = await F_loadContent();
+        renderHome(data);
+      }
+    })();
+  </script>
 </body>
 </html>
+
 
