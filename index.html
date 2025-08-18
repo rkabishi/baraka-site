@@ -177,6 +177,7 @@
     async function autoDiscoverGallery({prefix='assets/gallery-',exts=['.jpg','.jpeg','.png','.webp'],max=50,stopAfterMisses=8}={}){ const out=[]; let misses=0; for(let n=1;n<=max;n++){ let added=false; for(const ext of exts){ const p=`${prefix}${n}${ext}`; /* eslint-disable-next-line no-await-in-loop */ if(await checkImage(p)){ out.push({src:p,alt:'Photo'}); added=true; break; } } if(!added){ if(++misses>=stopAfterMisses) break; } else misses=0; } return out; }
 
     /* --- Our sponsors row (used beside News/Donate titles) --- */
+    /*
     function sponsorsRowHTML(E) {
       const sponsors = [
         { src: 'assets/Founders/TNL.png',                         alt: 'The National Lottery Community Fund', name: 'tnl' },
@@ -191,6 +192,7 @@
                </div>`).join('') +
              `</div>`;
     }
+             */
 
     /********************** PAGE RENDER ***************************************/
     async function renderHome(data){
