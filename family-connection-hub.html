@@ -10,9 +10,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/site.css">
   <style>
-    /* Page-specific tweaks */
     main.container { padding-top: 16px; }
     .wide-hero { margin: 12px 0 24px; }
+
     .pill { display:inline-block; padding:6px 10px; border-radius:999px; background:#f1f5f9; color:#0f172a; font-weight:600; font-size:12px; }
     .fact { display:grid; grid-template-columns: 120px 1fr; gap:10px; align-items:start; }
     .fact b { color: var(--muted); }
@@ -28,7 +28,7 @@
 </head>
 <body>
 
-  <!-- HEADER (same as other pages, menu populated by assets/site.js) -->
+  <!-- HEADER -->
   <header class="site-header">
     <div class="container nav">
       <a class="logo" href="index.html">
@@ -36,7 +36,14 @@
         <span id="siteName">Baraka Community & Family Centre</span>
       </a>
       <button class="menu-toggle" aria-expanded="false" aria-controls="site-menu">Menu</button>
-      <nav id="site-menu" class="menu" aria-label="Main menu"></nav>
+      <nav id="site-menu" class="menu" aria-label="Main menu">
+        <!-- Simple fallback menu so page works even if site.js fails -->
+        <a href="index.html">Home</a>
+        <a href="programmes.html">Programmes</a>
+        <a href="get-involved.html">Get involved</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="contact.html">Contact</a>
+      </nav>
     </div>
   </header>
 
@@ -95,7 +102,7 @@
     </section>
   </main>
 
-  <!-- FOOTER (same as other pages) -->
+  <!-- FOOTER -->
   <footer class="footer">
     <div class="container" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;">
       <div>© <span id="year"></span> <span id="footerName">Baraka Community & Family Centre</span> · All rights reserved.<br><span class="notice">Registered SCIO <span id="scio"></span></span></div>
@@ -141,134 +148,142 @@
   }
   </script>
 
-  <!-- Shared helpers (header/footer/brand/slideshow) -->
+  <!-- (Optional) shared helpers; not required for this page to work -->
   <script src="assets/site.js"></script>
 
-  <!-- Page render -->
   <script>
-    // Escaper + JSON read
-    const E = (s)=>String(s??'').replace(/[&<>\\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-    function parsePage(){
-      try { return JSON.parse(document.getElementById('family-hub-content').textContent || '{}'); }
-      catch { return {}; }
+    /* ---------- Utilities ---------- */
+    function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+    function getJson(id){
+      try { return JSON.parse(document.getElementById(id).textContent || '{}'); }
+      catch(e){ console.error('JSON parse error:', e); return {}; }
     }
 
-    // Image helpers — files are assets/FamilyHub/20.jpg ... /35.jpg
+    /* ---------- Slideshow helpers ---------- */
+    function localInitSlideshow(id, images, opts){
+      var interval = (opts && opts.interval) || 4000;
+      var root = document.getElementById(id);
+      if(!root || !images || !images.length) return;
+      var slides = root.querySelectorAll('.slide');
+      var dots   = root.querySelectorAll('.dot');
+      var prev   = root.querySelector('[data-prev]');
+      var next   = root.querySelector('[data-next]');
+      var idx=0, timer=null;
+      function render(){ for(var i=0;i<slides.length;i++){ slides[i].classList.toggle('active', i===idx); dots[i] && dots[i].classList.toggle('active', i===idx); } }
+      function go(n){ idx = (n + images.length) % images.length; render(); }
+      function start(){ stop(); timer = setInterval(function(){ go(idx+1); }, interval); }
+      function stop(){ if(timer) clearInterval(timer); timer=null; }
+      if(prev) prev.addEventListener('click', function(){ go(idx-1); start(); });
+      if(next) next.addEventListener('click', function(){ go(idx+1); start(); });
+      dots.forEach && dots.forEach(function(d,i){ d.addEventListener('click', function(){ idx=i; start(); }); });
+      root.addEventListener('mouseenter', stop);
+      root.addEventListener('mouseleave', start);
+      render(); start();
+    }
+
     function checkImage(src){
-      return new Promise(res=>{
-        const i = new Image();
-        i.onload  = () => res(true);
-        i.onerror = () => res(false);
-        i.src = src; // no spaces to encode now
+      return new Promise(function(resolve){
+        var img = new Image();
+        img.onload  = function(){ resolve(true); };
+        img.onerror = function(){ resolve(false); };
+        img.src = src;
       });
     }
+
+    // Discover assets/FamilyHub/20.jpg … /35.jpg
     async function discoverFamilyHubImages(){
-      const out = [];
-      for (let n = 20; n <= 35; n++){
-        const p = `assets/FamilyHub/${n}.jpg`;
+      var out = [];
+      for (var n=20; n<=35; n++){
+        var p = 'assets/FamilyHub/' + n + '.jpg';
         /* eslint-disable-next-line no-await-in-loop */
-        if (await checkImage(p)) out.push({ src: p, alt: `Family Hub ${n}` });
+        if (await checkImage(p)) out.push({ src:p, alt:'Family Hub ' + n });
       }
       return out;
     }
 
-    // Minimal local slideshow init (used only if SITE.initSlideshow is missing)
-    function localInitSlideshow(id, images, {interval=4000}={}){
-      const root=document.getElementById(id); if(!root||!images?.length) return;
-      const slides=root.querySelectorAll('.slide');
-      const dots=root.querySelectorAll('.dot');
-      const prev=root.querySelector('[data-prev]'); const next=root.querySelector('[data-next]');
-      let idx=0,timer=null;
-      const render=()=>{slides.forEach((s,i)=>s.classList.toggle('active',i===idx)); dots.forEach((d,i)=>d.classList.toggle('active',i===idx));};
-      const go=n=>{idx=(n+images.length)%images.length; render();};
-      const start=()=>{stop(); timer=setInterval(()=>go(idx+1),interval);};
-      const stop =()=>{if(timer) clearInterval(timer); timer=null;};
-      prev?.addEventListener('click',()=>{go(idx-1);start();});
-      next?.addEventListener('click',()=>{go(idx+1);start();});
-      dots.forEach((d,i)=>d.addEventListener('click',()=>{idx=i;start();}));
-      root.addEventListener('mouseenter',stop); root.addEventListener('mouseleave',start);
-      render(); start();
-    }
+    /* ---------- Render ---------- */
+    async function render(){
+      // Fill footer basics (works even if site.js is absent)
+      var yearEl = document.getElementById('year');
+      if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-    function render(siteData){
-      // Brand + header/footer from shared script (if present)
-      (window.SITE?.applyBrand || (()=>{}))(siteData?.site?.brand || {});
-      (window.SITE?.buildHeader || (()=>{}))(siteData || {});
-      (window.SITE?.buildFooter || (()=>{}))(siteData || {});
-
-      const page = parsePage();
+      var page = getJson('family-hub-content');
 
       // Lead
-      document.getElementById('fh-lead').textContent = page.lead || 'A monthly, welcoming space for parents and children.';
+      var leadEl = document.getElementById('fh-lead');
+      if (leadEl) leadEl.textContent = page.lead || 'A monthly, welcoming space for parents and children.';
 
       // When & where
-      document.getElementById('fh-day').textContent = page.when?.day || 'Last Saturday of every month';
-      document.getElementById('fh-time').textContent = page.when?.time || '12:00 – 15:00';
-      document.getElementById('fh-location').textContent = page.when?.location || 'West Glasgow';
-      document.getElementById('fh-who').textContent = page.when?.who || 'Parents/carers & children';
-      document.getElementById('fh-cost').textContent = page.when?.cost || 'Free';
-      const regHref = page.when?.register_href || 'mailto:hello@baraka-centre.org';
-      const regLabel = page.when?.register_label || 'Register interest by email';
-      document.getElementById('fh-register').innerHTML = `<a class="btn" href="${E(regHref)}">${E(regLabel)}</a>`;
+      document.getElementById('fh-day').textContent      = (page.when && page.when.day)      || 'Last Saturday of every month';
+      document.getElementById('fh-time').textContent     = (page.when && page.when.time)     || '12:00 – 15:00';
+      document.getElementById('fh-location').textContent = (page.when && page.when.location) || 'West Glasgow';
+      document.getElementById('fh-who').textContent      = (page.when && page.when.who)      || 'Parents/carers & children';
+      document.getElementById('fh-cost').textContent     = (page.when && page.when.cost)     || 'Free';
+      var regHref  = (page.when && page.when.register_href)  || 'mailto:hello@baraka-centre.org';
+      var regLabel = (page.when && page.when.register_label) || 'Register interest by email';
+      document.getElementById('fh-register').innerHTML = '<a class="btn" href="'+esc(regHref)+'">'+esc(regLabel)+'</a>';
 
       // Activities
-      const acts = page.activities || [];
+      var acts = page.activities || [];
       document.getElementById('fh-activities').innerHTML = acts.length
-        ? acts.map(a=>`<li>${E(a)}</li>`).join('')
+        ? acts.map(function(a){ return '<li>'+esc(a)+'</li>'; }).join('')
         : '<li>Creative play and crafts</li>';
 
-      // Safeguarding note
+      // Safeguarding + session plan
       document.getElementById('fh-safeguarding').textContent = page.safeguarding || '';
-
-      // Session plan
-      const plan = page.session_plan || [];
-      document.getElementById('fh-session-grid').innerHTML = plan.map(([time,what]) =>
-        `<div><b>${E(time)}</b></div><div>${E(what)}</div>`).join('');
+      var plan = page.session_plan || [];
+      document.getElementById('fh-session-grid').innerHTML = plan.map(function(row){
+        return '<div><b>'+esc(row[0])+'</b></div><div>'+esc(row[1])+'</div>';
+      }).join('');
 
       // CTA
-      const ctaA = document.getElementById('fh-cta-primary');
+      var ctaA = document.getElementById('fh-cta-primary');
       ctaA.textContent = page.cta_primary_label || 'Register interest';
-      ctaA.href = page.cta_primary_href || 'mailto:hello@baraka-centre.org';
+      ctaA.href        = page.cta_primary_href  || 'mailto:hello@baraka-centre.org';
       document.getElementById('fh-cta-note').textContent = page.cta_note || '';
 
-      // Slideshow (inside render so 'page' is in scope)
-      (async ()=>{
-        let imgs = Array.isArray(page.images) ? page.images.slice() : [];
-        if (!imgs.length) imgs = await discoverFamilyHubImages();
-        if (!imgs.length && page.fallback_image) imgs = [page.fallback_image];
+      // Slideshow images: JSON → FamilyHub discovery → fallback
+      var imgs = Array.isArray(page.images) && page.images.length ? page.images.slice() : [];
+      if (!imgs.length) imgs = await discoverFamilyHubImages();
+      if (!imgs.length && page.fallback_image) imgs = [page.fallback_image];
 
-        const rootId = 'family-hub-slideshow';
-        const slidesEl = document.querySelector('#'+rootId+' .slides');
-        const dotsEl   = document.querySelector('#'+rootId+' .dots');
+      var rootId  = 'family-hub-slideshow';
+      var slides  = document.querySelector('#'+rootId+' .slides');
+      var dotsBox = document.querySelector('#'+rootId+' .dots');
 
-        if (imgs.length && slidesEl && dotsEl) {
-          const slidesHtml = imgs.map((g,i)=>`
-              <div class="slide ${i===0?'active':''}">
-                <img src="${g.src}" alt="${E(g.alt || 'Family Hub photo')}" loading="lazy">
-                ${g.caption ? `<div class="caption">${E(g.caption)}</div>` : ''}
-              </div>`).join('');
-          const dotsHtml = imgs.map((_,i)=>`<button class="dot ${i===0?'active':''}" aria-label="Go to slide ${i+1}"></button>`).join('');
+      if (imgs.length && slides && dotsBox) {
+        var slidesHtml = imgs.map(function(g, i){
+          var src = g.src;
+          var alt = esc(g.alt || 'Family Hub photo');
+          return '<div class="slide '+(i===0?'active':'')+'">'+
+                   '<img src="'+src+'" alt="'+alt+'" loading="lazy">'+
+                   (g.caption ? '<div class="caption">'+esc(g.caption)+'</div>' : '')+
+                 '</div>';
+        }).join('');
+        var dotsHtml = imgs.map(function(_,i){
+          return '<button class="dot '+(i===0?'active':'')+'" aria-label="Go to slide '+(i+1)+'"></button>';
+        }).join('');
 
-          slidesEl.innerHTML = slidesHtml;
-          dotsEl.innerHTML   = dotsHtml;
+        slides.innerHTML = slidesHtml;
+        dotsBox.innerHTML = dotsHtml;
 
-          (window.SITE?.initSlideshow || localInitSlideshow)(rootId, imgs, { interval: 4000 });
-          console.log(`[Family Hub] Loaded ${imgs.length} slideshow image(s) from /assets/FamilyHub/.`);
-        } else if (slidesEl) {
-          slidesEl.innerHTML = `<div class="slide active"><img src="assets/2.jpg" alt="Family Hub" loading="lazy"></div>`;
-          console.warn('[Family Hub] No slideshow images found. Showing fallback.');
-        }
-      })();
+        // Use shared init if present; else fallback
+        var init = (window.SITE && window.SITE.initSlideshow) ? window.SITE.initSlideshow : localInitSlideshow;
+        init(rootId, imgs, { interval: 4000 });
+
+        console.log('[Family Hub] Loaded '+imgs.length+' slideshow image(s) from /assets/FamilyHub/.');
+      } else if (slides) {
+        slides.innerHTML = '<div class="slide active"><img src="assets/2.jpg" alt="Family Hub" loading="lazy"></div>';
+        console.warn('[Family Hub] No slideshow images found. Showing fallback.');
+      }
     }
 
-    // Boot: use site data if available; otherwise render with defaults
-    if (window.__SITE__) {
-      render(window.__SITE__);
-    } else {
-      document.addEventListener('site:loaded', (e)=>render(e.detail), { once:true });
-      setTimeout(()=>{ if (!window.__SITE__) render({}); }, 800);
-    }
+    // Start after DOM is ready
+    document.addEventListener('DOMContentLoaded', function(){
+      try { render(); } catch (e) { console.error('Render error:', e); }
+    });
   </script>
 </body>
 </html>
+
 
