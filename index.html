@@ -227,16 +227,21 @@
 
         // Reusable "Our sponsors" row (logos loaded from /assets/Founders)
     function sponsorsRowHTML(E) {
-      const sponsors = [
-        { src: 'assets/Founders/TNL.png',                         alt: 'The National Lottery Community Fund' },
-        { src: 'assets/Founders/Scottish-Refugee_council.png',    alt: 'Scottish Refugee Council' },
-        { src: 'assets/Founders/corra-logo.jpg',                  alt: 'Corra Foundation' },
-        { src: 'assets/Founders/Fareshare.jpg',                   alt: 'FareShare' }
-      ];
-      return `<div class="sponsors-row" aria-label="Our sponsors">` +
-            sponsors.map(s => `<img src="${E(s.src)}" alt="${E(s.alt)}" loading="lazy">`).join('') +
-            `</div>`;
-    }
+  const sponsors = [
+    { src: 'assets/Founders/TNL.png',                      alt: 'The National Lottery Community Fund' },
+    { src: 'assets/Founders/Scottish-Refugee_council.png', alt: 'Scottish Refugee Council' },
+    { src: 'assets/Founders/corra-logo.jpg',               alt: 'Corra Foundation' },
+    { src: 'assets/Founders/Fareshare.jpg',                alt: 'FareShare' }
+  ];
+  return `<div class="sponsors-row" aria-label="Our sponsors">` +
+         sponsors.map(s =>
+           `<div class="sponsor">
+              <img src="${E(s.src)}" alt="${E(s.alt)}" loading="lazy">
+            </div>`
+         ).join('') +
+         `</div>`;
+}
+
 
 
 
