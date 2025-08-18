@@ -220,6 +220,23 @@
       return out;
     }
 
+        // Reusable "Our sponsors" row (logos loaded from /assets/Founders)
+    function sponsorsRowHTML(E) {
+      const sponsors = [
+        { src: 'assets/Founders/TNL.png',                         alt: 'The National Lottery Community Fund' },
+        { src: 'assets/Founders/Scottish-Refugee_council.png',    alt: 'Scottish Refugee Council' },
+        { src: 'assets/Founders/corra-logo.jpg',                  alt: 'Corra Foundation' },
+        { src: 'assets/Founders/Fareshare.jpg',                   alt: 'FareShare' }
+      ];
+      return `<div class="sponsors-row" aria-label="Our sponsors">` +
+            sponsors.map(s => `<img src="${E(s.src)}" alt="${E(s.alt)}" loading="lazy">`).join('') +
+            `</div>`;
+    }
+
+
+
+
+
     /********************** PAGE RENDER ***************************************/
     async function renderHome(data){
       const E = F_E();
@@ -257,16 +274,41 @@
       progEl.innerHTML=`<div class="kicker">Programmes</div><h2 class="section-title">${E(data.programmes_title||'What we run')}</h2><div class="grid">${progs}</div>`;
 
       /* NEWS */
-      const news=document.getElementById('news');
-      const newsCards=(data.news||[]).map(n=>`<div class="card"><h3>${E(n.title)}</h3><p>${E(n.body)}</p>${n.date?`<p class="notice">Posted: <time>${E(n.date)}</time></p>`:''}</div>`).join('');
-      news.innerHTML=`<div class="kicker">Updates</div><h2 class="section-title">${E(data.news_title||'Latest news')}</h2><div class="grid">${newsCards}</div>`;
+     
+      const news = document.getElementById('news');
+      const newsCards = (d.news||[]).map(n=>`
+        <div class="card">
+          <h3>${E(n.title)}</h3>
+          <p>${E(n.body)}</p>
+          ${n.date?`<p class="notice">Posted: <time>${E(n.date)}</time></p>`:''}
+        </div>`).join('');
+      news.innerHTML = `
+        <div class="kicker">Updates</div>
+        <div class="title-row">
+          <h2 class="section-title">${E(d.news_title || 'Latest news')}</h2>
+          ${sponsorsRowHTML(E)}
+        </div>
+        <div class="grid">${newsCards}</div>
+      `;
+
 
       /* DONATE */
-      const donate=document.getElementById('donate'); const dlinks=[];
-      if(data.donate?.paypal) dlinks.push(`<a class="btn" href="${E(data.donate.paypal)}">Donate via PayPal</a>`);
-      if(data.donate?.stripe) dlinks.push(`<a class="btn secondary" href="${E(data.donate.stripe)}">Donate via Stripe</a>`);
-      if(data.donate?.justgiving) dlinks.push(`<a class="btn" href="${E(data.donate.justgiving)}">JustGiving</a>`);
-      donate.innerHTML=`<div class="kicker">Donate</div><h2 class="section-title">${E(data.donate_title||'Support our work')}</h2><p>${E(data.donate?.intro||'Your donation helps us run weekly food support, skills workshops, and safe community spaces.')}</p><div class="donate-row" style="margin:14px 0 6px">${dlinks.join(' ')}</div><p class="notice">${E(data.donate?.note||'')}</p>`;
+     
+      const donate = document.getElementById('donate');
+      const dlinks = [];
+      if(d.donate?.paypal)    dlinks.push(`<a class="btn"           href="${E(d.donate.paypal)}">Donate via PayPal</a>`);
+      if(d.donate?.stripe)    dlinks.push(`<a class="btn secondary" href="${E(d.donate.stripe)}">Donate via Stripe</a>`);
+      if(d.donate?.justgiving)dlinks.push(`<a class="btn"           href="${E(d.donate.justgiving)}">JustGiving</a>`);
+      donate.innerHTML = `
+        <div class="kicker">Donate</div>
+        <div class="title-row">
+          <h2 class="section-title">${E(d.donate_title || 'Support our work')}</h2>
+          ${sponsorsRowHTML(E)}
+        </div>
+        <p>${E(d.donate?.intro || 'Your donation helps us run weekly food support, skills workshops, and safe community spaces.')}</p>
+        <div class="donate-row" style="margin:14px 0 6px">${dlinks.join(' ')}</div>
+        <p class="notice">${E(d.donate?.note || '')}</p>
+      `;
 
       /* GALLERY → slideshow (JSON first, then auto-discover) */
       const gal=document.getElementById('gallery');
