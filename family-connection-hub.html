@@ -136,11 +136,7 @@
     "cta_note": "Pop us an email and we’ll confirm the next date and location.",
     "cta_primary_label": "Register interest",
     "cta_primary_href": "mailto:hello@baraka-centre.org?subject=Family%20Connection%20Hub%20registration",
-    "images": [
-      { "src": "assets/family-hub-1.jpg", "alt": "Family Hub activity" },
-      { "src": "assets/family-hub-2.jpg", "alt": "Group crafts" },
-      { "src": "assets/family-hub-3.jpg", "alt": "Games time" }
-    ],
+    "images": [],
     "fallback_image": { "src": "assets/2.jpg", "alt": "Family activities" }
   }
   </script>
@@ -150,40 +146,55 @@
 
   <!-- Page render -->
   <script>
-    // Helpers
-    const E = (s)=>String(s??'').replace(/[&<>\\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-    function parsePage(){ try{ return JSON.parse(document.getElementById('family-hub-content').textContent||'{}'); }catch{ return {}; } }
+    // Escaper + JSON read
+    const E = (s)=>String(s??'').replace(/[&<>\\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    function parsePage(){
+      try { return JSON.parse(document.getElementById('family-hub-content').textContent || '{}'); }
+      catch { return {}; }
+    }
 
-    // Optional auto-discovery: assets/family-hub-1.jpg, -2.jpg, ...
-    
-  // …
-  // Replace these helpers:
+    // Image helpers — files are assets/FamilyHub/20.jpg ... /35.jpg
     function checkImage(src){
-        return new Promise(res=>{
+      return new Promise(res=>{
         const i = new Image();
         i.onload  = () => res(true);
         i.onerror = () => res(false);
-        i.src = encodeURI(src); // handle spaces in filenames
-        });
+        i.src = src; // no spaces to encode now
+      });
     }
-
-    // New: discover FamilyHub 20.jpg … 35.jpg
     async function discoverFamilyHubImages(){
-        const out = [];
-        for (let n = 20; n <= 35; n++){
-        const p = `assets/FamilyHub ${n}.jpg`;
+      const out = [];
+      for (let n = 20; n <= 35; n++){
+        const p = `assets/FamilyHub/${n}.jpg`;
         /* eslint-disable-next-line no-await-in-loop */
         if (await checkImage(p)) out.push({ src: p, alt: `Family Hub ${n}` });
-        }
-        return out;
+      }
+      return out;
     }
 
+    // Minimal local slideshow init (used only if SITE.initSlideshow is missing)
+    function localInitSlideshow(id, images, {interval=4000}={}){
+      const root=document.getElementById(id); if(!root||!images?.length) return;
+      const slides=root.querySelectorAll('.slide');
+      const dots=root.querySelectorAll('.dot');
+      const prev=root.querySelector('[data-prev]'); const next=root.querySelector('[data-next]');
+      let idx=0,timer=null;
+      const render=()=>{slides.forEach((s,i)=>s.classList.toggle('active',i===idx)); dots.forEach((d,i)=>d.classList.toggle('active',i===idx));};
+      const go=n=>{idx=(n+images.length)%images.length; render();};
+      const start=()=>{stop(); timer=setInterval(()=>go(idx+1),interval);};
+      const stop =()=>{if(timer) clearInterval(timer); timer=null;};
+      prev?.addEventListener('click',()=>{go(idx-1);start();});
+      next?.addEventListener('click',()=>{go(idx+1);start();});
+      dots.forEach((d,i)=>d.addEventListener('click',()=>{idx=i;start();}));
+      root.addEventListener('mouseenter',stop); root.addEventListener('mouseleave',start);
+      render(); start();
+    }
 
-    function render(data){
-      // Header/footer/brand from shared file
-      (window.SITE?.applyBrand||(()=>{}))(data?.site?.brand||{});
-      (window.SITE?.buildHeader||(()=>{}))(data||{});
-      (window.SITE?.buildFooter||(()=>{}))(data||{});
+    function render(siteData){
+      // Brand + header/footer from shared script (if present)
+      (window.SITE?.applyBrand || (()=>{}))(siteData?.site?.brand || {});
+      (window.SITE?.buildHeader || (()=>{}))(siteData || {});
+      (window.SITE?.buildFooter || (()=>{}))(siteData || {});
 
       const page = parsePage();
 
@@ -196,15 +207,15 @@
       document.getElementById('fh-location').textContent = page.when?.location || 'West Glasgow';
       document.getElementById('fh-who').textContent = page.when?.who || 'Parents/carers & children';
       document.getElementById('fh-cost').textContent = page.when?.cost || 'Free';
-
-      const reg = document.getElementById('fh-register');
       const regHref = page.when?.register_href || 'mailto:hello@baraka-centre.org';
       const regLabel = page.when?.register_label || 'Register interest by email';
-      reg.innerHTML = `<a class="btn" href="${E(regHref)}">${E(regLabel)}</a>`;
+      document.getElementById('fh-register').innerHTML = `<a class="btn" href="${E(regHref)}">${E(regLabel)}</a>`;
 
       // Activities
       const acts = page.activities || [];
-      document.getElementById('fh-activities').innerHTML = acts.map(a=>`<li>${E(a)}</li>`).join('') || '<li>Creative play and crafts</li>';
+      document.getElementById('fh-activities').innerHTML = acts.length
+        ? acts.map(a=>`<li>${E(a)}</li>`).join('')
+        : '<li>Creative play and crafts</li>';
 
       // Safeguarding note
       document.getElementById('fh-safeguarding').textContent = page.safeguarding || '';
@@ -219,53 +230,42 @@
       ctaA.textContent = page.cta_primary_label || 'Register interest';
       ctaA.href = page.cta_primary_href || 'mailto:hello@baraka-centre.org';
       document.getElementById('fh-cta-note').textContent = page.cta_note || '';
+
+      // Slideshow (inside render so 'page' is in scope)
+      (async ()=>{
+        let imgs = Array.isArray(page.images) ? page.images.slice() : [];
+        if (!imgs.length) imgs = await discoverFamilyHubImages();
+        if (!imgs.length && page.fallback_image) imgs = [page.fallback_image];
+
+        const rootId = 'family-hub-slideshow';
+        const slidesEl = document.querySelector('#'+rootId+' .slides');
+        const dotsEl   = document.querySelector('#'+rootId+' .dots');
+
+        if (imgs.length && slidesEl && dotsEl) {
+          const slidesHtml = imgs.map((g,i)=>`
+              <div class="slide ${i===0?'active':''}">
+                <img src="${g.src}" alt="${E(g.alt || 'Family Hub photo')}" loading="lazy">
+                ${g.caption ? `<div class="caption">${E(g.caption)}</div>` : ''}
+              </div>`).join('');
+          const dotsHtml = imgs.map((_,i)=>`<button class="dot ${i===0?'active':''}" aria-label="Go to slide ${i+1}"></button>`).join('');
+
+          slidesEl.innerHTML = slidesHtml;
+          dotsEl.innerHTML   = dotsHtml;
+
+          (window.SITE?.initSlideshow || localInitSlideshow)(rootId, imgs, { interval: 4000 });
+          console.log(`[Family Hub] Loaded ${imgs.length} slideshow image(s) from /assets/FamilyHub/.`);
+        } else if (slidesEl) {
+          slidesEl.innerHTML = `<div class="slide active"><img src="assets/2.jpg" alt="Family Hub" loading="lazy"></div>`;
+          console.warn('[Family Hub] No slideshow images found. Showing fallback.');
+        }
+      })();
     }
-      // Slideshow
-      // Slideshow
-    (async ()=>{
-    let imgs = Array.isArray(page.images) ? page.images.slice() : [];
 
-    // 1) Prefer your “FamilyHub 20–35.jpg” set
-    if (!imgs.length) imgs = await discoverFamilyHubImages();
-
-    // 2) (Optional) fall back to the old auto-discover pattern if you want:
-    // if (!imgs.length) imgs = await discoverImages({ prefix: 'assets/family-hub-' });
-
-    // 3) Last resort: fallback image so header area isn't empty
-    if (!imgs.length && page.fallback_image) imgs = [page.fallback_image];
-
-    const rootId = 'family-hub-slideshow';
-    const slidesEl = document.querySelector('#'+rootId+' .slides');
-    const dotsEl   = document.querySelector('#'+rootId+' .dots');
-
-    if (imgs.length && slidesEl && dotsEl) {
-        const slidesHtml = imgs.map((g,i)=>{
-        const src = encodeURI(g.src); // encode spaces
-        const alt = E(g.alt || 'Family Hub photo');
-        return `
-            <div class="slide ${i===0?'active':''}">
-            <img src="${src}" alt="${alt}" loading="lazy">
-            ${g.caption ? `<div class="caption">${E(g.caption)}</div>` : ''}
-            </div>`;
-        }).join('');
-        const dotsHtml = imgs.map((_,i)=>`<button class="dot ${i===0?'active':''}" aria-label="Go to slide ${i+1}"></button>`).join('');
-
-        slidesEl.innerHTML = slidesHtml;
-        dotsEl.innerHTML   = dotsHtml;
-
-        (window.SITE?.initSlideshow||(()=>{}))(rootId, imgs, { interval: 4000 });
-    } else if (slidesEl) {
-        slidesEl.innerHTML = `<div class="slide active"><img src="assets/2.jpg" alt="Family Hub" loading="lazy"></div>`;
-    }
-    })();
-
-
-    // Boot: use shared loaded data if available; otherwise just render with defaults
+    // Boot: use site data if available; otherwise render with defaults
     if (window.__SITE__) {
       render(window.__SITE__);
     } else {
-      document.addEventListener('site:loaded', (e)=>render(e.detail), {once:true});
-      // Fail-safe: render without site data so header/footer still appear
+      document.addEventListener('site:loaded', (e)=>render(e.detail), { once:true });
       setTimeout(()=>{ if (!window.__SITE__) render({}); }, 800);
     }
   </script>
