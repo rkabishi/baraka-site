@@ -1,54 +1,258 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Programmes — Baraka Community & Family Centre</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css">
-</head><body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Family Connection Hub — Baraka Community & Family Centre</title>
+  <meta name="description" content="Family Connection Hub at Baraka Community & Family Centre — monthly programme for parents and children with creative play, peer support, and community lunch."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/site.css">
+  <style>
+    /* Page-specific tweaks */
+    main.container { padding-top: 16px; }
+    .wide-hero { margin: 12px 0 24px; }
+    .pill { display:inline-block; padding:6px 10px; border-radius:999px; background:#f1f5f9; color:#0f172a; font-weight:600; font-size:12px; }
+    .fact { display:grid; grid-template-columns: 120px 1fr; gap:10px; align-items:start; }
+    .fact b { color: var(--muted); }
+    .activity-list { display:grid; grid-template-columns: repeat(2,1fr); gap:12px; }
+    .activity-list li { background: var(--card); border:1px solid var(--card-border); border-radius:12px; padding:10px 12px; }
+    .session-plan { display:grid; grid-template-columns: 1fr 3fr; gap:10px; }
+    .session-plan div { background: var(--card); border:1px solid var(--card-border); border-radius:12px; padding:10px 12px; }
+    @media (max-width: 900px){
+      .activity-list { grid-template-columns: 1fr; }
+      .session-plan { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
 
-<header class="site-header"> <!-- header skeleton --> 
-  <div class="container nav">
-    <a class="logo" href="index.html"><img id="logo" src="assets/baraka-logo.png" alt="Baraka logo"><span id="siteName">Baraka Community & Family Centre</span></a>
-    <button class="menu-toggle" aria-expanded="false" aria-controls="site-menu">Menu</button>
-    <nav id="site-menu" class="menu" aria-label="Main menu"></nav>
-  </div>
-</header>
+  <!-- HEADER (same as other pages, menu populated by assets/site.js) -->
+  <header class="site-header">
+    <div class="container nav">
+      <a class="logo" href="index.html">
+        <img id="logo" src="assets/baraka-logo.png" alt="Baraka logo">
+        <span id="siteName">Baraka Community & Family Centre</span>
+      </a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="site-menu">Menu</button>
+      <nav id="site-menu" class="menu" aria-label="Main menu"></nav>
+    </div>
+  </header>
 
-<main class="container">
-  <div class="kicker">Programmes</div>
-  <h1 class="section-title">What we run</h1>
-  <div id="programmesGrid" class="grid" aria-live="polite"></div>
-</main>
+  <main class="container">
+    <!-- TOP: Slideshow -->
+    <section id="fh-slideshow" class="wide-hero" aria-label="Family Connection Hub photos">
+      <div class="slideshow" id="family-hub-slideshow" aria-label="Family Connection Hub slideshow">
+        <div class="slides"></div>
+        <button class="nav prev" data-prev aria-label="Previous slide">‹</button>
+        <button class="nav next" data-next aria-label="Next slide">›</button>
+        <div class="dots"></div>
+      </div>
+    </section>
 
-<footer class="footer"> <!-- footer skeleton -->
-  <div class="container" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;">
-    <div>© <span id="year"></span> <span id="footerName">Baraka Community & Family Centre</span> · All rights reserved.<br><span class="notice">Registered SCIO <span id="scio"></span></span></div>
-    <div class="oscr"><img id="oscrBadge" src="assets/oscr-badge.jpg" alt="OSCR badge"/></div>
-  </div>
-</footer>
+    <!-- Overview -->
+    <section id="fh-overview">
+      <div class="kicker">Programmes</div>
+      <h1 class="section-title">Family Connection Hub</h1>
+      <p class="lead" id="fh-lead"></p>
+      <div class="two" style="margin-top:12px">
+        <div class="card" id="fh-when">
+          <h3>When & where</h3>
+          <div class="fact"><b>Day</b><div id="fh-day"></div></div>
+          <div class="fact"><b>Time</b><div id="fh-time"></div></div>
+          <div class="fact"><b>Location</b><div id="fh-location"></div></div>
+          <div class="fact"><b>Who for</b><div id="fh-who"></div></div>
+          <div class="fact"><b>Cost</b><div id="fh-cost"></div></div>
+          <div class="fact"><b>Register</b><div id="fh-register"></div></div>
+        </div>
+        <div class="card" id="fh-what">
+          <h3>What happens</h3>
+          <ul class="activity-list" id="fh-activities"></ul>
+          <p class="notice" id="fh-safeguarding"></p>
+        </div>
+      </div>
+    </section>
 
-<script src="assets/site.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', ()=>{
-    const d = window.__SITE__;
-    // override Family Connection image + link as requested
-    const programmes = (d.programmes||[]).map(p=>{
-      if(p.title && p.title.toLowerCase().includes('family connection')){
-        p = {...p, image:'assets/2.jpg', image_alt:'Family Connection Hub', link:'family-connection-hub.html'};
+    <!-- Session plan -->
+    <section id="fh-session" style="margin-top:18px">
+      <div class="kicker">Typical session</div>
+      <h2 class="section-title">A relaxed, family-first afternoon</h2>
+      <div class="session-plan" id="fh-session-grid"></div>
+    </section>
+
+    <!-- CTA -->
+    <section id="fh-cta" style="margin-top:18px">
+      <div class="card">
+        <h3 style="margin:0 0 8px">Questions or want to join?</h3>
+        <p class="notice" id="fh-cta-note"></p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <a id="fh-cta-primary" class="btn" href="#">Register interest</a>
+          <a class="btn secondary" href="contact.html">Contact us</a>
+          <a class="pill" href="programmes.html">All programmes</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER (same as other pages) -->
+  <footer class="footer">
+    <div class="container" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;">
+      <div>© <span id="year"></span> <span id="footerName">Baraka Community & Family Centre</span> · All rights reserved.<br><span class="notice">Registered SCIO <span id="scio"></span></span></div>
+      <div class="oscr"><img id="oscrBadge" src="assets/oscr-badge.jpg" alt="OSCR badge"/></div>
+    </div>
+  </footer>
+
+  <!-- Page content (editable) -->
+  <script id="family-hub-content" type="application/json">
+  {
+    "lead": "A monthly, welcoming space for parents and children to connect, play, learn, and find peer support — with a shared community meal.",
+    "when": {
+      "day": "Last Saturday of every month",
+      "time": "12:00 – 15:00 (arrive from 11:45)",
+      "location": "West Glasgow — venue confirmed on registration for safeguarding",
+      "who": "Parents/carers and children (all ages welcome)",
+      "cost": "Free",
+      "register_label": "Email to join the next session",
+      "register_href": "mailto:hello@baraka-centre.org?subject=Family%20Connection%20Hub%20registration"
+    },
+    "activities": [
+      "Creative play & crafts for different age groups",
+      "Parent peer-support circle (domestic-abuse-informed)",
+      "Storytime & reading corner",
+      "STEM/lego table and board games",
+      "Movement/dance games and outdoor play (weather-permitting)",
+      "Community lunch & social time"
+    ],
+    "safeguarding": "All activities are supervised by staff/volunteers. We use sign-in/out and safeguarding-first practices.",
+    "session_plan": [
+      ["11:45–12:00", "Arrivals & welcome"],
+      ["12:00–12:45", "Creative play stations open (crafts, lego/STEM, reading corner)"],
+      ["12:45–13:15", "Parent circle (optional) & children’s games"],
+      ["13:15–13:45", "Community lunch"],
+      ["13:45–14:45", "Group activity (dance/movement/collaborative craft)"],
+      ["14:45–15:00", "Reflection, tidy up & close"]
+    ],
+    "cta_note": "Pop us an email and we’ll confirm the next date and location.",
+    "cta_primary_label": "Register interest",
+    "cta_primary_href": "mailto:hello@baraka-centre.org?subject=Family%20Connection%20Hub%20registration",
+    "images": [
+      { "src": "assets/FamilyHub/20.jpg", "alt": "Family Hub activity" },
+      { "src": "assets/FamilyHub/21.jpg", "alt": "Group crafts" },
+      { "src": "assets/FamilyHub/22.jpg", "alt": "Games time" },
+      { "src": "assets/FamilyHub/23.jpg", "alt": "Games time" },
+      { "src": "assets/FamilyHub/24.jpg", "alt": "Games time" },
+      { "src": "assets/FamilyHub/25.jpg", "alt": "Games time" },
+      { "src": "assets/FamilyHub/26.jpg", "alt": "Games time" },
+      { "src": "assets/FamilyHub/27.jpg", "alt": "Games time" },
+      { "src": "assets/FamilyHub/28.jpg", "alt": "Games time" },
+      { "src": "assets/FamilyHub/29.jpg", "alt": "Games time" },
+      { "src": "assets/FamilyHub/30.jpg", "alt": "Games time" },
+      { "src": "assets/FamilyHub/31.jpg", "alt": "Games time" },
+      { "src": "assets/FamilyHub/32.jpg", "alt": "Games time" }
+    ],
+    "fallback_image": { "src": "assets/2.jpg", "alt": "Family activities" }
+  }
+  </script>
+
+  <!-- Shared helpers (header/footer/brand/slideshow) -->
+  <script src="assets/site.js"></script>
+
+  <!-- Page render -->
+  <script>
+    // Helpers
+    const E = (s)=>String(s??'').replace(/[&<>\\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    function parsePage(){ try{ return JSON.parse(document.getElementById('family-hub-content').textContent||'{}'); }catch{ return {}; } }
+
+    // Optional auto-discovery: assets/family-hub-1.jpg, -2.jpg, ...
+    function checkImage(src){ return new Promise(res=>{ const i=new Image(); i.onload=()=>res(true); i.onerror=()=>res(false); i.src=src; }); }
+    async function discoverImages({prefix='assets/family-hub-', exts=['.jpg','.jpeg','.png','.webp'], max=50, stopAfterMisses=6}={}){
+      const out=[]; let misses=0;
+      for(let n=1;n<=max;n++){
+        let added=false;
+        for(const ext of exts){ const p=`${prefix}${n}${ext}`; /* eslint-disable-next-line no-await-in-loop */ if(await checkImage(p)){ out.push({src:p,alt:'Family Hub photo'}); added=true; break; } }
+        if(!added){ if(++misses>=stopAfterMisses) break; } else misses=0;
       }
-      return p;
-    });
-    const grid = document.getElementById('programmesGrid');
-    grid.innerHTML = programmes.map(p=>{
-      const inner = `
-        ${p.image?`<img class="prog-img" src="${SITE.esc(p.image)}" alt="${SITE.esc(p.image_alt||p.title||'Programme')}" loading="lazy">`:''}
-        <h3>${SITE.esc(p.title||'Programme')}</h3>
-        <p>${SITE.esc(p.description||'')}</p>
-        ${p.bullets?`<ul>${p.bullets.map(li=>`<li>${SITE.esc(li)}</li>`).join('')}</ul>`:''}
-      `;
-      return p.link ? `<a class="card program" href="${p.link}">${inner}</a>` : `<div class="card program">${inner}</div>`;
-    }).join('');
-  });
-</script>
-</body></html>
+      return out;
+    }
+
+    function render(data){
+      // Header/footer/brand from shared file
+      (window.SITE?.applyBrand||(()=>{}))(data?.site?.brand||{});
+      (window.SITE?.buildHeader||(()=>{}))(data||{});
+      (window.SITE?.buildFooter||(()=>{}))(data||{});
+
+      const page = parsePage();
+
+      // Lead
+      document.getElementById('fh-lead').textContent = page.lead || 'A monthly, welcoming space for parents and children.';
+
+      // When & where
+      document.getElementById('fh-day').textContent = page.when?.day || 'Last Saturday of every month';
+      document.getElementById('fh-time').textContent = page.when?.time || '12:00 – 15:00';
+      document.getElementById('fh-location').textContent = page.when?.location || 'West Glasgow';
+      document.getElementById('fh-who').textContent = page.when?.who || 'Parents/carers & children';
+      document.getElementById('fh-cost').textContent = page.when?.cost || 'Free';
+
+      const reg = document.getElementById('fh-register');
+      const regHref = page.when?.register_href || 'mailto:hello@baraka-centre.org';
+      const regLabel = page.when?.register_label || 'Register interest by email';
+      reg.innerHTML = `<a class="btn" href="${E(regHref)}">${E(regLabel)}</a>`;
+
+      // Activities
+      const acts = page.activities || [];
+      document.getElementById('fh-activities').innerHTML = acts.map(a=>`<li>${E(a)}</li>`).join('') || '<li>Creative play and crafts</li>';
+
+      // Safeguarding note
+      document.getElementById('fh-safeguarding').textContent = page.safeguarding || '';
+
+      // Session plan
+      const plan = page.session_plan || [];
+      document.getElementById('fh-session-grid').innerHTML = plan.map(([time,what]) =>
+        `<div><b>${E(time)}</b></div><div>${E(what)}</div>`).join('');
+
+      // CTA
+      const ctaA = document.getElementById('fh-cta-primary');
+      ctaA.textContent = page.cta_primary_label || 'Register interest';
+      ctaA.href = page.cta_primary_href || 'mailto:hello@baraka-centre.org';
+      document.getElementById('fh-cta-note').textContent = page.cta_note || '';
+
+      // Slideshow
+      (async ()=>{
+        let imgs = Array.isArray(page.images) ? page.images.slice() : [];
+        // Replace with any auto-discovered files if none listed or listed ones missing
+        if (!imgs.length) imgs = await discoverImages();
+        if (!imgs.length && page.fallback_image) imgs = [page.fallback_image];
+
+        const rootId = 'family-hub-slideshow';
+        const slides = document.querySelector('#'+rootId+' .slides');
+        const dots = document.querySelector('#'+rootId+' .dots');
+
+        if (imgs.length && slides && dots) {
+          slides.innerHTML = imgs.map((g,i)=>`
+            <div class="slide ${i===0?'active':''}">
+              <img src="${E(g.src)}" alt="${E(g.alt||'Family Hub photo')}" loading="lazy">
+              ${g.caption?`<div class="caption">${E(g.caption)}</div>`:''}
+            </div>`).join('');
+          dots.innerHTML = imgs.map((_,i)=>`<button class="dot ${i===0?'active':''}" aria-label="Go to slide ${i+1}"></button>`).join('');
+
+          (window.SITE?.initSlideshow||(()=>{}))(rootId, imgs, { interval: 4000 });
+        } else if (slides) {
+          slides.innerHTML = `<div class="slide active"><img src="assets/2.jpg" alt="Family Hub" loading="lazy"></div>`;
+        }
+      })();
+    }
+
+    // Boot: use shared loaded data if available; otherwise just render with defaults
+    if (window.__SITE__) {
+      render(window.__SITE__);
+    } else {
+      document.addEventListener('site:loaded', (e)=>render(e.detail), {once:true});
+      // Fail-safe: render without site data so header/footer still appear
+      setTimeout(()=>{ if (!window.__SITE__) render({}); }, 800);
+    }
+  </script>
+</body>
+</html>
+
 
