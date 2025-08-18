@@ -228,10 +228,10 @@
         // Reusable "Our sponsors" row (logos loaded from /assets/Founders)
    function sponsorsRowHTML(E) {
   const sponsors = [
-    
-    { src: 'assets/Founders/Scottish-Refugee-council.png',  alt: 'Scottish Refugee Council',              name: 'scottish-refugee_council' },
-    { src: 'assets/Founders/corra-logo.jpg',                alt: 'Corra Foundation',                       name: 'corra-logo' },
-    { src: 'assets/Founders/Fareshare.jpg',                 alt: 'FareShare',                              name: 'fareshare' }
+    { src: 'assets/Founders/TNL.png',                      alt: 'The National Lottery Community Fund',   name: 'tnl' },
+    { src: 'assets/Founders/Scottish-Refugee_council.png', alt: 'Scottish Refugee Council',              name: 'scottish-refugee_council' },
+    { src: 'assets/Founders/corra-logo.jpg',               alt: 'Corra Foundation',                       name: 'corra-logo' },
+    { src: 'assets/Founders/Fareshare.jpg',                alt: 'FareShare',                              name: 'fareshare' }
   ];
   return `<div class="sponsors-row" aria-label="Our sponsors">` +
          sponsors.map(s =>
@@ -241,6 +241,7 @@
          ).join('') +
          `</div>`;
 }
+
 
 
 
