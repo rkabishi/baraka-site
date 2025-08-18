@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Digital Hub — Baraka Community & Family Centre</title>
+  <meta name="description" content="Digital Hub at Baraka — weekly skills sessions for parents and youths: devices, online safety, CVs, job search, and more."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/site.css">
+  <style>
+    main.container { padding-top: 16px; }
+    .wide-hero { margin: 12px 0 24px; }
+    .pill { display:inline-block; padding:6px 10px; border-radius:999px; background:#f1f5f9; color:#0f172a; font-weight:600; font-size:12px; }
+    .fact { display:grid; grid-template-columns: 120px 1fr; gap:10px; align-items:start; }
+    .fact b { color: var(--muted); }
+    .activity-list { display:grid; grid-template-columns: repeat(2,1fr); gap:12px; }
+    .activity-list li { background: var(--card); border:1px solid var(--card-border); border-radius:12px; padding:10px 12px; }
+    .session-plan { display:grid; grid-template-columns: 1fr 3fr; gap:10px; }
+    .session-plan div { background: var(--card); border:1px solid var(--card-border); border-radius:12px; padding:10px 12px; }
+    @media (max-width: 900px){
+      .activity-list { grid-template-columns: 1fr; }
+      .session-plan { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="container nav">
+      <a class="logo" href="index.html">
+        <img id="logo" src="assets/baraka-logo.png" alt="Baraka logo">
+        <span id="siteName">Baraka Community & Family Centre</span>
+      </a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="site-menu">Menu</button>
+      <nav id="site-menu" class="menu" aria-label="Main menu">
+        <!-- Fallback menu so page works even if site.js fails -->
+        <a href="index.html">Home</a>
+        <a href="programmes.html">Programmes</a>
+        <a href="get-involved.html">Get involved</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- TOP: Slideshow -->
+    <section id="dh-slideshow" class="wide-hero" aria-label="Digital Hub photos">
+      <div class="slideshow" id="digital-hub-slideshow" aria-label="Digital Hub slideshow">
+        <div class="slides"></div>
+        <button class="nav prev" data-prev aria-label="Previous slide">‹</button>
+        <button class="nav next" data-next aria-label="Next slide">›</button>
+        <div class="dots"></div>
+      </div>
+    </section>
+
+    <!-- Overview -->
+    <section id="dh-overview">
+      <div class="kicker">Programmes</div>
+      <h1 class="section-title">Digital Hub</h1>
+      <p class="lead" id="dh-lead"></p>
+      <div class="two" style="margin-top:12px">
+        <div class="card" id="dh-when">
+          <h3>When & where</h3>
+          <div class="fact"><b>Day</b><div id="dh-day"></div></div>
+          <div class="fact"><b>Time</b><div id="dh-time"></div></div>
+          <div class="fact"><b>Location</b><div id="dh-location"></div></div>
+          <div class="fact"><b>Who for</b><div id="dh-who"></div></div>
+          <div class="fact"><b>Cost</b><div id="dh-cost"></div></div>
+          <div class="fact"><b>Register</b><div id="dh-register"></div></div>
+        </div>
+        <div class="card" id="dh-what">
+          <h3>What happens</h3>
+          <ul class="activity-list" id="dh-activities"></ul>
+          <p class="notice" id="dh-safeguarding"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Session plan -->
+    <section id="dh-session" style="margin-top:18px">
+      <div class="kicker">Typical session</div>
+      <h2 class="section-title">Build skills, confidence, and opportunities</h2>
+      <div class="session-plan" id="dh-session-grid"></div>
+    </section>
+
+    <!-- CTA -->
+    <section id="dh-cta" style="margin-top:18px">
+      <div class="card">
+        <h3 style="margin:0 0 8px">Questions or want to join?</h3>
+        <p class="notice" id="dh-cta-note"></p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <a id="dh-cta-primary" class="btn" href="#">Register interest</a>
+          <a class="btn secondary" href="contact.html">Contact us</a>
+          <a class="pill" href="programmes.html">All programmes</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;">
+      <div>© <span id="year"></span> <span id="footerName">Baraka Community & Family Centre</span> · All rights reserved.<br><span class="notice">Registered SCIO <span id="scio"></span></span></div>
+      <div class="oscr"><img id="oscrBadge" src="assets/oscr-badge.jpg" alt="OSCR badge"/></div>
+    </div>
+  </footer>
+
+  <!-- Page content (editable) -->
+  <script id="digital-hub-content" type="application/json">
+  {
+    "lead": "Weekly digital skills sessions for parents and youths — from device basics to online safety, CVs, and job search.",
+    "when": {
+      "day": "Weekly (day confirmed on registration)",
+      "time": "Time confirmed on registration",
+      "location": "West Glasgow — venue confirmed on registration for safeguarding",
+      "who": "Parents/carers and young people (12+ welcome with parent/guardian)",
+      "cost": "Free",
+      "register_label": "Email to join the next session",
+      "register_href": "mailto:hello@baraka-centre.org?subject=Digital%20Hub%20registration"
+    },
+    "activities": [
+      "Device setup & troubleshooting (phones, tablets, laptops)",
+      "Internet essentials & online safety",
+      "Email, forms, and communicating with services",
+      "CV writing & job search help",
+      "Office apps (Docs/Sheets) and printing",
+      "Helpdesk time for your questions"
+    ],
+    "safeguarding": "Supervised sessions with safeguarding-first practices. Under 16s attend with a parent/guardian.",
+    "session_plan": [
+      ["00:00–00:10", "Welcome, sign-in, and quick check-in"],
+      ["00:10–00:50", "Mini-lesson (topic of the week)"],
+      ["00:50–01:20", "Guided practice and pair help"],
+      ["01:20–01:40", "CV/job search support or device help desk"],
+      ["01:40–02:00", "Wrap-up, resources, and next steps"]
+    ],
+    "cta_note": "Email us to confirm the next session time and venue.",
+    "cta_primary_label": "Register interest",
+    "cta_primary_href": "mailto:hello@baraka-centre.org?subject=Digital%20Hub%20registration",
+    "images": [],
+    "fallback_image": { "src": "assets/16.jpg", "alt": "Digital Hub" }
+  }
+  </script>
+
+  <!-- Optional shared helpers -->
+  <script src="assets/site.js"></script>
+
+  <script>
+    /* ---------- Utilities ---------- */
+    function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+    function getJson(id){
+      try { return JSON.parse(document.getElementById(id).textContent || '{}'); }
+      catch(e){ console.error('JSON parse error:', e); return {}; }
+    }
+
+    /* ---------- Slideshow helpers ---------- */
+    function localInitSlideshow(id, images, opts){
+      var interval = (opts && opts.interval) || 4000;
+      var root = document.getElementById(id);
+      if(!root || !images || !images.length) return;
+      var slides = root.querySelectorAll('.slide');
+      var dots   = root.querySelectorAll('.dot');
+      var prev   = root.querySelector('[data-prev]');
+      var next   = root.querySelector('[data-next]');
+      var idx=0, timer=null;
+      function render(){ for(var i=0;i<slides.length;i++){ slides[i].classList.toggle('active', i===idx); dots[i] && dots[i].classList.toggle('active', i===idx); } }
+      function go(n){ idx = (n + images.length) % images.length; render(); }
+      function start(){ stop(); timer = setInterval(function(){ go(idx+1); }, interval); }
+      function stop(){ if(timer) clearInterval(timer); timer=null; }
+      if(prev) prev.addEventListener('click', function(){ go(idx-1); start(); });
+      if(next) next.addEventListener('click', function(){ go(idx+1); start(); });
+      dots.forEach && dots.forEach(function(d,i){ d.addEventListener('click', function(){ idx=i; start(); }); });
+      root.addEventListener('mouseenter', stop);
+      root.addEventListener('mouseleave', start);
+      render(); start();
+    }
+
+    function checkImage(src){
+      return new Promise(function(resolve){
+        var img = new Image();
+        img.onload  = function(){ resolve(true); };
+        img.onerror = function(){ resolve(false); };
+        img.src = src;
+      });
+    }
+
+    // Discover assets/Digital/40.jpg … /55.jpg
+    async function discoverDigitalImages(){
+      var out = [];
+      for (var n=40; n<=55; n++){
+        var p = 'assets/Digital/' + n + '.jpg';
+        /* eslint-disable-next-line no-await-in-loop */
+        if (await checkImage(p)) out.push({ src:p, alt:'Digital Hub ' + n });
+      }
+      return out;
+    }
+
+    /* ---------- Render ---------- */
+    async function render(){
+      // Year in footer (works even if site.js fails)
+      var yearEl = document.getElementById('year');
+      if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+      // If site.js is present, let it enhance header/footer/brand
+      if (window.SITE && typeof SITE.buildHeader === 'function') SITE.buildHeader(window.__SITE__ || {});
+      if (window.SITE && typeof SITE.buildFooter === 'function') SITE.buildFooter(window.__SITE__ || {});
+      if (window.SITE && typeof SITE.applyBrand  === 'function') SITE.applyBrand((window.__SITE__ && window.__SITE__.site && window.__SITE__.site.brand) || {});
+
+      var page = getJson('digital-hub-content');
+
+      // Lead
+      var leadEl = document.getElementById('dh-lead');
+      if (leadEl) leadEl.textContent = page.lead || 'Weekly digital skills sessions.';
+
+      // When & where
+      document.getElementById('dh-day').textContent      = (page.when && page.when.day)      || 'Weekly';
+      document.getElementById('dh-time').textContent     = (page.when && page.when.time)     || 'Time confirmed on registration';
+      document.getElementById('dh-location').textContent = (page.when && page.when.location) || 'West Glasgow';
+      document.getElementById('dh-who').textContent      = (page.when && page.when.who)      || 'Parents/carers & youths';
+      document.getElementById('dh-cost').textContent     = (page.when && page.when.cost)     || 'Free';
+      var regHref  = (page.when && page.when.register_href)  || 'mailto:hello@baraka-centre.org';
+      var regLabel = (page.when && page.when.register_label) || 'Register interest by email';
+      document.getElementById('dh-register').innerHTML = '<a class="btn" href="'+esc(regHref)+'">'+esc(regLabel)+'</a>';
+
+      // Activities
+      var acts = page.activities || [];
+      document.getElementById('dh-activities').innerHTML = acts.length
+        ? acts.map(function(a){ return '<li>'+esc(a)+'</li>'; }).join('')
+        : '<li>Device basics & online safety</li>';
+
+      // Safeguarding + session plan
+      document.getElementById('dh-safeguarding').textContent = page.safeguarding || '';
+      var plan = page.session_plan || [];
+      document.getElementById('dh-session-grid').innerHTML = plan.map(function(row){
+        return '<div><b>'+esc(row[0])+'</b></div><div>'+esc(row[1])+'</div>';
+      }).join('');
+
+      // CTA
+      var ctaA = document.getElementById('dh-cta-primary');
+      ctaA.textContent = page.cta_primary_label || 'Register interest';
+      ctaA.href        = page.cta_primary_href  || 'mailto:hello@baraka-centre.org';
+      document.getElementById('dh-cta-note').textContent = page.cta_note || '';
+
+      // Slideshow images: JSON → Digital folder → fallback
+      var imgs = Array.isArray(page.images) && page.images.length ? page.images.slice() : [];
+      if (!imgs.length) imgs = await discoverDigitalImages();
+      if (!imgs.length && page.fallback_image) imgs = [page.fallback_image];
+
+      var rootId  = 'digital-hub-slideshow';
+      var slides  = document.querySelector('#'+rootId+' .slides');
+      var dotsBox = document.querySelector('#'+rootId+' .dots');
+
+      if (imgs.length && slides && dotsBox) {
+        var slidesHtml = imgs.map(function(g, i){
+          var src = g.src;
+          var alt = esc(g.alt || 'Digital Hub photo');
+          return '<div class="slide '+(i===0?'active':'')+'">'+
+                   '<img src="'+src+'" alt="'+alt+'" loading="lazy">'+
+                   (g.caption ? '<div class="caption">'+esc(g.caption)+'</div>' : '')+
+                 '</div>';
+        }).join('');
+        var dotsHtml = imgs.map(function(_,i){
+          return '<button class="dot '+(i===0?'active':'')+'" aria-label="Go to slide '+(i+1)+'"></button>';
+        }).join('');
+
+        slides.innerHTML = slidesHtml;
+        dotsBox.innerHTML = dotsHtml;
+
+        var init = (window.SITE && window.SITE.initSlideshow) ? window.SITE.initSlideshow : localInitSlideshow;
+        init(rootId, imgs, { interval: 4000 });
+
+        console.log('[Digital Hub] Loaded '+imgs.length+' slideshow image(s) from /assets/Digital/.');
+      } else if (slides) {
+        slides.innerHTML = '<div class="slide active"><img src="assets/16.jpg" alt="Digital Hub" loading="lazy"></div>';
+        console.warn('[Digital Hub] No slideshow images found. Showing fallback.');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function(){
+      try { render(); } catch (e) { console.error('Render error:', e); }
+    });
+  </script>
+</body>
+</html>
