@@ -162,7 +162,12 @@
     /************ FALLBACK HELPERS (used only if SITE isn't ready) ************/
     const F_ESC = (s)=>String(s??'').replace(/[&<>\\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
     const F_HEX=(n)=>n.toString(16).padStart(2,'0');
-    function F_hexToRgb(h){const m=/^#?([\\da-f]{2})([\\da-f]{2})([\\da-f]{2})$/i.exec(h||'');return m?{r:parseInt(m[1],16),g:parseInt(m[2],16),b:parseInt(m[3],16)}:{r:255,g:255,b:255};}
+    function F_hexToRgb(h){
+    const m=/^#?([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(h||'');
+    return m?{r:parseInt(m[1],16),g:parseInt(m[2],16),b:parseInt(m[3],16)}:{r:255,g:255,b:255};
+    }
+
+
     function F_mix(a,b,t){const A=F_hexToRgb(a),B=F_hexToRgb(b);const r=Math.round(A.r*(1-t)+B.r*t),g=Math.round(A.g*(1-t)+B.g*t),b2=Math.round(A.b*(1-t)+B.b*t);return `#${F_HEX(r)}${F_HEX(g)}${F_HEX(b2)}`;}
     function F_applyBrand(brand={}){
       const root=document.documentElement;
@@ -275,8 +280,9 @@
 
       /* NEWS */
      
+     
       const news = document.getElementById('news');
-      const newsCards = (d.news||[]).map(n=>`
+      const newsCards = (data.news||[]).map(n=>`
         <div class="card">
           <h3>${E(n.title)}</h3>
           <p>${E(n.body)}</p>
@@ -285,7 +291,7 @@
       news.innerHTML = `
         <div class="kicker">Updates</div>
         <div class="title-row">
-          <h2 class="section-title">${E(d.news_title || 'Latest news')}</h2>
+          <h2 class="section-title">${E(data.news_title || 'Latest news')}</h2>
           ${sponsorsRowHTML(E)}
         </div>
         <div class="grid">${newsCards}</div>
@@ -294,21 +300,23 @@
 
       /* DONATE */
      
+     
       const donate = document.getElementById('donate');
       const dlinks = [];
-      if(d.donate?.paypal)    dlinks.push(`<a class="btn"           href="${E(d.donate.paypal)}">Donate via PayPal</a>`);
-      if(d.donate?.stripe)    dlinks.push(`<a class="btn secondary" href="${E(d.donate.stripe)}">Donate via Stripe</a>`);
-      if(d.donate?.justgiving)dlinks.push(`<a class="btn"           href="${E(d.donate.justgiving)}">JustGiving</a>`);
+      if (data.donate?.paypal)     dlinks.push(`<a class="btn"           href="${E(data.donate.paypal)}">Donate via PayPal</a>`);
+      if (data.donate?.stripe)     dlinks.push(`<a class="btn secondary" href="${E(data.donate.stripe)}">Donate via Stripe</a>`);
+      if (data.donate?.justgiving) dlinks.push(`<a class="btn"           href="${E(data.donate.justgiving)}">JustGiving</a>`);
       donate.innerHTML = `
         <div class="kicker">Donate</div>
         <div class="title-row">
-          <h2 class="section-title">${E(d.donate_title || 'Support our work')}</h2>
+          <h2 class="section-title">${E(data.donate_title || 'Support our work')}</h2>
           ${sponsorsRowHTML(E)}
         </div>
-        <p>${E(d.donate?.intro || 'Your donation helps us run weekly food support, skills workshops, and safe community spaces.')}</p>
+        <p>${E(data.donate?.intro || 'Your donation helps us run weekly food support, skills workshops, and safe community spaces.')}</p>
         <div class="donate-row" style="margin:14px 0 6px">${dlinks.join(' ')}</div>
-        <p class="notice">${E(d.donate?.note || '')}</p>
+        <p class="notice">${E(data.donate?.note || '')}</p>
       `;
+
 
       /* GALLERY → slideshow (JSON first, then auto-discover) */
       const gal=document.getElementById('gallery');
