@@ -27,7 +27,7 @@
 </head>
 <body>
 
-  <!-- HEADER (same as other pages) -->
+  <!-- HEADER (same as other pages; menu populated by assets/site.js) -->
   <header class="site-header">
     <div class="container nav">
       <a class="logo" href="index.html">
@@ -132,10 +132,8 @@
     "cta_note": "Email us and we’ll confirm the next date and location.",
     "cta_primary_label": "Register interest",
     "cta_primary_href": "mailto:hello@baraka-centre.org?subject=Wellness%20Hub%20registration",
-    "images": [
-      { "src": "assets/Refugee Festival/IMG_7117.jpg", "alt": "Wellness/Community gathering" }
-    ],
-    "fallback_image": { "src": "assets/Refugee Festival/IMG_7117.jpg", "alt": "Wellness Hub" }
+    "images": [],
+    "fallback_image": { "src": "assets/Refugee Festival/IMG_7200.jpg", "alt": "Wellness Hub" }
   }
   </script>
 
@@ -144,25 +142,44 @@
 
   <!-- Page render -->
   <script>
-    const E = (s)=>String(s??'').replace(/[&<>\\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    /* ---------- tiny helpers ---------- */
+    const ESC = (s)=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
     function parsePage(){ try{ return JSON.parse(document.getElementById('wellness-hub-content').textContent||'{}'); }catch{ return {}; } }
+    function checkImage(src){ // encode spaces for probing + usage
+      return new Promise(res=>{ const i=new Image(); i.onload=()=>res(true); i.onerror=()=>res(false); i.src=encodeURI(src); });
+    }
 
-    // Probe images in a folder (Wellness/1..30.jpg|.JPG) + allow spaces in paths
-    function checkImage(src){ return new Promise(res=>{ const i=new Image(); i.onload=()=>res(true); i.onerror=()=>res(false); i.src=encodeURI(src); }); }
-    async function discoverWellnessImages(){
-      const out=[];
-      for(let n=1;n<=30;n++){
-        const cands = [
-          `assets/Wellness/${n}.jpg`,
-          `assets/Wellness/${n}.JPG`,
-          `assets/Wellness/${String(n).padStart(2,'0')}.jpg`,
-          `assets/Wellness/${String(n).padStart(2,'0')}.JPG`
-        ];
-        for(const p of cands){ /* eslint-disable-next-line no-await-in-loop */
+    // Discover exactly IMG_7200..IMG_7210 (any common jpeg extension)
+    async function discoverRefugeeFestivalImages7200(){
+      const out=[], base='assets/Refugee Festival/';
+      for(let n=7200; n<=7210; n++){
+        const names=[`IMG_${n}.jpg`,`IMG_${n}.JPG`,`IMG_${n}.jpeg`,`IMG_${n}.JPEG`];
+        for(const name of names){ /* eslint-disable-next-line no-await-in-loop */
+          const p = base + name;
           if(await checkImage(p)){ out.push({src:p, alt:`Wellness ${n}`}); break; }
         }
       }
       return out;
+    }
+
+    // Local slideshow init (used if SITE.initSlideshow not present)
+    function localInitSlideshow(rootId, images, {interval=4000}={}){
+      const root=document.getElementById(rootId);
+      if(!root||!images?.length) return;
+      const S=root.querySelectorAll('.slide');
+      const D=root.querySelectorAll('.dot');
+      const P=root.querySelector('[data-prev]'), N=root.querySelector('[data-next]');
+      let idx=0, t=null;
+      const render=()=>{ S.forEach((s,i)=>s.classList.toggle('active',i===idx)); D.forEach((d,i)=>d.classList.toggle('active',i===idx)); };
+      const go=n=>{ idx=(n+images.length)%images.length; render(); };
+      const start=()=>{ stop(); t=setInterval(()=>go(idx+1),interval); };
+      const stop =()=>{ if(t) clearInterval(t); t=null; };
+      P?.addEventListener('click',()=>{ go(idx-1); start(); });
+      N?.addEventListener('click',()=>{ go(idx+1); start(); });
+      D.forEach((d,i)=>d.addEventListener('click',()=>{ idx=i; start(); }));
+      root.addEventListener('mouseenter',stop);
+      root.addEventListener('mouseleave',start);
+      render(); start();
     }
 
     function renderBasics(){
@@ -184,15 +201,15 @@
       document.getElementById('wh-who').textContent  = page.when?.who || 'Adults';
       document.getElementById('wh-cost').textContent = page.when?.cost || 'Free';
       const reg = document.getElementById('wh-register');
-      reg.innerHTML = `<a class="btn" href="${E(page.when?.register_href || 'mailto:hello@baraka-centre.org')}">${E(page.when?.register_label || 'Register interest')}</a>`;
+      reg.innerHTML = `<a class="btn" href="${ESC(page.when?.register_href || 'mailto:hello@baraka-centre.org')}">${ESC(page.when?.register_label || 'Register interest')}</a>`;
 
       // Activities
       const acts = page.activities || [];
-      document.getElementById('wh-activities').innerHTML = acts.map(a=>`<li>${E(a)}</li>`).join('') || '<li>Wellbeing café</li>';
+      document.getElementById('wh-activities').innerHTML = acts.map(a=>`<li>${ESC(a)}</li>`).join('') || '<li>Wellbeing café</li>';
 
       // Session plan
       const plan = page.session_plan || [];
-      document.getElementById('wh-session-grid').innerHTML = plan.map(([t,what]) => `<div><b>${E(t)}</b></div><div>${E(what)}</div>`).join('');
+      document.getElementById('wh-session-grid').innerHTML = plan.map(([t,what]) => `<div><b>${ESC(t)}</b></div><div>${ESC(what)}</div>`).join('');
 
       // CTA
       const ctaA = document.getElementById('wh-cta-primary');
@@ -200,36 +217,40 @@
       ctaA.href = page.cta_primary_href || 'mailto:hello@baraka-centre.org';
       document.getElementById('wh-cta-note').textContent = page.cta_note || '';
 
-      // Slideshow (JSON images → discover Wellness folder → fallback to Refugee Festival image)
+      // ----- Slideshow -----
       let imgs = Array.isArray(page.images) ? page.images.slice() : [];
-      if(!imgs.length) imgs = await discoverWellnessImages();
-      if(!imgs.length && page.fallback_image) imgs = [page.fallback_image];
+      if (!imgs.length) imgs = await discoverRefugeeFestivalImages7200();
+      if (!imgs.length && page.fallback_image) imgs = [page.fallback_image];
 
       const rootId = 'wellness-slideshow';
       const slidesEl = document.querySelector('#'+rootId+' .slides');
       const dotsEl   = document.querySelector('#'+rootId+' .dots');
 
-      if(imgs.length && slidesEl && dotsEl){
+      if (imgs.length && slidesEl && dotsEl){
         const slidesHtml = imgs.map((g,i)=>`
           <div class="slide ${i===0?'active':''}">
-            <img src="${encodeURI(g.src)}" alt="${E(g.alt||'Wellness photo')}" loading="lazy">
-            ${g.caption ? `<div class="caption">${E(g.caption)}</div>` : ''}
+            <img src="${encodeURI(g.src)}" alt="${ESC(g.alt||'Wellness photo')}" loading="lazy">
+            ${g.caption ? `<div class="caption">${ESC(g.caption)}</div>` : ''}
           </div>`).join('');
         const dotsHtml = imgs.map((_,i)=>`<button class="dot ${i===0?'active':''}" aria-label="Go to slide ${i+1}"></button>`).join('');
         slidesEl.innerHTML = slidesHtml;
         dotsEl.innerHTML = dotsHtml;
-        (window.SITE?.initSlideshow||(()=>{}))(rootId, imgs, { interval: 4000 });
+        (window.SITE?.initSlideshow || localInitSlideshow)(rootId, imgs, { interval: 4000 });
       } else if (slidesEl){
-        slidesEl.innerHTML = `<div class="slide active"><img src="${encodeURI(page.fallback_image?.src || 'assets/Refugee Festival/IMG_7117.jpg')}" alt="Wellness Hub" loading="lazy"></div>`;
+        // last resort
+        slidesEl.innerHTML = `<div class="slide active"><img src="${encodeURI(page.fallback_image?.src || 'assets/Refugee Festival/IMG_7200.jpg')}" alt="Wellness Hub" loading="lazy"></div>`;
       }
     }
 
-    if(window.__SITE__){
+    // Boot
+    if (window.__SITE__) {
       renderPage();
-    }else{
-      document.addEventListener('site:loaded', ()=>renderPage(), { once:true });
+    } else {
+      document.addEventListener('site:loaded', renderPage, { once:true });
+      // fail-safe if content.json is blocked (e.g. local file preview)
       setTimeout(()=>{ if(!window.__SITE__) renderPage(); }, 800);
     }
   </script>
 </body>
 </html>
+
