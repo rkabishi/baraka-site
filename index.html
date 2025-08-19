@@ -232,6 +232,19 @@
         if(p.title && /digital\s*hub/i.test(p.title)){
           p={...p,image:'assets/16.jpg',image_alt:'Digital Hub',link:'digital-hub.html'};
         }
+        // WELLNESS HUB override (clickable + Refugee Festival image)
+        if (p.title && /wellness\s*hub/i.test(p.title)) {
+          // NOTE: path has a space → use %20 to be safe; adjust extension if your file isn’t .jpg
+          p = { 
+            ...p, 
+            image: 'assets/Refugee%20Festival/IMG_7117.jpg',
+            image_alt: 'Wellness Hub',
+            link: 'wellness-hub.html'
+          };
+        }
+
+
+
         const inner=`${p.image?`<img class="prog-img" src="${E(p.image)}" alt="${E(p.image_alt||p.title||'Programme image')}" loading="lazy">`:''}<h3>${E(p.title||'')}</h3><p>${E(p.description||'')}</p>${p.bullets?`<ul>${p.bullets.map(li=>`<li>${E(li)}</li>`).join('')}</ul>`:''}`;
         return p.link?`<a class="card program" href="${E(p.link)}" aria-label="${E(p.title)}">${inner}</a>`:`<div class="card program">${inner}</div>`;
       }).join('');

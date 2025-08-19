@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Wellness Hub — Baraka Community & Family Centre</title>
+  <meta name="description" content="Wellness Hub at Baraka Community & Family Centre — peer-led wellbeing cafés and support circles focused on connection and resilience."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/site.css">
+  <style>
+    main.container { padding-top: 16px; }
+    .wide-hero { margin: 12px 0 24px; }
+    .pill { display:inline-block; padding:6px 10px; border-radius:999px; background:#f1f5f9; color:#0f172a; font-weight:600; font-size:12px; }
+    .fact { display:grid; grid-template-columns: 120px 1fr; gap:10px; align-items:start; }
+    .fact b { color: var(--muted); }
+    .activity-list { display:grid; grid-template-columns: repeat(2,1fr); gap:12px; }
+    .activity-list li { background: var(--card); border:1px solid var(--card-border); border-radius:12px; padding:10px 12px; }
+    .session-plan { display:grid; grid-template-columns: 1fr 3fr; gap:10px; }
+    .session-plan div { background: var(--card); border:1px solid var(--card-border); border-radius:12px; padding:10px 12px; }
+    @media (max-width: 900px){
+      .activity-list { grid-template-columns: 1fr; }
+      .session-plan { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER (same as other pages) -->
+  <header class="site-header">
+    <div class="container nav">
+      <a class="logo" href="index.html">
+        <img id="logo" src="assets/baraka-logo.png" alt="Baraka logo">
+        <span id="siteName">Baraka Community & Family Centre</span>
+      </a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="site-menu">Menu</button>
+      <nav id="site-menu" class="menu" aria-label="Main menu"></nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- TOP: Slideshow -->
+    <section class="wide-hero" aria-label="Wellness Hub photos">
+      <div class="slideshow" id="wellness-slideshow" aria-label="Wellness Hub slideshow">
+        <div class="slides"></div>
+        <button class="nav prev" data-prev aria-label="Previous slide">‹</button>
+        <button class="nav next" data-next aria-label="Next slide">›</button>
+        <div class="dots"></div>
+      </div>
+    </section>
+
+    <!-- Overview -->
+    <section>
+      <div class="kicker">Programmes</div>
+      <h1 class="section-title">Wellness Hub</h1>
+      <p class="lead" id="wh-lead"></p>
+      <div class="two" style="margin-top:12px">
+        <div class="card" id="wh-when">
+          <h3>When & where</h3>
+          <div class="fact"><b>Day</b><div id="wh-day"></div></div>
+          <div class="fact"><b>Time</b><div id="wh-time"></div></div>
+          <div class="fact"><b>Location</b><div id="wh-location"></div></div>
+          <div class="fact"><b>Who for</b><div id="wh-who"></div></div>
+          <div class="fact"><b>Cost</b><div id="wh-cost"></div></div>
+          <div class="fact"><b>Register</b><div id="wh-register"></div></div>
+        </div>
+        <div class="card" id="wh-what">
+          <h3>What happens</h3>
+          <ul class="activity-list" id="wh-activities"></ul>
+          <p class="notice" id="wh-safeguarding"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Session plan -->
+    <section style="margin-top:18px">
+      <div class="kicker">Typical session</div>
+      <h2 class="section-title">A calm, supportive space</h2>
+      <div class="session-plan" id="wh-session-grid"></div>
+    </section>
+
+    <!-- CTA -->
+    <section style="margin-top:18px">
+      <div class="card">
+        <h3 style="margin:0 0 8px">Questions or want to join?</h3>
+        <p class="notice" id="wh-cta-note"></p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <a id="wh-cta-primary" class="btn" href="#">Register interest</a>
+          <a class="btn secondary" href="contact.html">Contact us</a>
+          <a class="pill" href="programmes.html">All programmes</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;">
+      <div>© <span id="year"></span> <span id="footerName">Baraka Community & Family Centre</span> · All rights reserved.<br><span class="notice">Registered SCIO <span id="scio"></span></span></div>
+      <div class="oscr"><img id="oscrBadge" src="assets/oscr-badge.jpg" alt="OSCR badge"/></div>
+    </div>
+  </footer>
+
+  <!-- Page content (editable) -->
+  <script id="wellness-hub-content" type="application/json">
+  {
+    "lead": "Peer-led wellbeing cafés and support circles focused on connection, mental health, and resilience — with a warm, welcoming atmosphere.",
+    "when": {
+      "day": "Monthly (see calendar/announcements)",
+      "time": "13:00 – 15:00",
+      "location": "West Glasgow — venue confirmed on registration",
+      "who": "Adults (women-focused spaces available); child-friendly area when advertised",
+      "cost": "Free",
+      "register_label": "Email to join the next session",
+      "register_href": "mailto:hello@baraka-centre.org?subject=Wellness%20Hub%20registration"
+    },
+    "activities": [
+      "Wellbeing café & peer support circle",
+      "Mindfulness / gentle movement",
+      "Creative therapy (journaling/crafts)",
+      "Signposting and one-to-one support (by appointment)"
+    ],
+    "safeguarding": "Sessions are facilitated by trained staff/volunteers; we follow safeguarding-first practices.",
+    "session_plan": [
+      ["12:50–13:00", "Arrivals & tea"],
+      ["13:00–13:40", "Check-in & peer circle"],
+      ["13:40–14:10", "Mindfulness / gentle movement / creative activity"],
+      ["14:10–14:40", "Informal chats & signposting"],
+      ["14:40–15:00", "Close & optional one-to-one support scheduling"]
+    ],
+    "cta_note": "Email us and we’ll confirm the next date and location.",
+    "cta_primary_label": "Register interest",
+    "cta_primary_href": "mailto:hello@baraka-centre.org?subject=Wellness%20Hub%20registration",
+    "images": [
+      { "src": "assets/Refugee Festival/IMG_7117.jpg", "alt": "Wellness/Community gathering" }
+    ],
+    "fallback_image": { "src": "assets/Refugee Festival/IMG_7117.jpg", "alt": "Wellness Hub" }
+  }
+  </script>
+
+  <!-- Shared helpers (header/footer/brand/slideshow) -->
+  <script src="assets/site.js"></script>
+
+  <!-- Page render -->
+  <script>
+    const E = (s)=>String(s??'').replace(/[&<>\\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    function parsePage(){ try{ return JSON.parse(document.getElementById('wellness-hub-content').textContent||'{}'); }catch{ return {}; } }
+
+    // Probe images in a folder (Wellness/1..30.jpg|.JPG) + allow spaces in paths
+    function checkImage(src){ return new Promise(res=>{ const i=new Image(); i.onload=()=>res(true); i.onerror=()=>res(false); i.src=encodeURI(src); }); }
+    async function discoverWellnessImages(){
+      const out=[];
+      for(let n=1;n<=30;n++){
+        const cands = [
+          `assets/Wellness/${n}.jpg`,
+          `assets/Wellness/${n}.JPG`,
+          `assets/Wellness/${String(n).padStart(2,'0')}.jpg`,
+          `assets/Wellness/${String(n).padStart(2,'0')}.JPG`
+        ];
+        for(const p of cands){ /* eslint-disable-next-line no-await-in-loop */
+          if(await checkImage(p)){ out.push({src:p, alt:`Wellness ${n}`}); break; }
+        }
+      }
+      return out;
+    }
+
+    function renderBasics(){
+      const d = window.__SITE__ || {};
+      (window.SITE?.applyBrand||(()=>{}))(d.site?.brand||{});
+      (window.SITE?.buildHeader||(()=>{}))(d);
+      (window.SITE?.buildFooter||(()=>{}))(d);
+    }
+
+    async function renderPage(){
+      renderBasics();
+      const page = parsePage();
+
+      // Lead / Facts
+      document.getElementById('wh-lead').textContent = page.lead || 'Peer-led wellbeing cafés and support circles.';
+      document.getElementById('wh-day').textContent  = page.when?.day || 'Monthly';
+      document.getElementById('wh-time').textContent = page.when?.time || '13:00 – 15:00';
+      document.getElementById('wh-location').textContent = page.when?.location || 'West Glasgow';
+      document.getElementById('wh-who').textContent  = page.when?.who || 'Adults';
+      document.getElementById('wh-cost').textContent = page.when?.cost || 'Free';
+      const reg = document.getElementById('wh-register');
+      reg.innerHTML = `<a class="btn" href="${E(page.when?.register_href || 'mailto:hello@baraka-centre.org')}">${E(page.when?.register_label || 'Register interest')}</a>`;
+
+      // Activities
+      const acts = page.activities || [];
+      document.getElementById('wh-activities').innerHTML = acts.map(a=>`<li>${E(a)}</li>`).join('') || '<li>Wellbeing café</li>';
+
+      // Session plan
+      const plan = page.session_plan || [];
+      document.getElementById('wh-session-grid').innerHTML = plan.map(([t,what]) => `<div><b>${E(t)}</b></div><div>${E(what)}</div>`).join('');
+
+      // CTA
+      const ctaA = document.getElementById('wh-cta-primary');
+      ctaA.textContent = page.cta_primary_label || 'Register interest';
+      ctaA.href = page.cta_primary_href || 'mailto:hello@baraka-centre.org';
+      document.getElementById('wh-cta-note').textContent = page.cta_note || '';
+
+      // Slideshow (JSON images → discover Wellness folder → fallback to Refugee Festival image)
+      let imgs = Array.isArray(page.images) ? page.images.slice() : [];
+      if(!imgs.length) imgs = await discoverWellnessImages();
+      if(!imgs.length && page.fallback_image) imgs = [page.fallback_image];
+
+      const rootId = 'wellness-slideshow';
+      const slidesEl = document.querySelector('#'+rootId+' .slides');
+      const dotsEl   = document.querySelector('#'+rootId+' .dots');
+
+      if(imgs.length && slidesEl && dotsEl){
+        const slidesHtml = imgs.map((g,i)=>`
+          <div class="slide ${i===0?'active':''}">
+            <img src="${encodeURI(g.src)}" alt="${E(g.alt||'Wellness photo')}" loading="lazy">
+            ${g.caption ? `<div class="caption">${E(g.caption)}</div>` : ''}
+          </div>`).join('');
+        const dotsHtml = imgs.map((_,i)=>`<button class="dot ${i===0?'active':''}" aria-label="Go to slide ${i+1}"></button>`).join('');
+        slidesEl.innerHTML = slidesHtml;
+        dotsEl.innerHTML = dotsHtml;
+        (window.SITE?.initSlideshow||(()=>{}))(rootId, imgs, { interval: 4000 });
+      } else if (slidesEl){
+        slidesEl.innerHTML = `<div class="slide active"><img src="${encodeURI(page.fallback_image?.src || 'assets/Refugee Festival/IMG_7117.jpg')}" alt="Wellness Hub" loading="lazy"></div>`;
+      }
+    }
+
+    if(window.__SITE__){
+      renderPage();
+    }else{
+      document.addEventListener('site:loaded', ()=>renderPage(), { once:true });
+      setTimeout(()=>{ if(!window.__SITE__) renderPage(); }, 800);
+    }
+  </script>
+</body>
+</html>
