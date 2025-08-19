@@ -243,6 +243,18 @@
           };
         }
 
+        if (p.title && /food distribution/i.test(p.title)) {
+        // Card image path you gave:
+        // NOTE: you wrote "Farashare_Food" (single 'a') — keeping it.
+        // If your real folder is "Fareshare_Food", just change the path below.
+        p = { 
+          ...p, 
+          image: 'assets/Farashare_Food/50.jpg', 
+          image_alt: 'Food Distribution',
+          link: 'food-distribution.html'
+        };
+      }
+
 
 
         const inner=`${p.image?`<img class="prog-img" src="${E(p.image)}" alt="${E(p.image_alt||p.title||'Programme image')}" loading="lazy">`:''}<h3>${E(p.title||'')}</h3><p>${E(p.description||'')}</p>${p.bullets?`<ul>${p.bullets.map(li=>`<li>${E(li)}</li>`).join('')}</ul>`:''}`;
