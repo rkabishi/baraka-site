@@ -433,4 +433,78 @@ header.site-header{
   :root{ --footer-logo-h: 128px; }                 /* ~80% of desktop size */
 }
 
+/* === FOOTER ROW: 3 COLUMNS (COPY • LOGOS • OSCR) ========================= */
+.footer-row{
+  display: grid !important;
+  grid-template-columns: 1fr minmax(420px, 1.2fr) auto !important;
+  align-items: center !important;
+  gap: 16px !important;
+}
+
+/* On narrow screens: stack nicely */
+@media (max-width: 800px){
+  .footer-row{
+    grid-template-columns: 1fr !important;
+    justify-items: center !important;
+    text-align: center !important;
+  }
+}
+
+/* === UNIFORM LOGO SIZE: 2.5× BIGGER ===================================== */
+/* We’ll treat current ~40px logos as baseline → 40 × 2.5 = 100px */
+:root{ --footer-logo-h: 100px; } /* tweak to 120px if you want even bigger */
+
+/* Middle block: distribute logos evenly */
+.footer .founder-logos{
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-evenly !important;
+  gap: 18px !important;
+  flex-wrap: nowrap !important;     /* keep them on one line at desktop */
+}
+
+/* Each founder = same-size tile so visual sizes match */
+.footer .founder{
+  width: clamp(180px, 26vw, 280px) !important;
+  height: var(--footer-logo-h) !important;
+  display: grid !important;
+  place-items: center !important;
+  background: #fff !important;
+  border: 1px solid var(--card-border) !important;
+  border-radius: 10px !important;
+  padding: 10px !important;
+  box-shadow: 0 2px 10px rgba(15,23,42,.06) !important;
+  overflow: hidden !important;
+}
+
+/* The images scale to fit the tile (no overflow) */
+.footer .founder img{
+  max-width: 92% !important;
+  max-height: 92% !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important;
+  display: block !important;
+}
+
+/* Extra-wide TNL mark: small nudge down so it matches visually */
+.footer .founder[data-name="tnl"] img{
+  max-width: 86% !important;
+  max-height: 86% !important;
+}
+
+/* OSCR badge: make EXACTLY the same height as the founders */
+.footer .oscr img{
+  height: var(--footer-logo-h) !important;
+  width: auto !important;
+  object-fit: contain !important;
+  display: block !important;
+  border-radius: 10px !important;
+}
+
+/* If the row gets tight, allow logos to wrap under the copy on phones */
+@media (max-width: 800px){
+  .footer .founder-logos{ flex-wrap: wrap !important; }
+}
+
 
