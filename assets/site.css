@@ -379,3 +379,58 @@ header.site-header{
 }
 
 
+/* === FOOTER LOGOS — UNIFORM & 2.5× BIGGER (OVERRIDES) =================== */
+:root{
+  /* 2.5× bigger target height for ALL footer logos */
+  --footer-logo-h: 160px; /* was ~64px before; 64 × 2.5 = 160 */
+}
+
+/* Row layout: spread evenly and wrap nicely */
+.footer .founder-logos{
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-evenly !important;
+  gap: 18px !important;
+  flex-wrap: wrap !important;
+  width: 100% !important;
+}
+
+/* Every founder sits in the same-size tile as the OSCR height */
+.footer .founder{
+  width: clamp(220px, 28vw, 360px) !important;     /* responsive width */
+  height: var(--footer-logo-h) !important;         /* uniform height */
+  display: grid !important;
+  place-items: center !important;
+  background: #fff !important;
+  border: 1px solid var(--card-border) !important;
+  border-radius: 10px !important;
+  padding: 10px !important;
+  box-shadow: 0 2px 10px rgba(15,23,42,.06) !important;
+  overflow: hidden !important;                     /* never overflow */
+}
+
+/* Logos auto-fit inside each tile (override any earlier 28px/64px rules) */
+.footer .founder img{
+  max-width: 92% !important;
+  max-height: 92% !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important;
+  display: block !important;
+}
+
+/* Make OSCR EXACTLY the same height as the tiles */
+.footer .oscr img{
+  height: var(--footer-logo-h) !important;
+  width: auto !important;
+  object-fit: contain !important;
+  border-radius: 10px !important;
+  display: block !important;
+}
+
+/* (Optional) keep them still big on phones */
+@media (max-width: 600px){
+  :root{ --footer-logo-h: 128px; }                 /* ~80% of desktop size */
+}
+
+
