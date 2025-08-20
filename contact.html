@@ -31,11 +31,39 @@
 </main>
 
 <footer class="footer">
-  <div class="container" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;">
-    <div>© <span id="year"></span> <span id="footerName">Baraka Community & Family Centre</span> · All rights reserved.<br><span class="notice">Registered SCIO <span id="scio"></span></span></div>
-    <div class="oscr"><img id="oscrBadge" src="assets/oscr-badge.jpg" alt="OSCR badge"/></div>
+  <div class="container footer-row">
+    <!-- Left: copy -->
+    <div class="footer-copy">
+      © <span id="year"></span> <span id="footerName">Baraka Community & Family Centre</span> · All rights reserved.
+      <br><span class="notice">Registered SCIO <span id="scio"></span></span>
+    </div>
+
+    <!-- Middle: founders (web logos, uniform size) -->
+    <div class="founder-logos" aria-label="Funders">
+      <a href="https://www.tnlcommunityfund.org.uk/" target="_blank" rel="noopener">
+        <img class="footer-logo" alt="The National Lottery Community Fund"
+             src="https://images.brandfetch.io/tnlcommunityfund.org.uk/logo"
+             onerror="this.onerror=null;this.src='https://logo.clearbit.com/tnlcommunityfund.org.uk';">
+      </a>
+      <a href="https://www.corra.scot/" target="_blank" rel="noopener">
+        <img class="footer-logo" alt="Corra Foundation"
+             src="https://images.brandfetch.io/corra.scot/logo"
+             onerror="this.onerror=null;this.src='https://logo.clearbit.com/corra.scot';">
+      </a>
+      <a href="https://fareshare.org.uk/" target="_blank" rel="noopener">
+        <img class="footer-logo" alt="FareShare UK"
+             src="https://images.brandfetch.io/fareshare.org.uk/logo"
+             onerror="this.onerror=null;this.src='https://logo.clearbit.com/fareshare.org.uk';">
+      </a>
+    </div>
+
+    <!-- Right: OSCR (same size as founders) -->
+    <div class="oscr">
+      <img id="oscrBadge" class="footer-logo" src="assets/oscr-badge.jpg" alt="OSCR badge">
+    </div>
   </div>
 </footer>
+
 
 <script src="assets/site.js"></script>
 <script>

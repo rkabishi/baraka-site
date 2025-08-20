@@ -1,524 +1,210 @@
+/* ========================================================================== */
+/* Baraka — Site styles                                                       */
+/* ========================================================================== */
+
+/* ---------- Theme variables ---------- */
 :root{
-  --brand:#0ea5e9; --brand-dark:#0369a1; --accent:#22c55e;
-  --ink:#0f172a; --muted:#475569; --bg:#EAF7F1;
-  --card:#EAF7F1; --card-border:#d1e7dd; --ring:rgba(14,165,233,.35);
+  --brand:#0ea5e9;
+  --brand-dark:#0369a1;
+  --accent:#22c55e;
+
+  --ink:#0f172a;
+  --muted:#475569;
+  --bg:#EAF7F1;
+
+  --card:#EAF7F1;
+  --card-border:#d1e7dd;
+  --ring:rgba(14,165,233,.35);
 
   /* nav sizing that "fits the space" */
   --nav-gap: clamp(8px, 1.2vw, 14px);
   --nav-h: clamp(36px, 4.2vw, 44px);
   --nav-pad-x: clamp(10px, 1.6vw, 16px);
   --nav-fs: clamp(13px, 1.4vw, 16px);
+
+  /* Footer logos (2.5× bigger than the old tiny ones) */
+  --footer-logo-h: 100px; /* tweak to 120px if you want even bigger */
 }
 
+/* ---------- Base ---------- */
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg)}
-a{color:var(--brand-dark);text-decoration:none}
+html,body{
+  margin:0; padding:0;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--ink);
+  background:var(--bg);
+}
+a{ color:var(--brand-dark); text-decoration:none }
 
-/* Layout */
-.container{max-width:1100px;margin:0 auto;padding:0 20px}
-main.container{padding:32px 20px}
-.kicker{color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-bottom:8px;font-size:12px}
-.section-title{font-size:28px;margin:0 0 12px}
-.card{background:var(--card);border:1px solid var(--card-border);border-radius:18px;padding:18px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.lead{color:var(--muted);font-size:18px}
-.notice{font-size:13px;color:#64748b}
-.btn{display:inline-block;padding:12px 18px;border-radius:12px;font-weight:700;background:var(--brand);color:#fff;box-shadow:0 6px 16px rgba(2,132,199,.25)}
-.btn.secondary{background:var(--accent);box-shadow:0 6px 16px rgba(34,197,94,.25)}
-.footer{padding:28px 0 40px;color:var(--muted);font-size:14px;border-top:1px solid #e2e8f0}
-.oscr img{height:40px;border-radius:6px}
-
-/* Title + sponsors row: title on left, logos on right */
-.title-row {
-  display: grid;
-  grid-template-columns: 1fr auto; /* title grows, logos shrink-to-fit */
-  align-items: center;
-  gap: 12px;
+/* ---------- Layout utilities ---------- */
+.container{ max-width:1100px; margin:0 auto; padding:0 20px }
+main.container{ padding:32px 20px }
+.kicker{
+  color:var(--muted); font-weight:700; text-transform:uppercase;
+  letter-spacing:.3px; margin-bottom:8px; font-size:12px
+}
+.section-title{ font-size:28px; margin:0 0 12px }
+.card{
+  background:var(--card); border:1px solid var(--card-border);
+  border-radius:18px; padding:18px;
+  box-shadow:0 10px 30px rgba(15,23,42,.06)
+}
+.grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px }
+.two{ display:grid; grid-template-columns:1fr 1fr; gap:18px }
+.lead{ color:var(--muted); font-size:18px }
+.notice{ font-size:13px; color:#64748b }
+.btn{
+  display:inline-block; padding:12px 18px; border-radius:12px; font-weight:700;
+  background:var(--brand); color:#fff;
+  box-shadow:0 6px 16px rgba(2,132,199,.25)
+}
+.btn.secondary{
+  background:var(--accent);
+  box-shadow:0 6px 16px rgba(34,197,94,.25)
+}
+.prog-img{
+  width:100%; height:160px; object-fit:cover; border-radius:12px; margin-bottom:8px
 }
 
-/* The sponsors container */
-.sponsors-row {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 12px;
-  flex-wrap: wrap;
-  max-width: 100%;
+@media (max-width:900px){
+  .grid{ grid-template-columns:1fr }
+  .two{ grid-template-columns:1fr }
 }
 
-/* Uniform “frame” for every logo */
-.sponsor {
-  flex: 0 0 auto;
-  width: clamp(110px, 18vw, 160px);  /* responsive width */
-  height: clamp(32px, 4.5vw, 48px);  /* responsive height */
-  padding: 6px 10px;                 /* inner breathing room */
-  border: 1px solid var(--card-border);
-  border-radius: 10px;
-  background: #fff;
-  box-shadow: 0 2px 10px rgba(15,23,42,.06);
-  display: grid;
-  place-items: center;
-  overflow: hidden;                  /* nothing can overflow the frame */
-}
-
-/* Images fit inside the frame, never overflow */
-.sponsor img {
-  max-width: 80%;    /* cap width and height to keep visual balance */
-  max-height: 80%;
-  object-fit: contain;
-  display: block;
-}
-
-/* Tweak very-wide marks (like TNL) a touch smaller */
-.sponsor[data-name="tnl"] img {
-  max-width: 68%;
-  max-height: 68%;
-}
-
-/* Stack title above logos on small screens */
-@media (max-width: 600px) {
-  .title-row { grid-template-columns: 1fr; }
-  .sponsors-row { justify-content: flex-start; }
-}
-
-
-/* The image scales to fit inside the frame, keeps its aspect ratio */
-.sponsor img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  display: block;
-}
-
-/* Stack title above logos on small screens */
-@media (max-width: 600px) {
-  .title-row { grid-template-columns: 1fr; }
-  .sponsors-row { justify-content: flex-start; }
-}
-
-
-
-/* Header */
+/* ---------- Header / Nav ---------- */
 header.site-header{
-  position:sticky;top:0;z-index:50;
-  background:rgba(248,250,252,.85);backdrop-filter:blur(8px);
+  position:sticky; top:0; z-index:50;
+  background:rgba(248,250,252,.85); backdrop-filter:blur(8px);
   border-bottom:1px solid #e2e8f0;
 }
-.nav{display:flex;align-items:center;justify-content:space-between;height:64px}
-.logo{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--ink)}
-.logo img{width:36px;height:36px;border-radius:8px;object-fit:cover;background:#e2e8f0}
-#siteName{font-size:clamp(16px,2.2vw,20px)}
+.nav{
+  display:flex; align-items:center; justify-content:space-between; height:64px
+}
+.logo{ display:flex; align-items:center; gap:10px; font-weight:800; color:var(--ink) }
+.logo img{ width:36px; height:36px; border-radius:8px; object-fit:cover; background:#e2e8f0 }
+#siteName{ font-size:clamp(16px,2.2vw,20px) }
 
-/* Menu fits space + aligned */
-.menu{display:flex;align-items:center;gap:var(--nav-gap);flex-wrap:wrap}
+.menu{ display:flex; align-items:center; gap:var(--nav-gap); flex-wrap:wrap }
 .menu a{
-  display:inline-flex;align-items:center;justify-content:center;
-  height:var(--nav-h);padding:0 var(--nav-pad-x);
-  font-weight:700;font-size:var(--nav-fs);line-height:1;border-radius:10px;
-  background:var(--accent);color:#fff;border:1px solid color-mix(in srgb, var(--accent) 70%, transparent);
+  display:inline-flex; align-items:center; justify-content:center;
+  height:var(--nav-h); padding:0 var(--nav-pad-x);
+  font-weight:700; font-size:var(--nav-fs); line-height:1; border-radius:10px;
+  background:var(--accent); color:#fff;
+  border:1px solid color-mix(in srgb, var(--accent) 70%, transparent);
   box-shadow:0 6px 16px rgba(34,197,94,.25);
   transition:transform .05s ease, filter .15s ease
 }
-.menu a:hover{filter:brightness(.95);transform:translateY(-1px)}
-.menu a.active{outline:2px solid var(--brand);}
+.menu a:hover{ filter:brightness(.95); transform:translateY(-1px) }
+.menu a.active{ outline:2px solid var(--brand) }
 
-/* Mobile menu */
 .menu-toggle{
-  display:none;appearance:none;border:1px solid #cbd5e1;background:#fff;
-  border-radius:10px;padding:8px 10px;font-weight:700;color:#0f172a;
+  display:none; appearance:none; border:1px solid #cbd5e1; background:#fff;
+  border-radius:10px; padding:8px 10px; font-weight:700; color:#0f172a;
 }
+
 @media (max-width:900px){
-  .menu-toggle{display:inline-block}
-  .menu{display:none;width:100%;margin-top:10px}
-  .nav{flex-wrap:wrap;gap:10px}
-  .menu.open{display:flex}
-  .grid{grid-template-columns:1fr}
-  .two{grid-template-columns:1fr}
+  .menu-toggle{ display:inline-block }
+  .menu{ display:none; width:100%; margin-top:10px }
+  .nav{ flex-wrap:wrap; gap:10px }
+  .menu.open{ display:flex }
 }
 
-/* Slideshow (shared) */
-.slideshow{position:relative;border-radius:16px;border:1px solid var(--card-border);background:var(--card);overflow:hidden;aspect-ratio:16/9;min-height:320px}
-.slideshow .slides{position:relative;width:100%;height:100%}
-.slideshow .slide{position:absolute;inset:0;opacity:0;transition:opacity .5s ease-in-out}
-.slideshow .slide.active{opacity:1}
-.slideshow .slide img{width:100%;height:100%;object-fit:cover;display:block}
-.slideshow .caption{position:absolute;left:12px;bottom:12px;background:rgba(0,0,0,.45);color:#fff;padding:6px 10px;border-radius:8px;font-size:12px}
-.slideshow .nav{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:999px;border:1px solid rgba(255,255,255,.6);background:rgba(0,0,0,.25);color:#fff;font-size:22px;font-weight:800;display:grid;place-items:center;cursor:pointer;z-index:2}
-.slideshow .nav.prev{left:10px}.slideshow .nav.next{right:10px}
-.slideshow .dots{position:absolute;left:0;right:0;bottom:10px;display:flex;justify-content:center;gap:8px;z-index:2}
-.slideshow .dot{width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.6);border:0;padding:0;cursor:pointer}
-.slideshow .dot.active{background:#fff}
-@media (max-width:900px){.slideshow{min-height:240px}}
+/* ---------- Slideshow (shared) ---------- */
+.slideshow{
+  position:relative; border-radius:16px; border:1px solid var(--card-border);
+  background:var(--card); overflow:hidden; aspect-ratio:16/9; min-height:320px
+}
+.slideshow .slides{ position:relative; width:100%; height:100% }
+.slideshow .slide{ position:absolute; inset:0; opacity:0; transition:opacity .5s ease-in-out }
+.slideshow .slide.active{ opacity:1 }
+.slideshow .slide img{ width:100%; height:100%; object-fit:cover; display:block }
+.slideshow .caption{
+  position:absolute; left:12px; bottom:12px;
+  background:rgba(0,0,0,.45); color:#fff; padding:6px 10px; border-radius:8px; font-size:12px
+}
+.slideshow .nav{
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:42px; height:42px; border-radius:999px; border:1px solid rgba(255,255,255,.6);
+  background:rgba(0,0,0,.25); color:#fff; font-size:22px; font-weight:800;
+  display:grid; place-items:center; cursor:pointer; z-index:2
+}
+.slideshow .nav.prev{ left:10px }
+.slideshow .nav.next{ right:10px }
+.slideshow .dots{
+  position:absolute; left:0; right:0; bottom:10px;
+  display:flex; justify-content:center; gap:8px; z-index:2
+}
+.slideshow .dot{
+  width:8px; height:8px; border-radius:999px; background:rgba(255,255,255,.6);
+  border:0; padding:0; cursor:pointer
+}
+.slideshow .dot.active{ background:#fff }
+@media (max-width:900px){ .slideshow{ min-height:240px } }
 
-
-.sponsor {
-  flex: 0 0 auto !important;
-  width: clamp(110px, 18vw, 160px) !important;
-  height: clamp(32px, 4.5vw, 48px) !important;
-  padding: 6px 10px !important;
-  border: 1px solid var(--card-border) !important;
-  border-radius: 10px !important;
-  background: #fff !important;
-  box-shadow: 0 2px 10px rgba(15,23,42,.06) !important;
-  display: grid !important;
-  place-items: center !important;
-  overflow: hidden !important;   /* never overflow the tile */
+/* ---------- Footer (uniform founders + OSCR, aligned with copyright) ---------- */
+.footer{
+  padding:28px 0 40px;
+  color:var(--muted);
+  font-size:14px;
+  border-top:1px solid #e2e8f0;
 }
 
-.sponsor img {
-  max-width: 80% !important;
-  max-height: 80% !important;
-  object-fit: contain !important;
-  display: block !important;
-}
-
-/* Very-wide marks (TNL) nudged smaller */
-.sponsor[data-name="tnl"] img {
-  max-width: 62% !important;
-  max-height: 62% !important;
-}
-
-.founder-logos img {
-  height: 28px;             /* same height for all */
-  width: auto;              /* keep aspect ratio */
-  object-fit: contain;
-  background: #fff;
-  border: 1px solid var(--card-border);
-  border-radius: 8px;
-  padding: 6px;
-  box-shadow: 0 2px 10px rgba(15,23,42,.06);
-}
-@media (max-width: 600px){
-  .founder-logos img { height: 24px; padding: 5px; }
-}
-
-/* === Footer founders (uniform tiles, consistent sizing) === */
-.footer-logos {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  flex-wrap: wrap;
-}
-
-.founder-logos {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-/* Same-size tile for every logo */
-.founder {
-  width: 140px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  background: #fff;
-  border: 1px solid var(--card-border);
-  border-radius: 8px;
-  padding: 6px;
-  box-shadow: 0 2px 10px rgba(15,23,42,.06);
-  overflow: hidden;            /* logos can’t overflow */
-}
-
-/* White logos (e.g., Corra SVG) get a dark tile */
-.founder.bg-dark { background: #0f172a; }
-
-/* Logos scale to fit the tile, keep aspect */
-.founder img {
-  max-width: 90%;
-  max-height: 90%;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  display: block;
-}
-
-/* TNL is extra-wide, nudge smaller */
-.founder[data-name="tnl"] img {
-  max-width: 80%;
-  max-height: 80%;
-}
-
-/* Text fallback if all URLs fail */
-.logo-fallback {
-  color: #0f172a;
-  font-weight: 700;
-  font-size: 12px;
-  text-align: center;
-}
-
-/* Slightly smaller tiles on small screens */
-@media (max-width: 600px) {
-  .founder { width: 120px; height: 40px; }
-}
-
-/* === Footer founders/OSCR sizing (uniform) === */
-:root{
-  /* OSCR was ~40px high before — now make it 80px (2×) */
-  --footer-logo-h: 80px;
-  /* width of each founder tile (tweak if needed) */
-  --founder-tile-w: 200px;
-}
-
-/* OSCR 2× bigger */
-.oscr img{
-  height: var(--footer-logo-h) !important;
-  width: auto !important;
-  object-fit: contain !important;
-  display: block;
-  border-radius: 8px;
-}
-
-/* Founders container */
-.footer-logos{
-  display:flex; align-items:center; gap:18px; flex-wrap:wrap;
-}
-.founder-logos{
-  display:inline-flex; align-items:center; gap:12px; flex-wrap:wrap;
-}
-
-/* Every founder tile = same height as OSCR */
-.founder{
-  width: var(--founder-tile-w) !important;
-  height: var(--footer-logo-h) !important;
-  display:grid; place-items:center;
-  background:#fff; border:1px solid var(--card-border);
-  border-radius:8px; padding:6px;
-  box-shadow:0 2px 10px rgba(15,23,42,.06);
-  overflow:hidden;
-}
-
-/* White-on-transparent marks (e.g., Corra) get contrast */
-.founder.bg-dark{ background:#0f172a; }
-
-/* Logos auto-fit inside the tile */
-.founder img{
-  max-width: 90% !important;
-  max-height: 90% !important;
-  width:auto; height:auto;
-  object-fit:contain; display:block;
-}
-
-
-
-/* Footer layout */
-.footer-flex{
-  display:flex;
+/* 3 columns: COPY • LOGOS • OSCR */
+.footer-row{
+  display:grid;
+  grid-template-columns: 1fr auto auto;
   align-items:center;
-  justify-content:space-between;
   gap:16px;
-  flex-wrap:wrap;          /* wrap nicely on small screens */
 }
 
-/* Logos row: evenly spaced and wrapping nicely */
+/* Founders block: even spacing, wraps when needed */
 .founder-logos{
   display:flex;
   align-items:center;
   justify-content:space-evenly;
-  gap:18px;
+  gap:16px;
   flex-wrap:wrap;
-  min-width:320px;         /* keeps from squashing too hard */
+  min-width:360px; /* prevents squashing at mid widths */
 }
 
-/* Footer founders (web logos, even sizing) */
-.footer-logos {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  flex-wrap: wrap;
-}
-
-.founder-logos {
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-evenly;
-  gap: 16px;
-  flex-wrap: wrap;
-  min-width: 320px;
-}
-
-/* 2.5× bigger than the tiny originals: make every logo the same visual size */
+/* All footer logos (including OSCR) are the same visual size */
 .footer-logo{
-  height: 80px !important;   /* <- tweak up/down if you want larger/smaller */
-  width: auto !important;
-  object-fit: contain !important;
-  background: #fff;
-  border: 1px solid var(--card-border);
-  border-radius: 10px;
-  padding: 10px;             /* a little white frame around each logo */
-  box-shadow: 0 2px 10px rgba(15,23,42,.06);
-  display: block;
+  height:var(--footer-logo-h);
+  width:auto;
+  object-fit:contain;
+  background:#fff;
+  border:1px solid var(--card-border);
+  border-radius:10px;
+  padding:10px;
+  box-shadow:0 2px 10px rgba(15,23,42,.06);
+  display:block;
 }
 
-
-
-
-/* Make OSCR exactly the same size as the others */
-.footer .oscr img,
-#oscrBadge.footer-logo{
-  height: 80px !important;
-  width: auto !important;
-  object-fit: contain !important;
-}
-
-/* Small screens: scale down a touch */
-@media (max-width: 600px){
-  .footer-logo,
-  .footer .oscr img,
-  #oscrBadge.footer-logo{
-    height: 64px !important;
-    padding: 8px;
-  }
-}
-
-/* Keep them a tad smaller on small screens (optional) */
-@media (max-width: 600px){
-  .footer-logo{ height: 48px; padding: 6px; }
-  .footer-logo.oscr-big{ height: 48px; padding: 6px; }
-}
-
-
-
-/* Very-wide TNL nudge */
-.founder[data-name="tnl"] img{ max-width:80% !important; }
-
-/* Text fallback (if all URLs fail) */
-.logo-fallback{
-  color:#0f172a; font-weight:700; font-size:12px; text-align:center;
-}
-
-/* Slightly smaller on narrow screens (optional) */
-@media (max-width: 600px){
-  :root{ --footer-logo-h: 64px; --founder-tile-w: 168px; }
-}
-
-
-/* === FOOTER LOGOS — UNIFORM & 2.5× BIGGER (OVERRIDES) =================== */
-:root{
-  /* 2.5× bigger target height for ALL footer logos */
-  --footer-logo-h: 160px; /* was ~64px before; 64 × 2.5 = 160 */
-}
-
-/* Row layout: spread evenly and wrap nicely */
-.footer .founder-logos{
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-evenly !important;
-  gap: 18px !important;
-  flex-wrap: wrap !important;
-  width: 100% !important;
-}
-
-/* Every founder sits in the same-size tile as the OSCR height */
-.footer .founder{
-  width: clamp(220px, 28vw, 360px) !important;     /* responsive width */
-  height: var(--footer-logo-h) !important;         /* uniform height */
-  display: grid !important;
-  place-items: center !important;
-  background: #fff !important;
-  border: 1px solid var(--card-border) !important;
-  border-radius: 10px !important;
-  padding: 10px !important;
-  box-shadow: 0 2px 10px rgba(15,23,42,.06) !important;
-  overflow: hidden !important;                     /* never overflow */
-}
-
-/* Logos auto-fit inside each tile (override any earlier 28px/64px rules) */
-.footer .founder img{
-  max-width: 92% !important;
-  max-height: 92% !important;
-  width: auto !important;
-  height: auto !important;
-  object-fit: contain !important;
-  display: block !important;
-}
-
-/* Make OSCR EXACTLY the same height as the tiles */
+/* If OSCR accidentally lacks .footer-logo on some page, normalize it here */
 .footer .oscr img{
-  height: var(--footer-logo-h) !important;
-  width: auto !important;
-  object-fit: contain !important;
-  border-radius: 10px !important;
-  display: block !important;
+  height:var(--footer-logo-h);
+  width:auto;
+  object-fit:contain;
+  border-radius:10px;
+  display:block;
 }
 
-/* (Optional) keep them still big on phones */
-@media (max-width: 600px){
-  :root{ --footer-logo-h: 128px; }                 /* ~80% of desktop size */
-}
-
-/* === FOOTER ROW: 3 COLUMNS (COPY • LOGOS • OSCR) ========================= */
-.footer-row{
-  display: grid !important;
-  grid-template-columns: 1fr minmax(420px, 1.2fr) auto !important;
-  align-items: center !important;
-  gap: 16px !important;
-}
-
-/* On narrow screens: stack nicely */
-@media (max-width: 800px){
+/* Mobile: stack nicely and center */
+@media (max-width:900px){
   .footer-row{
-    grid-template-columns: 1fr !important;
-    justify-items: center !important;
-    text-align: center !important;
+    grid-template-columns:1fr;
+    justify-items:center;
+    text-align:center;
+    gap:14px;
+  }
+  .founder-logos{
+    min-width:0;
+    justify-content:center;
+  }
+  .footer-logo,
+  .footer .oscr img{
+    height:84px; /* slightly smaller on phones, still big */
+    padding:8px;
   }
 }
 
-/* === UNIFORM LOGO SIZE: 2.5× BIGGER ===================================== */
-/* We’ll treat current ~40px logos as baseline → 40 × 2.5 = 100px */
-:root{ --footer-logo-h: 100px; } /* tweak to 120px if you want even bigger */
-
-/* Middle block: distribute logos evenly */
-.footer .founder-logos{
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-evenly !important;
-  gap: 18px !important;
-  flex-wrap: nowrap !important;     /* keep them on one line at desktop */
-}
-
-/* Each founder = same-size tile so visual sizes match */
-.footer .founder{
-  width: clamp(180px, 26vw, 280px) !important;
-  height: var(--footer-logo-h) !important;
-  display: grid !important;
-  place-items: center !important;
-  background: #fff !important;
-  border: 1px solid var(--card-border) !important;
-  border-radius: 10px !important;
-  padding: 10px !important;
-  box-shadow: 0 2px 10px rgba(15,23,42,.06) !important;
-  overflow: hidden !important;
-}
-
-/* The images scale to fit the tile (no overflow) */
-.footer .founder img{
-  max-width: 92% !important;
-  max-height: 92% !important;
-  width: auto !important;
-  height: auto !important;
-  object-fit: contain !important;
-  display: block !important;
-}
-
-/* Extra-wide TNL mark: small nudge down so it matches visually */
-.footer .founder[data-name="tnl"] img{
-  max-width: 86% !important;
-  max-height: 86% !important;
-}
-
-/* OSCR badge: make EXACTLY the same height as the founders */
-.footer .oscr img{
-  height: var(--footer-logo-h) !important;
-  width: auto !important;
-  object-fit: contain !important;
-  display: block !important;
-  border-radius: 10px !important;
-}
-
-/* If the row gets tight, allow logos to wrap under the copy on phones */
-@media (max-width: 800px){
-  .footer .founder-logos{ flex-wrap: wrap !important; }
-}
