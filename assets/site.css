@@ -305,21 +305,21 @@ header.site-header{
 
 /* Footer layout */
 .footer-flex{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;          /* wrap nicely on small screens */
 }
 
 /* Logos row: evenly spaced and wrapping nicely */
 .founder-logos{
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly; /* spread evenly */
-  gap: 16px;
-  flex-wrap: wrap;
-  min-width: 320px; /* avoids squashing too much on narrow widths */
+  display:flex;
+  align-items:center;
+  justify-content:space-evenly;
+  gap:18px;
+  flex-wrap:wrap;
+  min-width:320px;         /* keeps from squashing too hard */
 }
 
 /* Footer founders (web logos, even sizing) */
@@ -339,23 +339,38 @@ header.site-header{
   min-width: 320px;
 }
 
-/* 2× bigger: all logos 64px high */
+/* 2.5× bigger than the tiny originals: make every logo the same visual size */
 .footer-logo{
-  height: 64px;          /* was 32px */
-  width: auto;
-  object-fit: contain;
+  height: 80px !important;   /* <- tweak up/down if you want larger/smaller */
+  width: auto !important;
+  object-fit: contain !important;
   background: #fff;
   border: 1px solid var(--card-border);
-  border-radius: 8px;
-  padding: 8px;          /* a touch more padding looks nicer at this size */
+  border-radius: 10px;
+  padding: 10px;             /* a little white frame around each logo */
   box-shadow: 0 2px 10px rgba(15,23,42,.06);
+  display: block;
 }
 
-/* OSCR same size as the others now */
-.footer-logo.oscr-big{
-  height: 64px;          /* was larger; match others now */
-  padding: 8px;
+
+
+
+/* Make OSCR exactly the same size as the others */
+.footer .oscr img,
+#oscrBadge.footer-logo{
+  height: 80px !important;
+  width: auto !important;
+  object-fit: contain !important;
 }
+
+/* Small screens: scale down a touch */
+@media (max-width: 600px){
+  .footer-logo,
+  .footer .oscr img,
+  #oscrBadge.footer-logo{
+    height: 64px !important;
+    padding: 8px;
+  }
 
 /* Keep them a tad smaller on small screens (optional) */
 @media (max-width: 600px){

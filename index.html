@@ -75,34 +75,39 @@
 
   <!-- FOOTER (shared skeleton + FOUNDERS row) -->
 
-  
   <footer class="footer">
-  <div class="container footer-row">
-    <!-- Left: copyright -->
+  <div class="container footer-flex">
     <div class="footer-copy">
-      © <span id="year"></span> <span id="footerName">Baraka Community & Family Centre</span> · All rights reserved.<br>
-      <span class="notice">Registered SCIO <span id="scio"></span></span>
+      © <span id="year"></span> <span id="footerName">Baraka Community & Family Centre</span> · All rights reserved.
+      <br><span class="notice">Registered SCIO <span id="scio"></span></span>
     </div>
 
-    <!-- Middle: founders (web-hosted logos) -->
-    <div class="founder-logos">
-      <a class="founder" data-name="tnl" href="https://www.tnlcommunityfund.org.uk/" target="_blank" rel="noopener">
-        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/6/6e/National_Lottery_Community_Fund_logo.svg/512px-National_Lottery_Community_Fund_logo.svg.png" alt="The National Lottery Community Fund">
+    <div class="founder-logos" aria-label="Funders">
+      <a href="https://www.tnlcommunityfund.org.uk/" target="_blank" rel="noopener">
+        <img class="footer-logo" alt="The National Lottery Community Fund"
+             src="https://images.brandfetch.io/tnlcommunityfund.org.uk/logo"
+             onerror="this.onerror=null;this.src='https://logo.clearbit.com/tnlcommunityfund.org.uk';">
       </a>
-      <a class="founder" data-name="corra" href="https://www.corra.scot/" target="_blank" rel="noopener">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Corra_Foundation_logo.svg/512px-Corra_Foundation_logo.svg.png" alt="Corra Foundation">
-      </a>
-      <a class="founder" data-name="fareshare" href="https://fareshare.org.uk/" target="_blank" rel="noopener">
-        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/2/2b/FareShare_logo.svg/512px-FareShare_logo.svg.png" alt="FareShare">
-      </a>
-    </div>
 
-    <!-- Right: OSCR (auto-resized to match) -->
-    <div class="oscr">
-      <img id="oscrBadge" src="assets/oscr-badge.jpg" alt="OSCR badge">
+      <a href="https://www.corra.scot/" target="_blank" rel="noopener">
+        <img class="footer-logo" alt="Corra Foundation"
+             src="https://images.brandfetch.io/corra.scot/logo"
+             onerror="this.onerror=null;this.src='https://logo.clearbit.com/corra.scot';">
+      </a>
+
+      <a href="https://fareshare.org.uk/" target="_blank" rel="noopener">
+        <img class="footer-logo" alt="FareShare UK"
+             src="https://images.brandfetch.io/fareshare.org.uk/logo"
+             onerror="this.onerror=null;this.src='https://logo.clearbit.com/fareshare.org.uk';">
+      </a>
+
+      <!-- Keep the OSCR ID so your JS still sets the image if needed -->
+      <img id="oscrBadge" class="footer-logo" src="assets/oscr-badge.jpg" alt="OSCR badge">
     </div>
   </div>
 </footer>
+
+  
 
 
 
