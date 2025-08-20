@@ -371,6 +371,7 @@ header.site-header{
     height: 64px !important;
     padding: 8px;
   }
+}
 
 /* Keep them a tad smaller on small screens (optional) */
 @media (max-width: 600px){
@@ -521,5 +522,3 @@ header.site-header{
 @media (max-width: 800px){
   .footer .founder-logos{ flex-wrap: wrap !important; }
 }
-
-
