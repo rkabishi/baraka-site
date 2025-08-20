@@ -73,32 +73,52 @@
 
   <!-- FOOTER (shared skeleton + FOUNDERS row) -->
   <footer class="footer">
+  <div class="container" style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;">
+    <div>
+      © <span id="year"></span> <span id="footerName">Baraka Community & Family Centre</span> · All rights reserved.
+      <br><span class="notice">Registered SCIO <span id="scio"></span></span>
+    </div>
 
-    <!-- Founders & Supporters logos row -->
-    <div class="container" style="margin-bottom:14px">
-      <div class="kicker">Founders & supporters</div>
-      <div class="sponsors-row">
-        <a href="https://www.tnlcommunityfund.org.uk/" target="_blank" rel="noopener">
-          <img src="assets/Founders/TNL.png" alt="The National Lottery Community Fund logo">
-        </a>
-        <a href="https://www.scottishrefugeecouncil.org.uk/" target="_blank" rel="noopener">
-          <img src="assets/Founders/Scottish-Refugee_council.png" alt="Scottish Refugee Council logo">
-        </a>
-        <a href="https://www.corra.scot/" target="_blank" rel="noopener">
-          <img src="assets/Founders/corra-logo.jpg" alt="Corra Foundation logo">
-        </a>
-        <a href="https://fareshare.org.uk/" target="_blank" rel="noopener">
-          <img src="assets/Founders/Fareshare.jpg" alt="FareShare logo">
-        </a>
+    <!-- Founders (web-hosted logos, evenly sized) -->
+    <div class="footer-logos" aria-label="Founders">
+      <div class="founder-logos">
+        <!-- The National Lottery Community Fund -->
+        <img
+          src="https://www.tnlcommunityfund.org.uk/assets/images/logos/tnlcf/monolingual/colour/digital-white-background.png"
+          alt="The National Lottery Community Fund"
+          loading="lazy"
+        />
+
+        <!-- Scottish Refugee Council -->
+        <img
+          src="https://scottishrefugeecouncil.org.uk/wp-content/uploads/2019/06/srclogosmall.jpg"
+          alt="Scottish Refugee Council"
+          loading="lazy"
+        />
+
+        <!-- Corra Foundation -->
+        <img
+          src="https://www.corra.scot/wp-content/themes/corra-theme/theme-files/logo-corra-l.svg"
+          alt="Corra Foundation"
+          loading="lazy"
+        />
+
+        <!-- FareShare -->
+        <img
+          src="https://upload.wikimedia.org/wikipedia/en/thumb/b/bf/FareShare_logo.png/250px-FareShare_logo.png"
+          alt="FareShare"
+          loading="lazy"
+        />
+      </div>
+
+      <!-- keep OSCR badge -->
+      <div class="oscr">
+        <img id="oscrBadge" src="assets/oscr-badge.jpg" alt="OSCR badge" />
       </div>
     </div>
+  </div>
+</footer>
 
-    <!-- Standard footer line -->
-    <div class="container" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;">
-      <div>© <span id="year"></span> <span id="footerName">Baraka Community & Family Centre</span> · All rights reserved.<br><span class="notice">Registered SCIO <span id="scio"></span></span></div>
-      <div class="oscr"><img id="oscrBadge" src="assets/oscr-badge.jpg" alt="OSCR badge"/></div>
-    </div>
-  </footer>
 
   <!-- Default content fallback (used if data/content.json is missing) -->
   <script id="default-content" type="application/json">

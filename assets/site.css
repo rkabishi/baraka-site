@@ -201,3 +201,31 @@ header.site-header{
   .sponsors-row { justify-content: flex-start !important; }
 }
 
+/* Footer founders (web logos, even sizing) */
+.footer-logos {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.founder-logos {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.founder-logos img {
+  height: 28px;             /* same height for all */
+  width: auto;              /* keep aspect ratio */
+  object-fit: contain;
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 6px;
+  box-shadow: 0 2px 10px rgba(15,23,42,.06);
+}
+@media (max-width: 600px){
+  .founder-logos img { height: 24px; padding: 5px; }
+}
+
+
