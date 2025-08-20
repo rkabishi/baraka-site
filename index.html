@@ -71,8 +71,29 @@
     <section id="contact" aria-label="Contact"></section>
   </main>
 
-  <!-- FOOTER (shared skeleton) -->
+  <!-- FOOTER (shared skeleton + FOUNDERS row) -->
   <footer class="footer">
+
+    <!-- Founders & Supporters logos row -->
+    <div class="container" style="margin-bottom:14px">
+      <div class="kicker">Founders & supporters</div>
+      <div class="sponsors-row">
+        <a href="https://www.tnlcommunityfund.org.uk/" target="_blank" rel="noopener">
+          <img src="assets/Founders/TNL.png" alt="The National Lottery Community Fund logo">
+        </a>
+        <a href="https://www.scottishrefugeecouncil.org.uk/" target="_blank" rel="noopener">
+          <img src="assets/Founders/Scottish-Refugee_council.png" alt="Scottish Refugee Council logo">
+        </a>
+        <a href="https://www.corra.scot/" target="_blank" rel="noopener">
+          <img src="assets/Founders/corra-logo.jpg" alt="Corra Foundation logo">
+        </a>
+        <a href="https://fareshare.org.uk/" target="_blank" rel="noopener">
+          <img src="assets/Founders/Fareshare.jpg" alt="FareShare logo">
+        </a>
+      </div>
+    </div>
+
+    <!-- Standard footer line -->
     <div class="container" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;">
       <div>© <span id="year"></span> <span id="footerName">Baraka Community & Family Centre</span> · All rights reserved.<br><span class="notice">Registered SCIO <span id="scio"></span></span></div>
       <div class="oscr"><img id="oscrBadge" src="assets/oscr-badge.jpg" alt="OSCR badge"/></div>
@@ -176,19 +197,6 @@
     function checkImage(src){ return new Promise(res=>{const i=new Image(); i.onload=()=>res(true); i.onerror=()=>res(false); i.src=src;}); }
     async function autoDiscoverGallery({prefix='assets/gallery-',exts=['.jpg','.jpeg','.png','.webp'],max=50,stopAfterMisses=8}={}){ const out=[]; let misses=0; for(let n=1;n<=max;n++){ let added=false; for(const ext of exts){ const p=`${prefix}${n}${ext}`; /* eslint-disable-next-line no-await-in-loop */ if(await checkImage(p)){ out.push({src:p,alt:'Photo'}); added=true; break; } } if(!added){ if(++misses>=stopAfterMisses) break; } else misses=0; } return out; }
 
-    /* --- Our sponsors row (used beside News/Donate titles) --- */
-    function sponsorsRowHTML(E = F_E()){
-      const sponsors = [
-        { src: 'assets/Founders/TNL.png',                      alt: 'The National Lottery Community Fund' },
-        { src: 'assets/Founders/Scottish-Refugee_council.png', alt: 'Scottish Refugee Council' },
-        { src: 'assets/Founders/corra-logo.jpg',               alt: 'Corra Foundation' },
-        { src: 'assets/Founders/Fareshare.jpg',                alt: 'FareShare' }
-      ];
-      return `<div class="sponsors-row" aria-label="Our sponsors">` +
-             sponsors.map(s => `<img src="${E(s.src)}" alt="${E(s.alt)}" loading="lazy">`).join('') +
-             `</div>`;
-    }
-
     /********************** PAGE RENDER ***************************************/
     async function renderHome(data){
       const E = F_E();
@@ -216,22 +224,22 @@
       const bullets=(data.about?.bullets||[]).map(b=>`<li>${E(b)}</li>`).join('');
       about.innerHTML=`<div class="two"><div class="card"><div class="kicker">About us</div><h2 class="section-title">${E(data.about?.title||'Our story & mission')}</h2><p>${E(data.about?.story||'')}</p><p>${E(data.about?.values||'')}</p><ul>${bullets}</ul></div><div class="card"><div class="kicker">What we value</div><h2 class="section-title">${E(data.about?.values_title||'Empathy • Dignity • Solidarity • Empowerment')}</h2><p>${E(data.about?.values_para||'')}</p><div class="card" style="margin-top:10px"><h3 style="margin:0 0 6px">${E(data.about?.cta_title||'Need support?')}</h3><p class="notice" style="margin:0 0 10px">${E(data.about?.cta_note||'We’ll listen and connect you to the right activity or service.')}</p><a href="contact.html" class="btn">${E(data.about?.cta_label||'Get in touch')}</a></div></div></div>`;
 
-      /* PROGRAMMES (overrides for images + links) */
+      /* PROGRAMMES (including card overrides) */
       const progEl=document.getElementById('programmes');
       const progs=(data.programmes||[]).map(p=>{
-        // Family Connection Hub
+        // Family Connection Hub override
         if(p.title && /family connection/i.test(p.title)){
           p={...p,image:'assets/2.jpg',image_alt:'Family Connection Hub',link:'family-connection-hub.html'};
         }
-        // Digital Hub → clickable + assets/16.jpg
+        // DIGITAL HUB override (make clickable + set image 16.jpg)
         if(p.title && /digital\s*hub/i.test(p.title)){
           p={...p,image:'assets/16.jpg',image_alt:'Digital Hub',link:'digital-hub.html'};
         }
-        // Wellness Hub → clickable + image with space in folder (encode)
+        // WELLNESS HUB override (clickable + updated image 7217)
         if(p.title && /wellness\s*hub/i.test(p.title)){
           p={...p,image:'assets/Refugee%20Festival/IMG_7217.jpg',image_alt:'Wellness Hub',link:'wellness-hub.html'};
         }
-        // Food Distribution Service → **fixed path** assets/Fareshare_Food/50.jpg
+        // FOOD DISTRIBUTION override (correct folder/file)
         if(p.title && /food distribution/i.test(p.title)){
           p={...p,image:'assets/Fareshare_Food/50.jpg',image_alt:'Food Distribution',link:'food-distribution.html'};
         }
@@ -241,7 +249,7 @@
       }).join('');
       progEl.innerHTML=`<div class="kicker">Programmes</div><h2 class="section-title">${E(data.programmes_title||'What we run')}</h2><div class="grid">${progs}</div>`;
 
-      /* NEWS (with sponsors row) */
+      /* NEWS (simple, no sponsors beside title) */
       const news = document.getElementById('news');
       const newsCards = (data.news||[]).map(n=>`
         <div class="card">
@@ -251,14 +259,11 @@
         </div>`).join('');
       news.innerHTML = `
         <div class="kicker">Updates</div>
-        <div class="title-row">
-          <h2 class="section-title">${E(data.news_title || 'Latest news')}</h2>
-          ${sponsorsRowHTML(E)}
-        </div>
+        <h2 class="section-title">${E(data.news_title || 'Latest news')}</h2>
         <div class="grid">${newsCards}</div>
       `;
 
-      /* DONATE (with sponsors row) */
+      /* DONATE (simple, no sponsors beside title) */
       const donate = document.getElementById('donate');
       const dlinks = [];
       if (data.donate?.paypal)     dlinks.push(`<a class="btn"           href="${E(data.donate.paypal)}">Donate via PayPal</a>`);
@@ -266,10 +271,7 @@
       if (data.donate?.justgiving) dlinks.push(`<a class="btn"           href="${E(data.donate.justgiving)}">JustGiving</a>`);
       donate.innerHTML = `
         <div class="kicker">Donate</div>
-        <div class="title-row">
-          <h2 class="section-title">${E(data.donate_title || 'Support our work')}</h2>
-          ${sponsorsRowHTML(E)}
-        </div>
+        <h2 class="section-title">${E(data.donate_title || 'Support our work')}</h2>
         <p>${E(data.donate?.intro || 'Your donation helps us run weekly food support, skills workshops, and safe community spaces.')}</p>
         <div class="donate-row" style="margin:14px 0 6px">${dlinks.join(' ')}</div>
         <p class="notice">${E(data.donate?.note || '')}</p>
@@ -291,7 +293,10 @@
 
       /* CONTACT (homepage block) */
       const contact=document.getElementById('contact');
-      const fb=data.contact?.socials?.facebook?`<a href="${E(data.contact.socials.facebook)}">Facebook</a>`:''; const ig=data.contact?.socials?.instagram?`<a href="${E(data.contact.socials.instagram)}">Instagram</a>`:''; const wa=data.contact?.socials?.whatsapp?`<a href="${E(data.contact.socials.whatsapp)}">WhatsApp</a>`:''; const socials=[fb,ig,wa].filter(Boolean).join(' · ');
+      const fb=data.contact?.socials?.facebook?`<a href="${E(data.contact.socials.facebook)}">Facebook</a>`:''; 
+      const ig=data.contact?.socials?.instagram?`<a href="${E(data.contact.socials.instagram)}">Instagram</a>`:'';
+      const wa=data.contact?.socials?.whatsapp?`<a href="${E(data.contact.socials.whatsapp)}">WhatsApp</a>`:'';
+      const socials=[fb,ig,wa].filter(Boolean).join(' · ');
       contact.innerHTML=`<div class="kicker">Contact</div><h2 class="section-title">${E(data.contact_title||'Get in touch')}</h2><div class="two"><div class="card"><h3>Message us</h3><form action="mailto:${E(data.contact?.email||'')}" method="post" enctype="text/plain" onsubmit="alert('Thanks! We\\'ll reply soon.');"><div class="two"><div><label class="notice">Name</label><input required placeholder="Your name"></div><div><label class="notice">Email</label><input required type="email" placeholder="you@example.com"></div></div><div style="margin-top:10px"><label class="notice">Your message</label><textarea rows="4" placeholder="How can we help?"></textarea></div><div style="margin-top:12px"><button class="btn" type="submit">Send</button></div></form>${data.contact?.email?`<p class="notice" style="margin-top:8px">Email: <a href="mailto:${E(data.contact.email)}">${E(data.contact.email)}</a></p>`:''}</div><div class="card"><h3>Visit</h3><p>${E(data.contact?.visit_note||'West Glasgow (meetings by appointment).')}</p>${data.contact?.map_embed||''}${socials?`<p class="notice">Follow us: ${socials}</p>`:''}</div></div>`;
     }
 
@@ -309,6 +314,7 @@
   </script>
 </body>
 </html>
+
 
 
 
