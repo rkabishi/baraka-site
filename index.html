@@ -79,36 +79,51 @@
       <br><span class="notice">Registered SCIO <span id="scio"></span></span>
     </div>
 
-    <!-- Founders (web-hosted logos, evenly sized) -->
     <div class="footer-logos" aria-label="Founders">
       <div class="founder-logos">
         <!-- The National Lottery Community Fund -->
-        <img
-          src="https://www.tnlcommunityfund.org.uk/assets/images/logos/tnlcf/monolingual/colour/digital-white-background.png"
-          alt="The National Lottery Community Fund"
-          loading="lazy"
-        />
+        <div class="founder" data-name="tnl">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/The_National_Lottery_Community_Fund_logo.svg/320px-The_National_Lottery_Community_Fund_logo.svg.png"
+            alt="The National Lottery Community Fund"
+            referrerpolicy="no-referrer"
+            loading="lazy"
+            onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'TNL Community Fund',className:'logo-fallback'}));"
+          />
+        </div>
 
         <!-- Scottish Refugee Council -->
-        <img
-          src="https://scottishrefugeecouncil.org.uk/wp-content/uploads/2019/06/srclogosmall.jpg"
-          alt="Scottish Refugee Council"
-          loading="lazy"
-        />
+        <div class="founder" data-name="src">
+          <img
+            src="https://scottishrefugeecouncil.org.uk/wp-content/uploads/2019/06/srclogosmall.jpg"
+            alt="Scottish Refugee Council"
+            referrerpolicy="no-referrer"
+            loading="lazy"
+            onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'Scottish Refugee Council',className:'logo-fallback'}));"
+          />
+        </div>
 
-        <!-- Corra Foundation -->
-        <img
-          src="https://www.corra.scot/wp-content/themes/corra-theme/theme-files/logo-corra-l.svg"
-          alt="Corra Foundation"
-          loading="lazy"
-        />
+        <!-- Corra Foundation (use dark tile so white SVG is visible) -->
+        <div class="founder bg-dark" data-name="corra">
+          <img
+            src="https://www.corra.scot/wp-content/themes/corra-theme/theme-files/logo-corra-l.svg"
+            alt="Corra Foundation"
+            referrerpolicy="no-referrer"
+            loading="lazy"
+            onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'Corra Foundation',className:'logo-fallback',style:'color:#fff'}));"
+          />
+        </div>
 
-        <!-- FareShare -->
-        <img
-          src="https://upload.wikimedia.org/wikipedia/en/thumb/b/bf/FareShare_logo.png/250px-FareShare_logo.png"
-          alt="FareShare"
-          loading="lazy"
-        />
+        <!-- FareShare (Wikimedia PNG) -->
+        <div class="founder" data-name="fareshare">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/en/b/bf/FareShare_logo.png"
+            alt="FareShare"
+            referrerpolicy="no-referrer"
+            loading="lazy"
+            onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'FareShare',className:'logo-fallback'}));"
+          />
+        </div>
       </div>
 
       <!-- keep OSCR badge -->
@@ -118,6 +133,7 @@
     </div>
   </div>
 </footer>
+
 
 
   <!-- Default content fallback (used if data/content.json is missing) -->
