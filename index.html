@@ -73,49 +73,47 @@
 
   <!-- FOOTER (shared skeleton + FOUNDERS row) -->
   <footer class="footer">
-  <div class="container" style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;">
+  <div class="container footer-flex">
     <div>
       © <span id="year"></span> <span id="footerName">Baraka Community & Family Centre</span> · All rights reserved.
       <br><span class="notice">Registered SCIO <span id="scio"></span></span>
     </div>
 
-    <!-- Founders (web logos, uniform tiles) -->
-    <!-- Founders (web-hosted logos, uniform tiles) -->
-    <div class="footer-logos" aria-label="Founders">
-      <div class="founder-logos">
-        <!-- National Lottery Community Fund -->
-        <div class="founder" data-srcs="
-          https://upload.wikimedia.org/wikipedia/commons/3/3d/The_National_Lottery_Community_Fund_logo.svg |
-          https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/The_National_Lottery_Community_Fund_logo.svg/320px-The_National_Lottery_Community_Fund_logo.svg.png
-        " data-name="tnl">
-          <img alt="The National Lottery Community Fund" decoding="async" loading="lazy" referrerpolicy="no-referrer">
-        </div>
+    <!-- Founders / funders logos -->
+    <div class="founder-logos" aria-label="Founders and supporters">
+      <!-- National Lottery Community Fund -->
+      <img
+        class="footer-logo"
+        alt="The National Lottery Community Fund"
+        referrerpolicy="no-referrer"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/The_National_Lottery_Community_Fund_logo.svg/400px-The_National_Lottery_Community_Fund_logo.svg.png"
+        onerror="this.onerror=null;this.src='assets/Founders/TNL.png'">
 
-        <!-- Corra Foundation (white logo → dark tile) -->
-        <div class="founder bg-dark" data-srcs="
-          https://www.corra.scot/wp-content/themes/corra-theme/theme-files/logo-corra-l.svg |
-          https://upload.wikimedia.org/wikipedia/commons/5/58/Corra_Foundation_logo.png
-        " data-name="corra">
-          <img alt="Corra Foundation" decoding="async" loading="lazy" referrerpolicy="no-referrer">
-        </div>
+      <!-- Corra Foundation -->
+      <img
+        class="footer-logo"
+        alt="Corra Foundation"
+        referrerpolicy="no-referrer"
+        src="https://www.corra.scot/wp-content/uploads/2020/12/corra-logo-1.png"
+        onerror="this.onerror=null;this.src='assets/Founders/corra-logo.jpg'">
 
-        <!-- FareShare -->
-        <div class="founder" data-srcs="
-          https://upload.wikimedia.org/wikipedia/en/b/bf/FareShare_logo.png |
-          https://fareshare.org.uk/wp-content/uploads/2017/09/Fareshare-logo-1.png
-        " data-name="fareshare">
-          <img alt="FareShare" decoding="async" loading="lazy" referrerpolicy="no-referrer">
-        </div>
-      </div>
+      <!-- FareShare -->
+      <img
+        class="footer-logo"
+        alt="FareShare"
+        referrerpolicy="no-referrer"
+        src="https://upload.wikimedia.org/wikipedia/en/thumb/8/85/FareShare_Logo.svg/400px-FareShare_Logo.svg.png"
+        onerror="this.onerror=null;this.src='assets/Founders/Fareshare.jpg'">
 
-      <!-- OSCR badge — 2× bigger -->
-      <div class="oscr">
-        <img id="oscrBadge" src="assets/oscr-badge.jpg" alt="OSCR badge">
-      </div>
+      <!-- OSCR — intentionally larger -->
+      <img
+        class="footer-logo oscr-big"
+        alt="OSCR (Scottish Charity Regulator)"
+        src="assets/oscr-badge.jpg">
     </div>
-
   </div>
 </footer>
+
 
 
 
