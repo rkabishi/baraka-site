@@ -177,22 +177,17 @@
     async function autoDiscoverGallery({prefix='assets/gallery-',exts=['.jpg','.jpeg','.png','.webp'],max=50,stopAfterMisses=8}={}){ const out=[]; let misses=0; for(let n=1;n<=max;n++){ let added=false; for(const ext of exts){ const p=`${prefix}${n}${ext}`; /* eslint-disable-next-line no-await-in-loop */ if(await checkImage(p)){ out.push({src:p,alt:'Photo'}); added=true; break; } } if(!added){ if(++misses>=stopAfterMisses) break; } else misses=0; } return out; }
 
     /* --- Our sponsors row (used beside News/Donate titles) --- */
-    /*
-    function sponsorsRowHTML(E) {
+    function sponsorsRowHTML(E = F_E()){
       const sponsors = [
-        { src: 'assets/Founders/TNL.png',                         alt: 'The National Lottery Community Fund', name: 'tnl' },
-        { src: 'assets/Founders/Scottish-Refugee_council.png',    alt: 'Scottish Refugee Council',            name: 'scottish-refugee-council' },
-        { src: 'assets/Founders/corra-logo.jpg',                  alt: 'Corra Foundation',                     name: 'corra' },
-        { src: 'assets/Founders/Fareshare.jpg',                   alt: 'FareShare',                            name: 'fareshare' }
+        { src: 'assets/Founders/TNL.png',                      alt: 'The National Lottery Community Fund' },
+        { src: 'assets/Founders/Scottish-Refugee_council.png', alt: 'Scottish Refugee Council' },
+        { src: 'assets/Founders/corra-logo.jpg',               alt: 'Corra Foundation' },
+        { src: 'assets/Founders/Fareshare.jpg',                alt: 'FareShare' }
       ];
       return `<div class="sponsors-row" aria-label="Our sponsors">` +
-             sponsors.map(s => `
-               <div class="sponsor" data-name="${E(s.name)}">
-                 <img src="${E(s.src)}" alt="${E(s.alt)}" loading="lazy">
-               </div>`).join('') +
+             sponsors.map(s => `<img src="${E(s.src)}" alt="${E(s.alt)}" loading="lazy">`).join('') +
              `</div>`;
     }
-             */
 
     /********************** PAGE RENDER ***************************************/
     async function renderHome(data){
@@ -221,41 +216,25 @@
       const bullets=(data.about?.bullets||[]).map(b=>`<li>${E(b)}</li>`).join('');
       about.innerHTML=`<div class="two"><div class="card"><div class="kicker">About us</div><h2 class="section-title">${E(data.about?.title||'Our story & mission')}</h2><p>${E(data.about?.story||'')}</p><p>${E(data.about?.values||'')}</p><ul>${bullets}</ul></div><div class="card"><div class="kicker">What we value</div><h2 class="section-title">${E(data.about?.values_title||'Empathy • Dignity • Solidarity • Empowerment')}</h2><p>${E(data.about?.values_para||'')}</p><div class="card" style="margin-top:10px"><h3 style="margin:0 0 6px">${E(data.about?.cta_title||'Need support?')}</h3><p class="notice" style="margin:0 0 10px">${E(data.about?.cta_note||'We’ll listen and connect you to the right activity or service.')}</p><a href="contact.html" class="btn">${E(data.about?.cta_label||'Get in touch')}</a></div></div></div>`;
 
-      /* PROGRAMMES (Digital Hub override added) */
+      /* PROGRAMMES (overrides for images + links) */
       const progEl=document.getElementById('programmes');
       const progs=(data.programmes||[]).map(p=>{
-        // Family Connection Hub override
+        // Family Connection Hub
         if(p.title && /family connection/i.test(p.title)){
           p={...p,image:'assets/2.jpg',image_alt:'Family Connection Hub',link:'family-connection-hub.html'};
         }
-        // DIGITAL HUB override (make clickable + set image 16.jpg)
+        // Digital Hub → clickable + assets/16.jpg
         if(p.title && /digital\s*hub/i.test(p.title)){
           p={...p,image:'assets/16.jpg',image_alt:'Digital Hub',link:'digital-hub.html'};
         }
-        // WELLNESS HUB override (clickable + Refugee Festival image)
-        if (p.title && /wellness\s*hub/i.test(p.title)) {
-          // NOTE: path has a space → use %20 to be safe; adjust extension if your file isn’t .jpg
-          p = { 
-            ...p, 
-            image: 'assets/Refugee%20Festival/IMG_7217.jpg',
-            image_alt: 'Wellness Hub',
-            link: 'wellness-hub.html'
-          };
+        // Wellness Hub → clickable + image with space in folder (encode)
+        if(p.title && /wellness\s*hub/i.test(p.title)){
+          p={...p,image:'assets/Refugee%20Festival/IMG_7117.jpg',image_alt:'Wellness Hub',link:'wellness-hub.html'};
         }
-
-        if (p.title && /food distribution/i.test(p.title)) {
-        // Card image path you gave:
-        // NOTE: you wrote "Farashare_Food" (single 'a') — keeping it.
-        // If your real folder is "Fareshare_Food", just change the path below.
-        p = { 
-          ...p, 
-          image: 'assets/Farashare_Food/50.jpg', 
-          image_alt: 'Food Distribution',
-          link: 'food-distribution.html'
-        };
-      }
-
-
+        // Food Distribution Service → **fixed path** assets/Fareshare_Food/50.jpg
+        if(p.title && /food distribution/i.test(p.title)){
+          p={...p,image:'assets/Fareshare_Food/50.jpg',image_alt:'Food Distribution',link:'food-distribution.html'};
+        }
 
         const inner=`${p.image?`<img class="prog-img" src="${E(p.image)}" alt="${E(p.image_alt||p.title||'Programme image')}" loading="lazy">`:''}<h3>${E(p.title||'')}</h3><p>${E(p.description||'')}</p>${p.bullets?`<ul>${p.bullets.map(li=>`<li>${E(li)}</li>`).join('')}</ul>`:''}`;
         return p.link?`<a class="card program" href="${E(p.link)}" aria-label="${E(p.title)}">${inner}</a>`:`<div class="card program">${inner}</div>`;
