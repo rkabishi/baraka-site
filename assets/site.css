@@ -228,8 +228,7 @@ header.site-header{
   .founder-logos img { height: 24px; padding: 5px; }
 }
 
-
-/* === Footer founders (uniform tiles) === */
+/* === Footer founders (uniform tiles, consistent sizing) === */
 .footer-logos {
   display: flex;
   align-items: center;
@@ -244,31 +243,40 @@ header.site-header{
   flex-wrap: wrap;
 }
 
-/* Every logo sits inside a same-size tile */
+/* Same-size tile for every logo */
 .founder {
-  width: 140px;                 /* tile width */
-  height: 44px;                 /* tile height */
+  width: 140px;
+  height: 44px;
   display: grid;
   place-items: center;
   background: #fff;
   border: 1px solid var(--card-border);
   border-radius: 8px;
-  padding: 6px;                 /* little frame */
+  padding: 6px;
   box-shadow: 0 2px 10px rgba(15,23,42,.06);
-  overflow: hidden;             /* never overflow the tile */
+  overflow: hidden;            /* logos can’t overflow */
 }
 
-/* Logos scale to fit without distortion */
+/* White logos (e.g., Corra SVG) get a dark tile */
+.founder.bg-dark { background: #0f172a; }
+
+/* Logos scale to fit the tile, keep aspect */
 .founder img {
   max-width: 90%;
   max-height: 90%;
+  width: auto;
+  height: auto;
   object-fit: contain;
   display: block;
 }
 
-/* If a logo is white (e.g., some SVGs), give that tile a dark bg */
-.founder.bg-dark { background: #0f172a; }
+/* TNL is extra-wide, nudge smaller */
+.founder[data-name="tnl"] img {
+  max-width: 80%;
+  max-height: 80%;
+}
 
+/* Text fallback if all URLs fail */
 .logo-fallback {
   color: #0f172a;
   font-weight: 700;
@@ -276,9 +284,8 @@ header.site-header{
   text-align: center;
 }
 
-/* Slightly smaller on small screens */
+/* Slightly smaller tiles on small screens */
 @media (max-width: 600px) {
   .founder { width: 120px; height: 40px; }
 }
-
 

@@ -79,60 +79,48 @@
       <br><span class="notice">Registered SCIO <span id="scio"></span></span>
     </div>
 
+    <!-- Founders (web logos, uniform tiles) -->
     <div class="footer-logos" aria-label="Founders">
       <div class="founder-logos">
         <!-- The National Lottery Community Fund -->
-        <div class="founder" data-name="tnl">
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/The_National_Lottery_Community_Fund_logo.svg/320px-The_National_Lottery_Community_Fund_logo.svg.png"
-            alt="The National Lottery Community Fund"
-            referrerpolicy="no-referrer"
-            loading="lazy"
-            onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'TNL Community Fund',className:'logo-fallback'}));"
-          />
+        <div class="founder" data-srcs="
+          https://upload.wikimedia.org/wikipedia/commons/3/3d/The_National_Lottery_Community_Fund_logo.svg |
+          https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/The_National_Lottery_Community_Fund_logo.svg/320px-The_National_Lottery_Community_Fund_logo.svg.png
+        " data-name="tnl">
+          <img alt="The National Lottery Community Fund" decoding="async" loading="lazy" referrerpolicy="no-referrer">
         </div>
 
         <!-- Scottish Refugee Council -->
-        <div class="founder" data-name="src">
-          <img
-            src="https://scottishrefugeecouncil.org.uk/wp-content/uploads/2019/06/srclogosmall.jpg"
-            alt="Scottish Refugee Council"
-            referrerpolicy="no-referrer"
-            loading="lazy"
-            onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'Scottish Refugee Council',className:'logo-fallback'}));"
-          />
+        <div class="founder" data-srcs="
+          https://scottishrefugeecouncil.org.uk/wp-content/uploads/2019/06/srclogosmall.jpg
+        " data-name="src">
+          <img alt="Scottish Refugee Council" decoding="async" loading="lazy" referrerpolicy="no-referrer">
         </div>
 
-        <!-- Corra Foundation (use dark tile so white SVG is visible) -->
-        <div class="founder bg-dark" data-name="corra">
-          <img
-            src="https://www.corra.scot/wp-content/themes/corra-theme/theme-files/logo-corra-l.svg"
-            alt="Corra Foundation"
-            referrerpolicy="no-referrer"
-            loading="lazy"
-            onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'Corra Foundation',className:'logo-fallback',style:'color:#fff'}));"
-          />
+        <!-- Corra Foundation (white logo → dark tile for contrast) -->
+        <div class="founder bg-dark" data-srcs="
+          https://www.corra.scot/wp-content/themes/corra-theme/theme-files/logo-corra-l.svg
+        " data-name="corra">
+          <img alt="Corra Foundation" decoding="async" loading="lazy" referrerpolicy="no-referrer">
         </div>
 
-        <!-- FareShare (Wikimedia PNG) -->
-        <div class="founder" data-name="fareshare">
-          <img
-            src="https://upload.wikimedia.org/wikipedia/en/b/bf/FareShare_logo.png"
-            alt="FareShare"
-            referrerpolicy="no-referrer"
-            loading="lazy"
-            onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'FareShare',className:'logo-fallback'}));"
-          />
+        <!-- FareShare -->
+        <div class="founder" data-srcs="
+          https://upload.wikimedia.org/wikipedia/en/b/bf/FareShare_logo.png |
+          https://fareshare.org.uk/wp-content/uploads/2017/09/Fareshare-logo-1.png
+        " data-name="fareshare">
+          <img alt="FareShare" decoding="async" loading="lazy" referrerpolicy="no-referrer">
         </div>
       </div>
 
-      <!-- keep OSCR badge -->
+      <!-- OSCR badge (kept local) -->
       <div class="oscr">
-        <img id="oscrBadge" src="assets/oscr-badge.jpg" alt="OSCR badge" />
+        <img id="oscrBadge" src="assets/oscr-badge.jpg" alt="OSCR badge">
       </div>
     </div>
   </div>
 </footer>
+
 
 
 
@@ -348,6 +336,36 @@
       }
     })();
   </script>
+  <script>
+/* Uniform logo tiles + robust multi-source loading */
+(function(){
+  const tiles = document.querySelectorAll('.founder[data-srcs] > img');
+  tiles.forEach(img => {
+    const tile = img.parentElement;
+    const list = (tile.getAttribute('data-srcs') || '')
+      .split('|')
+      .map(s => s.trim())
+      .filter(Boolean);
+
+    let i = 0;
+    function tryNext(){
+      if (i >= list.length) {
+        // final fallback: keep the tile size with text
+        const span = document.createElement('span');
+        span.textContent = img.alt || 'Logo';
+        span.className = 'logo-fallback';
+        if (tile.classList.contains('bg-dark')) span.style.color = '#fff';
+        img.replaceWith(span);
+        return;
+      }
+      img.src = list[i++];
+    }
+    img.onerror = tryNext;
+    tryNext(); // start
+  });
+})();
+</script>
+
 </body>
 </html>
 
