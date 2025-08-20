@@ -289,3 +289,64 @@ header.site-header{
   .founder { width: 120px; height: 40px; }
 }
 
+/* === Footer founders/OSCR sizing (uniform) === */
+:root{
+  /* OSCR was ~40px high before — now make it 80px (2×) */
+  --footer-logo-h: 80px;
+  /* width of each founder tile (tweak if needed) */
+  --founder-tile-w: 200px;
+}
+
+/* OSCR 2× bigger */
+.oscr img{
+  height: var(--footer-logo-h) !important;
+  width: auto !important;
+  object-fit: contain !important;
+  display: block;
+  border-radius: 8px;
+}
+
+/* Founders container */
+.footer-logos{
+  display:flex; align-items:center; gap:18px; flex-wrap:wrap;
+}
+.founder-logos{
+  display:inline-flex; align-items:center; gap:12px; flex-wrap:wrap;
+}
+
+/* Every founder tile = same height as OSCR */
+.founder{
+  width: var(--founder-tile-w) !important;
+  height: var(--footer-logo-h) !important;
+  display:grid; place-items:center;
+  background:#fff; border:1px solid var(--card-border);
+  border-radius:8px; padding:6px;
+  box-shadow:0 2px 10px rgba(15,23,42,.06);
+  overflow:hidden;
+}
+
+/* White-on-transparent marks (e.g., Corra) get contrast */
+.founder.bg-dark{ background:#0f172a; }
+
+/* Logos auto-fit inside the tile */
+.founder img{
+  max-width: 90% !important;
+  max-height: 90% !important;
+  width:auto; height:auto;
+  object-fit:contain; display:block;
+}
+
+/* Very-wide TNL nudge */
+.founder[data-name="tnl"] img{ max-width:80% !important; }
+
+/* Text fallback (if all URLs fail) */
+.logo-fallback{
+  color:#0f172a; font-weight:700; font-size:12px; text-align:center;
+}
+
+/* Slightly smaller on narrow screens (optional) */
+@media (max-width: 600px){
+  :root{ --footer-logo-h: 64px; --founder-tile-w: 168px; }
+}
+
+
