@@ -71,49 +71,40 @@
     <section id="contact" aria-label="Contact"></section>
   </main>
 
-  
-
-  <!-- FOOTER -->
+  <!-- FOOTER (uniform founders row + OSCR) -->
   <footer class="footer">
-  <div class="container footer-row">
-    <!-- Left: copy -->
-    <div class="footer-copy">
-      © <span id="year"></span> <span id="footerName">Baraka Community & Family Centre</span> · All rights reserved.
-      <br><span class="notice">Registered SCIO <span id="scio"></span></span>
+    <div class="container footer-row">
+      <!-- Left: copy -->
+      <div class="footer-copy">
+        © <span id="year"></span> <span id="footerName">Baraka Community & Family Centre</span> · All rights reserved.
+        <br><span class="notice">Registered SCIO <span id="scio"></span></span>
+      </div>
+
+      <!-- Middle: founders (web logos, uniform size) -->
+      <div class="founder-logos" aria-label="Funders">
+        <a href="https://www.tnlcommunityfund.org.uk/" target="_blank" rel="noopener">
+          <img class="footer-logo" alt="The National Lottery Community Fund"
+               src="https://images.brandfetch.io/tnlcommunityfund.org.uk/logo"
+               onerror="this.onerror=null;this.src='https://logo.clearbit.com/tnlcommunityfund.org.uk';">
+        </a>
+        <a href="https://www.corra.scot/" target="_blank" rel="noopener">
+          <img class="footer-logo" alt="Corra Foundation"
+               src="https://images.brandfetch.io/corra.scot/logo"
+               onerror="this.onerror=null;this.src='https://logo.clearbit.com/corra.scot';">
+        </a>
+        <a href="https://fareshare.org.uk/" target="_blank" rel="noopener">
+          <img class="footer-logo" alt="FareShare UK"
+               src="https://images.brandfetch.io/fareshare.org.uk/logo"
+               onerror="this.onerror=null;this.src='https://logo.clearbit.com/fareshare.org.uk';">
+        </a>
+      </div>
+
+      <!-- Right: OSCR (same size as founders) -->
+      <div class="oscr">
+        <img id="oscrBadge" class="footer-logo" src="assets/oscr-badge.jpg" alt="OSCR badge">
+      </div>
     </div>
-
-    <!-- Middle: founders (web logos, uniform size) -->
-    <div class="founder-logos" aria-label="Funders">
-      <a href="https://www.tnlcommunityfund.org.uk/" target="_blank" rel="noopener">
-        <img class="footer-logo" alt="The National Lottery Community Fund"
-             src="https://images.brandfetch.io/tnlcommunityfund.org.uk/logo"
-             onerror="this.onerror=null;this.src='https://logo.clearbit.com/tnlcommunityfund.org.uk';">
-      </a>
-      <a href="https://www.corra.scot/" target="_blank" rel="noopener">
-        <img class="footer-logo" alt="Corra Foundation"
-             src="https://images.brandfetch.io/corra.scot/logo"
-             onerror="this.onerror=null;this.src='https://logo.clearbit.com/corra.scot';">
-      </a>
-      <a href="https://fareshare.org.uk/" target="_blank" rel="noopener">
-        <img class="footer-logo" alt="FareShare UK"
-             src="https://images.brandfetch.io/fareshare.org.uk/logo"
-             onerror="this.onerror=null;this.src='https://logo.clearbit.com/fareshare.org.uk';">
-      </a>
-    </div>
-
-    <!-- Right: OSCR (same size as founders) -->
-    <div class="oscr">
-      <img id="oscrBadge" class="footer-logo" src="assets/oscr-badge.jpg" alt="OSCR badge">
-    </div>
-  </div>
-</footer>
-
-  
-
-
-
-
-
+  </footer>
 
   <!-- Default content fallback (used if data/content.json is missing) -->
   <script id="default-content" type="application/json">
@@ -165,13 +156,46 @@
     },
     "programmes_title":"What we run",
     "programmes": [
-      {"title":"Family Connection Hub","description":"Monthly family activities to build confidence, connection, and joy for parents and children.","image":"assets/2.jpg","image_alt":"Family Connection Hub","link":"family-connection-hub.html","bullets":["Group activities and creative play","Peer support and signposting","Open to families across West Glasgow"]},
-      {"title":"Digital Hub","description":"Weekly digital skills sessions for parents and youths to boost confidence and employability.","image":"assets/baraka-logo.png","image_alt":"Digital skills"},
-      {"title":"Wellness Hub","description":"Peer-led wellbeing cafés and support circles focused on mental health, connection, and resilience.","image":"assets/baraka-logo.png","image_alt":"Wellbeing"},
-      {"title":"Food Distribution Service","description":"Weekly food support in partnership with FareShare, prioritising families and refugees in need.","image":"assets/baraka-logo.png","image_alt":"Food distribution"},
-      {"title":"Baraka Thrive","description":"Coming soon: employability and life-skills programme.","image":"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'><rect fill='%23EAF7F1' width='800' height='450'/><text x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Inter,Arial' font-size='42' fill='%23718597'>Coming%20Soon</text></svg>","image_alt":"Coming soon","link":"baraka-thrive.html"},
-      {"title":"EmpowerHer","description":"Coming soon: sewing, crochet, and women's wellbeing workshops.","image":"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'><rect fill='%23EAF7F1' width='800' height='450'/><text x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Inter,Arial' font-size='42' fill='%23718597'>Coming%20Soon</text></svg>","image_alt":"Coming soon","link":"empowerher.html"}
-
+      {
+        "title":"Family Connection Hub",
+        "description":"Monthly family activities to build confidence, connection, and joy for parents and children.",
+        "image":"assets/2.jpg",
+        "image_alt":"Family Connection Hub",
+        "link":"family-connection-hub.html",
+        "bullets":["Group activities and creative play","Peer support and signposting","Open to families across West Glasgow"]
+      },
+      {
+        "title":"Digital Hub",
+        "description":"Weekly digital skills sessions for parents and youths to boost confidence and employability.",
+        "image":"assets/baraka-logo.png",
+        "image_alt":"Digital skills"
+      },
+      {
+        "title":"Wellness Hub",
+        "description":"Peer-led wellbeing cafés and support circles focused on mental health, connection, and resilience.",
+        "image":"assets/baraka-logo.png",
+        "image_alt":"Wellbeing"
+      },
+      {
+        "title":"Food Distribution Service",
+        "description":"Weekly food support in partnership with FareShare, prioritising families and refugees in need.",
+        "image":"assets/baraka-logo.png",
+        "image_alt":"Food distribution"
+      },
+      {
+        "title":"Baraka Thrive",
+        "description":"Coming soon: employability and life-skills programme.",
+        "image":"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'><rect fill='%23EAF7F1' width='800' height='450'/><text x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Inter,Arial' font-size='42' fill='%23718597'>Coming%20Soon</text></svg>",
+        "image_alt":"Coming soon",
+        "link":"baraka-thrive.html"
+      },
+      {
+        "title":"EmpowerHer",
+        "description":"Coming soon: sewing, crochet, and women's wellbeing workshops.",
+        "image":"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'><rect fill='%23EAF7F1' width='800' height='450'/><text x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Inter,Arial' font-size='42' fill='%23718597'>Coming%20Soon</text></svg>",
+        "image_alt":"Coming soon",
+        "link":"empowerher.html"
+      }
     ],
     "get_involved": {
       "title":"Volunteer or partner with us",
@@ -243,17 +267,7 @@
       about.innerHTML=`<div class="two"><div class="card"><div class="kicker">About us</div><h2 class="section-title">${E(data.about?.title||'Our story & mission')}</h2><p>${E(data.about?.story||'')}</p><p>${E(data.about?.values||'')}</p><ul>${bullets}</ul></div><div class="card"><div class="kicker">What we value</div><h2 class="section-title">${E(data.about?.values_title||'Empathy • Dignity • Solidarity • Empowerment')}</h2><p>${E(data.about?.values_para||'')}</p><div class="card" style="margin-top:10px"><h3 style="margin:0 0 6px">${E(data.about?.cta_title||'Need support?')}</h3><p class="notice" style="margin:0 0 10px">${E(data.about?.cta_note||'We’ll listen and connect you to the right activity or service.')}</p><a href="contact.html" class="btn">${E(data.about?.cta_label||'Get in touch')}</a></div></div></div>`;
 
       /* PROGRAMMES (including card overrides) */
-
-      // Ensure placeholder cards exist
-     
-
-
       const progEl=document.getElementById('programmes');
-
-    
-
-
-
       const progs=(data.programmes||[]).map(p=>{
         // Family Connection Hub override
         if(p.title && /family connection/i.test(p.title)){
@@ -277,7 +291,7 @@
       }).join('');
       progEl.innerHTML=`<div class="kicker">Programmes</div><h2 class="section-title">${E(data.programmes_title||'What we run')}</h2><div class="grid">${progs}</div>`;
 
-      /* NEWS (simple, no sponsors beside title) */
+      /* NEWS (simple) */
       const news = document.getElementById('news');
       const newsCards = (data.news||[]).map(n=>`
         <div class="card">
@@ -291,7 +305,7 @@
         <div class="grid">${newsCards}</div>
       `;
 
-      /* DONATE (simple, no sponsors beside title) */
+      /* DONATE (simple) */
       const donate = document.getElementById('donate');
       const dlinks = [];
       if (data.donate?.paypal)     dlinks.push(`<a class="btn"           href="${E(data.donate.paypal)}">Donate via PayPal</a>`);
@@ -340,38 +354,9 @@
       }
     })();
   </script>
-  <script>
-/* Uniform logo tiles + robust multi-source loading */
-(function(){
-  const tiles = document.querySelectorAll('.founder[data-srcs] > img');
-  tiles.forEach(img => {
-    const tile = img.parentElement;
-    const list = (tile.getAttribute('data-srcs') || '')
-      .split('|')
-      .map(s => s.trim())
-      .filter(Boolean);
-
-    let i = 0;
-    function tryNext(){
-      if (i >= list.length) {
-        // final fallback: keep the tile size with text
-        const span = document.createElement('span');
-        span.textContent = img.alt || 'Logo';
-        span.className = 'logo-fallback';
-        if (tile.classList.contains('bg-dark')) span.style.color = '#fff';
-        img.replaceWith(span);
-        return;
-      }
-      img.src = list[i++];
-    }
-    img.onerror = tryNext;
-    tryNext(); // start
-  });
-})();
-</script>
-
 </body>
 </html>
+
 
 
 
