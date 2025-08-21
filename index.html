@@ -191,7 +191,7 @@
     /************ FALLBACK HELPERS (used only if SITE isn't ready) ************/
     const F_ESC = (s)=>String(s??'').replace(/[&<>\\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
     const F_HEX=(n)=>n.toString(16).padStart(2,'0');
-    function F_hexToRgb(h){ const m=/^#?([\\da-f]{2})([\\da-f]{2})([\\da-f]{2})$/i.exec(h||''); return m?{r:parseInt(m[1],16),g:parseInt(m[2],16),b:parseInt(m[3],16)}:{r:255,g:255,b:255}; }
+    function F_hexToRgb(h){ const m=/^#?([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(h||''); return m?{r:parseInt(m[1],16),g:parseInt(m[2],16),b:parseInt(m[3],16)}:{r:255,g:255,b:255}; }
     function F_mix(a,b,t){ const A=F_hexToRgb(a),B=F_hexToRgb(b); const r=Math.round(A.r*(1-t)+B.r*t),g=Math.round(A.g*(1-t)+B.g*t),b2=Math.round(A.b*(1-t)+B.b*t); return `#${F_HEX(r)}${F_HEX(g)}${F_HEX(b2)}`; }
     function F_applyBrand(brand={}){ const root=document.documentElement; const primary=brand.primary||getComputedStyle(root).getPropertyValue('--brand').trim()||'#6B3F18'; const accent=brand.accent||getComputedStyle(root).getPropertyValue('--accent').trim()||'#22C55E'; const bg=brand.bg||getComputedStyle(root).getPropertyValue('--bg').trim()||'#EAF7F1'; root.style.setProperty('--brand',primary); root.style.setProperty('--brand-dark',primary); root.style.setProperty('--accent',accent); root.style.setProperty('--bg',bg); const card=F_mix(bg,accent,0.08), border=F_mix(F_mix(bg,accent,0.08),accent,0.15); root.style.setProperty('--card',card); root.style.setProperty('--card-border',border); }
     function F_buildHeader(d){
@@ -229,6 +229,26 @@
     async function F_loadContent(){ try{ const r=await fetch('data/content.json',{cache:'no-store'}); if(!r.ok) throw 0; return await r.json(); }catch{ return F_parseDefault(); } }
     function F_E(){ return (window.SITE && SITE.esc) ? SITE.esc : F_ESC; }
 
+    /* === FIX for data:image/svg+xml placeholders ============================
+       Ensure inline SVG data-URLs are properly encoded and not escaped. */
+    function normalizeImageUrl(u){
+      if(!u) return '';
+      if (/^data:image\/svg\+xml/i.test(u)) {
+        const i = u.indexOf(',');
+        if (i > -1) {
+          const head = u.slice(0, i + 1);
+          const body = u.slice(i + 1);
+          const encoded = /</.test(body) ? encodeURIComponent(body) : body;
+          return head + encoded;
+        }
+      }
+      return u;
+    }
+    function SRC(u){
+      const v = normalizeImageUrl(u);
+      return /^data:image\//i.test(v) ? v : (window.SITE?.esc || F_ESC)(v);
+    }
+
     // Auto-discover gallery-#.ext if JSON gallery is empty
     function checkImage(src){ return new Promise(res=>{const i=new Image(); i.onload=()=>res(true); i.onerror=()=>res(false); i.src=src;}); }
     async function autoDiscoverGallery({prefix='assets/gallery-',exts=['.jpg','.jpeg','.png','.webp'],max=50,stopAfterMisses=8}={}){
@@ -246,8 +266,7 @@
     }
 
     /* Build separate socials section (emoji icons).
-       IMPORTANT CHANGE: we now render items even if links are "#"
-       (placeholders show but are not clickable). */
+       We render items even if links are "#" (placeholders). */
     function buildSocialsSection(E, links={}){
       const defs = [
         {key:'facebook',  label:'Facebook',  emoji:'📘'},
@@ -323,7 +342,7 @@
         upsert({ title:'EmpowerHer', description:'Coming soon: sewing, crochet, and women’s wellbeing workshops.', link:'empowerher.html', image:svgDataUrl, image_alt:'Coming soon' });
       })();
 
-      /* PROGRAMMES (overrides + clickable tiles) */
+      /* PROGRAMMES (overrides + clickable tiles, using SRC for images) */
       const progEl=document.getElementById('programmes');
       const progs=(data.programmes||[]).map(p=>{
         if(p.title && /family connection/i.test(p.title)){
@@ -338,7 +357,7 @@
         if(p.title && /food distribution/i.test(p.title)){
           p={...p,image:'assets/Fareshare_Food/50.jpg',image_alt:'Food Distribution',link:'food-distribution.html'};
         }
-        const inner=`${p.image?`<img class="prog-img" src="${E(p.image)}" alt="${E(p.image_alt||p.title||'Programme image')}" loading="lazy">`:''}<h3>${E(p.title||'')}</h3><p>${E(p.description||'')}</p>${p.bullets?`<ul>${p.bullets.map(li=>`<li>${E(li)}</li>`).join('')}</ul>`:''}`;
+        const inner=`${p.image?`<img class="prog-img" src="${SRC(p.image)}" alt="${E(p.image_alt||p.title||'Programme image')}" loading="lazy">`:''}<h3>${E(p.title||'')}</h3><p>${E(p.description||'')}</p>${p.bullets?`<ul>${p.bullets.map(li=>`<li>${E(li)}</li>`).join('')}</ul>`:''}`;
         return p.link
           ? `<a class="card program" href="${E(p.link)}" aria-label="${E(p.title)}" style="display:block">${inner}</a>`
           : `<div class="card program">${inner}</div>`;
@@ -457,6 +476,7 @@
   </script>
 </body>
 </html>
+
 
 
 
