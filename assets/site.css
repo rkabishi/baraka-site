@@ -249,5 +249,10 @@ header.site-header{
   #news .grid { justify-items: center; }
   #donate .donate-row { justify-content: center; }
 }
+/* Center the content of each news card (incl. "New: Weekly Food Collection") */
+#news .grid .card {
+  text-align: center;
+}
+
 
 
