@@ -245,7 +245,8 @@
       "whatsapp": "https://wa.me/447981748446"
     },
      "youtube_playlist": "PLxxxxxxxxxxxxxxxx",  
-    "map_embed": "<iframe src=\"https://www.google.com/maps/embed?...\" width=\"100%\" height=\"280\" style=\"border:0\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
+     "map_embed": "<iframe src=\"https://www.google.com/maps?q=325%20Kelso%20Street%2C%20Glasgow%20G13%204PG&output=embed\" width=\"100%\" height=\"280\" style=\"border:0\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\" allowfullscreen></iframe>"
+
     
   },
   "legal": {
