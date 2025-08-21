@@ -299,5 +299,36 @@ header.site-header{
   }
 }
 
+/* === Contact: stack "Message us" fields vertically ======================= */
+#contact .two .card:first-child form {
+  display: block !important;              /* no grid row */
+}
+
+#contact .two .card:first-child form > .two {
+  display: block !important;              /* stack Name + Email */
+}
+
+#contact .two .card:first-child form > .two > div,
+#contact .two .card:first-child form > div {
+  margin: 0 0 12px 0 !important;          /* even vertical spacing */
+}
+
+#contact .two .card:first-child form input,
+#contact .two .card:first-child form textarea {
+  width: 100% !important;                  /* fill card width */
+  box-sizing: border-box;
+}
+
+#contact .two .card:first-child form textarea {
+  min-height: 120px;                       /* comfortable message box */
+  resize: vertical;
+}
+
+/* Button sits on its own line */
+#contact .two .card:first-child form .btn {
+  display: inline-block;
+}
+
+
 
 
