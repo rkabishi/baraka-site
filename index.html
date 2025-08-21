@@ -245,29 +245,34 @@
       return out;
     }
 
+    /* Build separate socials section (emoji icons).
+       IMPORTANT CHANGE: we now render items even if links are "#"
+       (placeholders show but are not clickable). */
     function buildSocialsSection(E, links={}){
-    const items=[];
-    const add=(href,label,emoji)=>{
-      if(!href || href==='#') return;
-      items.push(
-        `<a class="social-pill" href="${E(href)}" target="_blank" rel="noopener">
-           <span class="ico">${emoji}</span><span>${E(label)}</span>
-         </a>`
-      );
-    };
-    add(links.facebook, 'Facebook',  '📘');
-    add(links.instagram,'Instagram', '📸');
-    add(links.whatsapp, 'WhatsApp',  '💬');
-
-    if(!items.length) return '';
-    return `
-      <div class="card">
-        <h2 class="section-title" style="text-align:center">Follow us</h2>
-        <div class="social-grid">${items.join('')}</div>
-      </div>`;
-  }
-
-
+      const defs = [
+        {key:'facebook',  label:'Facebook',  emoji:'📘'},
+        {key:'instagram', label:'Instagram', emoji:'📸'},
+        {key:'whatsapp',  label:'WhatsApp',  emoji:'💬'}
+      ];
+      const items = [];
+      defs.forEach(d=>{
+        let href = (links[d.key] ?? '#').toString().trim();
+        const isPlaceholder = (href === '' || href === '#');
+        const attrs = isPlaceholder
+          ? `href="#" aria-disabled="true" onclick="return false"`
+          : `href="${E(href)}" target="_blank" rel="noopener"`;
+        items.push(
+          `<a class="social-pill${isPlaceholder?' is-placeholder':''}" ${attrs}>
+             <span class="ico">${d.emoji}</span><span>${E(d.label)}</span>
+           </a>`
+        );
+      });
+      return `
+        <div class="card">
+          <h2 class="section-title" style="text-align:center">Follow us</h2>
+          <div class="social-grid">${items.join('')}</div>
+        </div>`;
+    }
 
     /********************** PAGE RENDER ***************************************/
     async function renderHome(data){
@@ -296,65 +301,43 @@
       const bullets=(data.about?.bullets||[]).map(b=>`<li>${E(b)}</li>`).join('');
       about.innerHTML=`<div class="two"><div class="card"><div class="kicker">About us</div><h2 class="section-title">${E(data.about?.title||'Our story & mission')}</h2><p>${E(data.about?.story||'')}</p><p>${E(data.about?.values||'')}</p><ul>${bullets}</ul></div><div class="card"><div class="kicker">What we value</div><h2 class="section-title">${E(data.about?.values_title||'Empathy • Dignity • Solidarity • Empowerment')}</h2><p>${E(data.about?.values_para||'')}</p><div class="card" style="margin-top:10px"><h3 style="margin:0 0 6px">${E(data.about?.cta_title||'Need support?')}</h3><p class="notice" style="margin:0 0 10px">${E(data.about?.cta_note||'We’ll listen and connect you to the right activity or service.')}</p><a href="contact.html" class="btn">${E(data.about?.cta_label||'Get in touch')}</a></div></div></div>`;
 
-      /* --- Ensure "Baraka Thrive" & "EmpowerHer" exist even if content.json omits them --- */
+      /* Ensure "Baraka Thrive" & "EmpowerHer" cards exist even if omitted */
       (function ensureComingSoonCards(){
         const svgDataUrl = "data:image/svg+xml;utf8," +
           "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'>" +
           "<rect fill='%23EAF7F1' width='800' height='450'/>" +
           "<text x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Inter,Arial' font-size='42' fill='%23718597'>Coming%20Soon</text></svg>";
-
         if (!Array.isArray(data.programmes)) data.programmes = [];
-
         const upsert = (entry) => {
           const i = data.programmes.findIndex(
             p => (p.title || '').trim().toLowerCase() === entry.title.toLowerCase()
           );
-          if (i === -1) {
-            data.programmes.push(entry);
-          } else {
+          if (i === -1) data.programmes.push(entry);
+          else {
             data.programmes[i] = { ...entry, ...data.programmes[i] };
             if (!data.programmes[i].link)  data.programmes[i].link  = entry.link;
             if (!data.programmes[i].image) data.programmes[i].image = entry.image;
           }
         };
-
-        upsert({
-          title: 'Baraka Thrive',
-          description: 'Coming soon: employability and life-skills programme.',
-          link: 'baraka-thrive.html',
-          image: svgDataUrl,
-          image_alt: 'Coming soon'
-        });
-
-        upsert({
-          title: 'EmpowerHer',
-          description: "Coming soon: sewing, crochet, and women’s wellbeing workshops.",
-          link: 'empowerher.html',
-          image: svgDataUrl,
-          image_alt: 'Coming soon'
-        });
+        upsert({ title:'Baraka Thrive', description:'Coming soon: employability and life-skills programme.', link:'baraka-thrive.html', image:svgDataUrl, image_alt:'Coming soon' });
+        upsert({ title:'EmpowerHer', description:'Coming soon: sewing, crochet, and women’s wellbeing workshops.', link:'empowerher.html', image:svgDataUrl, image_alt:'Coming soon' });
       })();
 
-      /* PROGRAMMES (with image/link overrides + clickable tiles) */
+      /* PROGRAMMES (overrides + clickable tiles) */
       const progEl=document.getElementById('programmes');
       const progs=(data.programmes||[]).map(p=>{
-        // Family Connection Hub override
         if(p.title && /family connection/i.test(p.title)){
           p={...p,image:'assets/2.jpg',image_alt:'Family Connection Hub',link:'family-connection-hub.html'};
         }
-        // DIGITAL HUB override
         if(p.title && /digital\s*hub/i.test(p.title)){
           p={...p,image:'assets/16.jpg',image_alt:'Digital Hub',link:'digital-hub.html'};
         }
-        // WELLNESS HUB override
         if(p.title && /wellness\s*hub/i.test(p.title)){
           p={...p,image:'assets/Refugee%20Festival/IMG_7217.jpg',image_alt:'Wellness Hub',link:'wellness-hub.html'};
         }
-        // FOOD DISTRIBUTION override
         if(p.title && /food distribution/i.test(p.title)){
           p={...p,image:'assets/Fareshare_Food/50.jpg',image_alt:'Food Distribution',link:'food-distribution.html'};
         }
-
         const inner=`${p.image?`<img class="prog-img" src="${E(p.image)}" alt="${E(p.image_alt||p.title||'Programme image')}" loading="lazy">`:''}<h3>${E(p.title||'')}</h3><p>${E(p.description||'')}</p>${p.bullets?`<ul>${p.bullets.map(li=>`<li>${E(li)}</li>`).join('')}</ul>`:''}`;
         return p.link
           ? `<a class="card program" href="${E(p.link)}" aria-label="${E(p.title)}" style="display:block">${inner}</a>`
@@ -404,68 +387,61 @@
         gal.innerHTML=`<div class="kicker">${E(data.gallery?.title||'Photos')}</div><h2 class="section-title">${E(data.gallery?.subtitle||'A glimpse of life at Baraka')}</h2><p class="notice">Add images to <code>data/content.json → gallery.images</code> or upload files named <code>assets/gallery-1.jpg</code>, <code>gallery-2.jpg</code>, …</p>`;
       }
 
-      /* CONTACT */
-      /* CONTACT (homepage block) — socials moved to their own section */
-const contact = document.getElementById('contact');
-const fb = data.contact?.socials?.facebook || '';
-const ig = data.contact?.socials?.instagram || '';
-const wa = data.contact?.socials?.whatsapp || '';
+      /* CONTACT (socials moved to their own section) */
+      const contact = document.getElementById('contact');
+      const fb = data.contact?.socials?.facebook || '#';
+      const ig = data.contact?.socials?.instagram || '#';
+      const wa = data.contact?.socials?.whatsapp || '#';
 
-contact.innerHTML = `
-  <div class="kicker">Contact</div>
-  <h2 class="section-title">${E(data.contact_title||'Get in touch')}</h2>
+      contact.innerHTML = `
+        <div class="kicker">Contact</div>
+        <h2 class="section-title">${E(data.contact_title||'Get in touch')}</h2>
 
-  <div class="two">
-    <div class="card">
-      <h3>Message us</h3>
-      <form action="mailto:${E(data.contact?.email||'')}" method="post" enctype="text/plain"
-            onsubmit="alert('Thanks! We\\'ll reply soon.');">
-        <div>
-          <label class="notice">Name</label>
-          <input required placeholder="Your name">
-        </div>
-        <div>
-          <label class="notice">Email</label>
-          <input required type="email" placeholder="you@example.com">
-        </div>
-        <div style="margin-top:10px">
-          <label class="notice">Your message</label>
-          <textarea rows="4" placeholder="How can we help?"></textarea>
-        </div>
-        <div style="margin-top:12px">
-          <button class="btn" type="submit">Send</button>
-        </div>
-      </form>
-      ${data.contact?.email?`<p class="notice" style="margin-top:8px">
-        Email: <a href="mailto:${E(data.contact.email)}">${E(data.contact.email)}</a>
-      </p>`:''}
-    </div>
+        <div class="two">
+          <div class="card">
+            <h3>Message us</h3>
+            <form action="mailto:${E(data.contact?.email||'')}" method="post" enctype="text/plain"
+                  onsubmit="alert('Thanks! We\\'ll reply soon.');">
+              <div>
+                <label class="notice">Name</label>
+                <input required placeholder="Your name">
+              </div>
+              <div>
+                <label class="notice">Email</label>
+                <input required type="email" placeholder="you@example.com">
+              </div>
+              <div style="margin-top:10px">
+                <label class="notice">Your message</label>
+                <textarea rows="4" placeholder="How can we help?"></textarea>
+              </div>
+              <div style="margin-top:12px">
+                <button class="btn" type="submit">Send</button>
+              </div>
+            </form>
+            ${data.contact?.email?`<p class="notice" style="margin-top:8px">
+              Email: <a href="mailto:${E(data.contact.email)}">${E(data.contact.email)}</a>
+            </p>`:''}
+          </div>
 
-    <div class="card">
-      <h3>Visit</h3>
-      <p>${E(data.contact?.visit_note||'West Glasgow (meetings by appointment).')}</p>
-      ${data.contact?.map_embed || ''}
-    </div>
-  </div>
-`;
+          <div class="card">
+            <h3>Visit</h3>
+            <p>${E(data.contact?.visit_note||'West Glasgow (meetings by appointment).')}</p>
+            ${data.contact?.map_embed || ''}
+          </div>
+        </div>
+      `;
 
-/* Build/insert the separate socials section */
-  const socialsHtml = buildSocialsSection(E, { facebook: fb, instagram: ig, whatsapp: wa });
-  let socialsSection = document.getElementById('socials');
-  if (socialsHtml) {
-    if (!socialsSection) {
-      socialsSection = document.createElement('section');
-      socialsSection.id = 'socials';
-      socialsSection.setAttribute('aria-label','Follow Baraka');
-      // put socials right AFTER the contact block
-      contact.insertAdjacentElement('afterend', socialsSection);
+      /* Build/insert the separate socials section (always render, placeholders allowed) */
+      const socialsHtml = buildSocialsSection(E, { facebook: fb, instagram: ig, whatsapp: wa });
+      let socialsSection = document.getElementById('socials');
+      if (!socialsSection) {
+        socialsSection = document.createElement('section');
+        socialsSection.id = 'socials';
+        socialsSection.setAttribute('aria-label','Follow Baraka');
+        contact.insertAdjacentElement('afterend', socialsSection);
+      }
+      socialsSection.innerHTML = socialsHtml;
     }
-    socialsSection.innerHTML = socialsHtml;
-  } else if (socialsSection) {
-    socialsSection.remove();
-  }
-    }
-
 
     /********************** BOOTSTRAP ***************************************/
     (async function boot(){
@@ -481,6 +457,7 @@ contact.innerHTML = `
   </script>
 </body>
 </html>
+
 
 
 
