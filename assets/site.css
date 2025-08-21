@@ -208,3 +208,46 @@ header.site-header{
   }
 }
 
+/* === Center Updates/Latest News section === */
+#news .kicker,
+#news .section-title,
+#news p,
+#news .notice {
+  text-align: center;
+}
+
+#news .grid {
+  /* override the generic .grid (3 cols) just for News */
+  grid-template-columns: 1fr;     /* single column, centered */
+  justify-items: center;          /* center the cards */
+}
+
+#news .grid .card {
+  width: 100%;
+  max-width: 720px;               /* readable line length */
+}
+
+/* === Center Donate / Support our work section === */
+#donate .kicker,
+#donate .section-title,
+#donate p,
+#donate .notice {
+  text-align: center;
+}
+
+#donate .donate-row {
+  justify-content: center;        /* center the buttons row */
+  align-items: center;
+}
+
+#donate .donate-row .btn {
+  margin: 0 6px;
+}
+
+/* Optional: on wider screens you can still center neatly */
+@media (min-width: 900px) {
+  #news .grid { justify-items: center; }
+  #donate .donate-row { justify-content: center; }
+}
+
+
