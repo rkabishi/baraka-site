@@ -6,7 +6,7 @@
   <title>Baraka Community & Family Centre</title>
   <meta name="description" content="Baraka Community & Family Centre — a SCIO in West Glasgow supporting young people, women, families, and refugees to thrive." />
 
-  <!-- Shared styles -->
+  <!-- Fonts + CSS -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
@@ -30,7 +30,7 @@
 </head>
 <body>
 
-  <!-- HEADER (shared skeleton; menu populated by assets/site.js or fallback below) -->
+  <!-- HEADER -->
   <header class="site-header">
     <div class="container nav">
       <a class="logo" href="index.html">
@@ -71,7 +71,7 @@
     <section id="contact" aria-label="Contact"></section>
   </main>
 
-  <!-- FOOTER (uniform founders row + OSCR) -->
+  <!-- FOOTER -->
   <footer class="footer">
     <div class="container footer-row">
       <!-- Left: copy -->
@@ -85,17 +85,17 @@
         <a href="https://www.tnlcommunityfund.org.uk/" target="_blank" rel="noopener">
           <img class="footer-logo" alt="The National Lottery Community Fund"
                src="https://images.brandfetch.io/tnlcommunityfund.org.uk/logo"
-               onerror="this.onerror=null;this.src='https://logo.clearbit.com/tnlcommunityfund.org.uk';">
+               onerror="this.onerror=null;this.src='https://logo.clearbit.com/tnlcommunityfund.org.uk'">
         </a>
         <a href="https://www.corra.scot/" target="_blank" rel="noopener">
           <img class="footer-logo" alt="Corra Foundation"
                src="https://images.brandfetch.io/corra.scot/logo"
-               onerror="this.onerror=null;this.src='https://logo.clearbit.com/corra.scot';">
+               onerror="this.onerror=null;this.src='https://logo.clearbit.com/corra.scot'">
         </a>
         <a href="https://fareshare.org.uk/" target="_blank" rel="noopener">
           <img class="footer-logo" alt="FareShare UK"
                src="https://images.brandfetch.io/fareshare.org.uk/logo"
-               onerror="this.onerror=null;this.src='https://logo.clearbit.com/fareshare.org.uk';">
+               onerror="this.onerror=null;this.src='https://logo.clearbit.com/fareshare.org.uk'">
         </a>
       </div>
 
@@ -106,7 +106,7 @@
     </div>
   </footer>
 
-  <!-- Default content fallback (used if data/content.json is missing) -->
+  <!-- Default content fallback -->
   <script id="default-content" type="application/json">
   {
     "site": {
@@ -154,48 +154,14 @@
       "cta_label": "Get in touch",
       "cta_href": "contact.html"
     },
-    "programmes_title":"What we run",
+    "programmes_title": "What we run",
     "programmes": [
-      {
-        "title":"Family Connection Hub",
-        "description":"Monthly family activities to build confidence, connection, and joy for parents and children.",
-        "image":"assets/2.jpg",
-        "image_alt":"Family Connection Hub",
-        "link":"family-connection-hub.html",
-        "bullets":["Group activities and creative play","Peer support and signposting","Open to families across West Glasgow"]
-      },
-      {
-        "title":"Digital Hub",
-        "description":"Weekly digital skills sessions for parents and youths to boost confidence and employability.",
-        "image":"assets/baraka-logo.png",
-        "image_alt":"Digital skills"
-      },
-      {
-        "title":"Wellness Hub",
-        "description":"Peer-led wellbeing cafés and support circles focused on mental health, connection, and resilience.",
-        "image":"assets/baraka-logo.png",
-        "image_alt":"Wellbeing"
-      },
-      {
-        "title":"Food Distribution Service",
-        "description":"Weekly food support in partnership with FareShare, prioritising families and refugees in need.",
-        "image":"assets/baraka-logo.png",
-        "image_alt":"Food distribution"
-      },
-      {
-        "title":"Baraka Thrive",
-        "description":"Coming soon: employability and life-skills programme.",
-        "image":"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'><rect fill='%23EAF7F1' width='800' height='450'/><text x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Inter,Arial' font-size='42' fill='%23718597'>Coming%20Soon</text></svg>",
-        "image_alt":"Coming soon",
-        "link":"baraka-thrive.html"
-      },
-      {
-        "title":"EmpowerHer",
-        "description":"Coming soon: sewing, crochet, and women's wellbeing workshops.",
-        "image":"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'><rect fill='%23EAF7F1' width='800' height='450'/><text x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Inter,Arial' font-size='42' fill='%23718597'>Coming%20Soon</text></svg>",
-        "image_alt":"Coming soon",
-        "link":"empowerher.html"
-      }
+      {"title":"Family Connection Hub","description":"Monthly family activities to build confidence, connection, and joy for parents and children.","image":"assets/2.jpg","image_alt":"Family Connection Hub","link":"family-connection-hub.html","bullets":["Group activities and creative play","Peer support and signposting","Open to families across West Glasgow"]},
+      {"title":"Digital Hub","description":"Weekly digital skills sessions for parents and youths to boost confidence and employability.","image":"assets/baraka-logo.png","image_alt":"Digital skills"},
+      {"title":"Wellness Hub","description":"Peer-led wellbeing cafés and support circles focused on mental health, connection, and resilience.","image":"assets/baraka-logo.png","image_alt":"Wellbeing"},
+      {"title":"Food Distribution Service","description":"Weekly food support in partnership with FareShare, prioritising families and refugees in need.","image":"assets/baraka-logo.png","image_alt":"Food distribution"},
+      {"title":"Baraka Thrive","description":"Coming soon: employability and life-skills programme.","image":"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'><rect fill='%23EAF7F1' width='800' height='450'/><text x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Inter,Arial' font-size='42' fill='%23718597'>Coming%20Soon</text></svg>","image_alt":"Coming soon","link":"baraka-thrive.html"},
+      {"title":"EmpowerHer","description":"Coming soon: sewing, crochet, and women's wellbeing workshops.","image":"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'><rect fill='%23EAF7F1' width='800' height='450'/><text x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Inter,Arial' font-size='42' fill='%23718597'>Coming%20Soon</text></svg>","image_alt":"Coming soon","link":"empowerher.html"}
     ],
     "get_involved": {
       "title":"Volunteer or partner with us",
@@ -217,10 +183,10 @@
   }
   </script>
 
-  <!-- Shared logic (builds header/footer + brand + helpers) -->
+  <!-- Shared helpers -->
   <script src="assets/site.js"></script>
 
-  <!-- Homepage render (with built-in fallbacks if site.js isn't ready) -->
+  <!-- Homepage render -->
   <script>
     /************ FALLBACK HELPERS (used only if SITE isn't ready) ************/
     const F_ESC = (s)=>String(s??'').replace(/[&<>\\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -228,22 +194,62 @@
     function F_hexToRgb(h){ const m=/^#?([\\da-f]{2})([\\da-f]{2})([\\da-f]{2})$/i.exec(h||''); return m?{r:parseInt(m[1],16),g:parseInt(m[2],16),b:parseInt(m[3],16)}:{r:255,g:255,b:255}; }
     function F_mix(a,b,t){ const A=F_hexToRgb(a),B=F_hexToRgb(b); const r=Math.round(A.r*(1-t)+B.r*t),g=Math.round(A.g*(1-t)+B.g*t),b2=Math.round(A.b*(1-t)+B.b*t); return `#${F_HEX(r)}${F_HEX(g)}${F_HEX(b2)}`; }
     function F_applyBrand(brand={}){ const root=document.documentElement; const primary=brand.primary||getComputedStyle(root).getPropertyValue('--brand').trim()||'#6B3F18'; const accent=brand.accent||getComputedStyle(root).getPropertyValue('--accent').trim()||'#22C55E'; const bg=brand.bg||getComputedStyle(root).getPropertyValue('--bg').trim()||'#EAF7F1'; root.style.setProperty('--brand',primary); root.style.setProperty('--brand-dark',primary); root.style.setProperty('--accent',accent); root.style.setProperty('--bg',bg); const card=F_mix(bg,accent,0.08), border=F_mix(F_mix(bg,accent,0.08),accent,0.15); root.style.setProperty('--card',card); root.style.setProperty('--card-border',border); }
-    function F_buildHeader(d){ const header=document.querySelector('header.site-header'); if(!header) return; const menu=header.querySelector('#site-menu'); const logo=header.querySelector('#logo'); const name=header.querySelector('#siteName'); if(d.site?.logo && logo) logo.src=d.site.logo; if(d.site?.name && name) name.textContent=d.site.name; if(menu && !menu.children.length){ const links=[{label:'Home',href:'index.html'},{label:'Programmes',href:'programmes.html'},{label:'Get involved',href:'get-involved.html'},{label:'Gallery',href:'gallery.html'},{label:'Contact',href:'contact.html'}]; const here=(location.pathname.split('/').pop()||'index.html').toLowerCase(); menu.innerHTML=links.map(l=>`<a class="${here===l.href.toLowerCase()?'active':''}" href="${l.href}">${F_ESC(l.label)}</a>`).join(''); } const toggle=header.querySelector('.menu-toggle'); if(toggle && menu){ toggle.addEventListener('click',()=>{ const open=menu.classList.toggle('open'); toggle.setAttribute('aria-expanded',open?'true':'false'); toggle.textContent=open?'Close':'Menu'; }); } }
-    function F_buildFooter(d){ const y=document.getElementById('year'), fn=document.getElementById('footerName'), sc=document.getElementById('scio'), os=document.getElementById('oscrBadge'); if(y) y.textContent=new Date().getFullYear(); if(fn && d.site?.name) fn.textContent=d.site.name; if(sc && d.legal?.scio) sc.textContent=d.legal.scio; if(os && d.legal?.oscr_badge) os.src=d.legal.oscr_badge; }
-    function F_initSlideshow(id, images, {interval=4000}={}){ const root=document.getElementById(id); if(!root||!images?.length) return; const slides=root.querySelector('.slides'), dots=root.querySelector('.dots'); if(!slides||!dots) return; slides.innerHTML=images.map((g,i)=>`<div class="slide ${i===0?'active':''}"><img src="${F_ESC(g.src)}" alt="${F_ESC(g.alt||'Photo')}" loading="lazy"/>${g.caption?`<div class="caption">${F_ESC(g.caption)}</div>`:''}</div>`).join(''); dots.innerHTML=images.map((_,i)=>`<button class="dot ${i===0?'active':''}" aria-label="Go to slide ${i+1}"></button>`).join(''); const S=root.querySelectorAll('.slide'), D=root.querySelectorAll('.dot'), P=root.querySelector('[data-prev]'), N=root.querySelector('[data-next]'); let idx=0,t=null; const render=()=>{S.forEach((s,i)=>s.classList.toggle('active',i===idx)); D.forEach((d,i)=>d.classList.toggle('active',i===idx));}; const go=n=>{idx=(n+images.length)%images.length;render();}; const start=()=>{stop(); t=setInterval(()=>go(idx+1),interval);}; const stop=()=>{if(t) clearInterval(t); t=null;}; P?.addEventListener('click',()=>{go(idx-1);start();}); N?.addEventListener('click',()=>{go(idx+1);start();}); D.forEach((d,i)=>d.addEventListener('click',()=>{idx=i;start();})); root.addEventListener('mouseenter',stop); root.addEventListener('mouseleave',start); render(); start(); }
+    function F_buildHeader(d){
+      const header=document.querySelector('header.site-header'); if(!header) return;
+      const menu=header.querySelector('#site-menu'); const logo=header.querySelector('#logo'); const name=header.querySelector('#siteName');
+      if(d.site?.logo && logo) logo.src=d.site.logo; if(d.site?.name && name) name.textContent=d.site.name;
+      if(menu && !menu.children.length){
+        const links=[{label:'Home',href:'index.html'},{label:'Programmes',href:'programmes.html'},{label:'Get involved',href:'get-involved.html'},{label:'Gallery',href:'gallery.html'},{label:'Contact',href:'contact.html'}];
+        const here=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+        menu.innerHTML=links.map(l=>`<a class="${here===l.href.toLowerCase()?'active':''}" href="${l.href}">${F_ESC(l.label)}</a>`).join('');
+      }
+      const toggle=header.querySelector('.menu-toggle'); if(toggle && menu){
+        toggle.addEventListener('click',()=>{ const open=menu.classList.toggle('open'); toggle.setAttribute('aria-expanded',open?'true':'false'); toggle.textContent=open?'Close':'Menu'; });
+      }
+    }
+    function F_buildFooter(d){
+      const y=document.getElementById('year'), fn=document.getElementById('footerName'), sc=document.getElementById('scio'), os=document.getElementById('oscrBadge');
+      if(y) y.textContent=new Date().getFullYear();
+      if(fn && d.site?.name) fn.textContent=d.site.name;
+      if(sc && d.legal?.scio) sc.textContent=d.legal.scio;
+      if(os && d.legal?.oscr_badge) os.src=d.legal.oscr_badge;
+    }
+    function F_initSlideshow(id, images, {interval=4000}={}){
+      const root=document.getElementById(id); if(!root||!images?.length) return;
+      const slides=root.querySelector('.slides'), dots=root.querySelector('.dots'); if(!slides||!dots) return;
+      slides.innerHTML=images.map((g,i)=>`<div class="slide ${i===0?'active':''}"><img src="${F_ESC(g.src)}" alt="${F_ESC(g.alt||'Photo')}" loading="lazy"/>${g.caption?`<div class="caption">${F_ESC(g.caption)}</div>`:''}</div>`).join('');
+      dots.innerHTML=images.map((_,i)=>`<button class="dot ${i===0?'active':''}" aria-label="Go to slide ${i+1}"></button>`).join('');
+      const S=root.querySelectorAll('.slide'), D=root.querySelectorAll('.dot'), P=root.querySelector('[data-prev]'), N=root.querySelector('[data-next]');
+      let idx=0,t=null; const render=()=>{S.forEach((s,i)=>s.classList.toggle('active',i===idx)); D.forEach((d,i)=>d.classList.toggle('active',i===idx));};
+      const go=n=>{idx=(n+images.length)%images.length;render();}; const start=()=>{stop(); t=setInterval(()=>go(idx+1),interval);}; const stop=()=>{if(t) clearInterval(t); t=null;};
+      P?.addEventListener('click',()=>{go(idx-1);start();}); N?.addEventListener('click',()=>{go(idx+1);start();}); D.forEach((d,i)=>d.addEventListener('click',()=>{idx=i;start();}));
+      root.addEventListener('mouseenter',stop); root.addEventListener('mouseleave',start); render(); start();
+    }
     function F_parseDefault(){ try{return JSON.parse(document.getElementById('default-content').textContent||'{}');}catch{return {};} }
     async function F_loadContent(){ try{ const r=await fetch('data/content.json',{cache:'no-store'}); if(!r.ok) throw 0; return await r.json(); }catch{ return F_parseDefault(); } }
     function F_E(){ return (window.SITE && SITE.esc) ? SITE.esc : F_ESC; }
 
     // Auto-discover gallery-#.ext if JSON gallery is empty
     function checkImage(src){ return new Promise(res=>{const i=new Image(); i.onload=()=>res(true); i.onerror=()=>res(false); i.src=src;}); }
-    async function autoDiscoverGallery({prefix='assets/gallery-',exts=['.jpg','.jpeg','.png','.webp'],max=50,stopAfterMisses=8}={}){ const out=[]; let misses=0; for(let n=1;n<=max;n++){ let added=false; for(const ext of exts){ const p=`${prefix}${n}${ext}`; /* eslint-disable-next-line no-await-in-loop */ if(await checkImage(p)){ out.push({src:p,alt:'Photo'}); added=true; break; } } if(!added){ if(++misses>=stopAfterMisses) break; } else misses=0; } return out; }
+    async function autoDiscoverGallery({prefix='assets/gallery-',exts=['.jpg','.jpeg','.png','.webp'],max=50,stopAfterMisses=8}={}){
+      const out=[]; let misses=0;
+      for(let n=1;n<=max;n++){
+        let added=false;
+        for(const ext of exts){
+          const p=`${prefix}${n}${ext}`;
+          /* eslint-disable-next-line no-await-in-loop */
+          if(await checkImage(p)){ out.push({src:p,alt:'Photo'}); added=true; break; }
+        }
+        if(!added){ if(++misses>=stopAfterMisses) break; } else misses=0;
+      }
+      return out;
+    }
 
     /********************** PAGE RENDER ***************************************/
     async function renderHome(data){
       const E = F_E();
 
-      // Brand + header/footer (prefer shared helpers if present)
+      // Brand + header/footer
       (window.SITE?.applyBrand || F_applyBrand)(data.site?.brand||{});
       (window.SITE?.buildHeader || F_buildHeader)(data);
       (window.SITE?.buildFooter || F_buildFooter)(data);
@@ -266,32 +272,73 @@
       const bullets=(data.about?.bullets||[]).map(b=>`<li>${E(b)}</li>`).join('');
       about.innerHTML=`<div class="two"><div class="card"><div class="kicker">About us</div><h2 class="section-title">${E(data.about?.title||'Our story & mission')}</h2><p>${E(data.about?.story||'')}</p><p>${E(data.about?.values||'')}</p><ul>${bullets}</ul></div><div class="card"><div class="kicker">What we value</div><h2 class="section-title">${E(data.about?.values_title||'Empathy • Dignity • Solidarity • Empowerment')}</h2><p>${E(data.about?.values_para||'')}</p><div class="card" style="margin-top:10px"><h3 style="margin:0 0 6px">${E(data.about?.cta_title||'Need support?')}</h3><p class="notice" style="margin:0 0 10px">${E(data.about?.cta_note||'We’ll listen and connect you to the right activity or service.')}</p><a href="contact.html" class="btn">${E(data.about?.cta_label||'Get in touch')}</a></div></div></div>`;
 
-      /* PROGRAMMES (including card overrides) */
+      /* --- Ensure "Baraka Thrive" & "EmpowerHer" exist even if content.json omits them --- */
+      (function ensureComingSoonCards(){
+        const svgDataUrl = "data:image/svg+xml;utf8," +
+          "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'>" +
+          "<rect fill='%23EAF7F1' width='800' height='450'/>" +
+          "<text x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Inter,Arial' font-size='42' fill='%23718597'>Coming%20Soon</text></svg>";
+
+        if (!Array.isArray(data.programmes)) data.programmes = [];
+
+        const upsert = (entry) => {
+          const i = data.programmes.findIndex(
+            p => (p.title || '').trim().toLowerCase() === entry.title.toLowerCase()
+          );
+          if (i === -1) {
+            data.programmes.push(entry);
+          } else {
+            data.programmes[i] = { ...entry, ...data.programmes[i] };
+            if (!data.programmes[i].link)  data.programmes[i].link  = entry.link;
+            if (!data.programmes[i].image) data.programmes[i].image = entry.image;
+          }
+        };
+
+        upsert({
+          title: 'Baraka Thrive',
+          description: 'Coming soon: employability and life-skills programme.',
+          link: 'baraka-thrive.html',
+          image: svgDataUrl,
+          image_alt: 'Coming soon'
+        });
+
+        upsert({
+          title: 'EmpowerHer',
+          description: "Coming soon: sewing, crochet, and women’s wellbeing workshops.",
+          link: 'empowerher.html',
+          image: svgDataUrl,
+          image_alt: 'Coming soon'
+        });
+      })();
+
+      /* PROGRAMMES (with image/link overrides + clickable tiles) */
       const progEl=document.getElementById('programmes');
       const progs=(data.programmes||[]).map(p=>{
         // Family Connection Hub override
         if(p.title && /family connection/i.test(p.title)){
           p={...p,image:'assets/2.jpg',image_alt:'Family Connection Hub',link:'family-connection-hub.html'};
         }
-        // DIGITAL HUB override (make clickable + set image 16.jpg)
+        // DIGITAL HUB override
         if(p.title && /digital\s*hub/i.test(p.title)){
           p={...p,image:'assets/16.jpg',image_alt:'Digital Hub',link:'digital-hub.html'};
         }
-        // WELLNESS HUB override (clickable + updated image 7217)
+        // WELLNESS HUB override
         if(p.title && /wellness\s*hub/i.test(p.title)){
           p={...p,image:'assets/Refugee%20Festival/IMG_7217.jpg',image_alt:'Wellness Hub',link:'wellness-hub.html'};
         }
-        // FOOD DISTRIBUTION override (correct folder/file)
+        // FOOD DISTRIBUTION override
         if(p.title && /food distribution/i.test(p.title)){
           p={...p,image:'assets/Fareshare_Food/50.jpg',image_alt:'Food Distribution',link:'food-distribution.html'};
         }
 
         const inner=`${p.image?`<img class="prog-img" src="${E(p.image)}" alt="${E(p.image_alt||p.title||'Programme image')}" loading="lazy">`:''}<h3>${E(p.title||'')}</h3><p>${E(p.description||'')}</p>${p.bullets?`<ul>${p.bullets.map(li=>`<li>${E(li)}</li>`).join('')}</ul>`:''}`;
-        return p.link?`<a class="card program" href="${E(p.link)}" aria-label="${E(p.title)}">${inner}</a>`:`<div class="card program">${inner}</div>`;
+        return p.link
+          ? `<a class="card program" href="${E(p.link)}" aria-label="${E(p.title)}" style="display:block">${inner}</a>`
+          : `<div class="card program">${inner}</div>`;
       }).join('');
       progEl.innerHTML=`<div class="kicker">Programmes</div><h2 class="section-title">${E(data.programmes_title||'What we run')}</h2><div class="grid">${progs}</div>`;
 
-      /* NEWS (simple) */
+      /* NEWS */
       const news = document.getElementById('news');
       const newsCards = (data.news||[]).map(n=>`
         <div class="card">
@@ -305,7 +352,7 @@
         <div class="grid">${newsCards}</div>
       `;
 
-      /* DONATE (simple) */
+      /* DONATE */
       const donate = document.getElementById('donate');
       const dlinks = [];
       if (data.donate?.paypal)     dlinks.push(`<a class="btn"           href="${E(data.donate.paypal)}">Donate via PayPal</a>`);
@@ -333,16 +380,16 @@
         gal.innerHTML=`<div class="kicker">${E(data.gallery?.title||'Photos')}</div><h2 class="section-title">${E(data.gallery?.subtitle||'A glimpse of life at Baraka')}</h2><p class="notice">Add images to <code>data/content.json → gallery.images</code> or upload files named <code>assets/gallery-1.jpg</code>, <code>gallery-2.jpg</code>, …</p>`;
       }
 
-      /* CONTACT (homepage block) */
+      /* CONTACT */
       const contact=document.getElementById('contact');
-      const fb=data.contact?.socials?.facebook?`<a href="${E(data.contact.socials.facebook)}">Facebook</a>`:''; 
+      const fb=data.contact?.socials?.facebook?`<a href="${E(data.contact.socials.facebook)}">Facebook</a>`:'';
       const ig=data.contact?.socials?.instagram?`<a href="${E(data.contact.socials.instagram)}">Instagram</a>`:'';
       const wa=data.contact?.socials?.whatsapp?`<a href="${E(data.contact.socials.whatsapp)}">WhatsApp</a>`:'';
       const socials=[fb,ig,wa].filter(Boolean).join(' · ');
       contact.innerHTML=`<div class="kicker">Contact</div><h2 class="section-title">${E(data.contact_title||'Get in touch')}</h2><div class="two"><div class="card"><h3>Message us</h3><form action="mailto:${E(data.contact?.email||'')}" method="post" enctype="text/plain" onsubmit="alert('Thanks! We\\'ll reply soon.');"><div class="two"><div><label class="notice">Name</label><input required placeholder="Your name"></div><div><label class="notice">Email</label><input required type="email" placeholder="you@example.com"></div></div><div style="margin-top:10px"><label class="notice">Your message</label><textarea rows="4" placeholder="How can we help?"></textarea></div><div style="margin-top:12px"><button class="btn" type="submit">Send</button></div></form>${data.contact?.email?`<p class="notice" style="margin-top:8px">Email: <a href="mailto:${E(data.contact.email)}">${E(data.contact.email)}</a></p>`:''}</div><div class="card"><h3>Visit</h3><p>${E(data.contact?.visit_note||'West Glasgow (meetings by appointment).')}</p>${data.contact?.map_embed||''}${socials?`<p class="notice">Follow us: ${socials}</p>`:''}</div></div>`;
     }
 
-    /********************** BOOTSTRAP: get data then render ********************/
+    /********************** BOOTSTRAP ***************************************/
     (async function boot(){
       let data = window.__SITE__;
       if(!data){
