@@ -249,6 +249,34 @@
 
 
       const progEl=document.getElementById('programmes');
+
+      // Add “coming soon” cards if missing
+      data.programmes = Array.isArray(data.programmes) ? data.programmes : [];
+      const have = t => data.programmes.some(p => (p.title||'').toLowerCase() === t.toLowerCase());
+
+      if (!have('Baraka Thrive')) {
+        data.programmes.push({
+          title: 'Baraka Thrive',
+          description: 'Coming soon: employability and life-skills programme.',
+          image: 'assets/coming-soon.jpg',
+          image_alt: 'Coming soon',
+          link: 'baraka-thrive.html'
+        });
+      }
+      if (!have('EmpowerHer')) {
+        data.programmes.push({
+          title: 'EmpowerHer',
+          description: 'Coming soon: sewing, crochet, and women’s wellbeing workshops.',
+          image: 'assets/coming-soon.jpg',
+          image_alt: 'Coming soon',
+          link: 'empowerher.html'
+        });
+      }
+
+
+
+
+
       const progs=(data.programmes||[]).map(p=>{
         // Family Connection Hub override
         if(p.title && /family connection/i.test(p.title)){
