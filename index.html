@@ -168,7 +168,10 @@
       {"title":"Family Connection Hub","description":"Monthly family activities to build confidence, connection, and joy for parents and children.","image":"assets/2.jpg","image_alt":"Family Connection Hub","link":"family-connection-hub.html","bullets":["Group activities and creative play","Peer support and signposting","Open to families across West Glasgow"]},
       {"title":"Digital Hub","description":"Weekly digital skills sessions for parents and youths to boost confidence and employability.","image":"assets/baraka-logo.png","image_alt":"Digital skills"},
       {"title":"Wellness Hub","description":"Peer-led wellbeing cafés and support circles focused on mental health, connection, and resilience.","image":"assets/baraka-logo.png","image_alt":"Wellbeing"},
-      {"title":"Food Distribution Service","description":"Weekly food support in partnership with FareShare, prioritising families and refugees in need.","image":"assets/baraka-logo.png","image_alt":"Food distribution"}
+      {"title":"Food Distribution Service","description":"Weekly food support in partnership with FareShare, prioritising families and refugees in need.","image":"assets/baraka-logo.png","image_alt":"Food distribution"},
+      {"title":"Baraka Thrive","description":"Coming soon: employability and life-skills programme.","image":"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'><rect fill='%23EAF7F1' width='800' height='450'/><text x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Inter,Arial' font-size='42' fill='%23718597'>Coming%20Soon</text></svg>","image_alt":"Coming soon","link":"baraka-thrive.html"},
+      {"title":"EmpowerHer","description":"Coming soon: sewing, crochet, and women's wellbeing workshops.","image":"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'><rect fill='%23EAF7F1' width='800' height='450'/><text x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Inter,Arial' font-size='42' fill='%23718597'>Coming%20Soon</text></svg>","image_alt":"Coming soon","link":"empowerher.html"}
+
     ],
     "get_involved": {
       "title":"Volunteer or partner with us",
@@ -240,6 +243,16 @@
       about.innerHTML=`<div class="two"><div class="card"><div class="kicker">About us</div><h2 class="section-title">${E(data.about?.title||'Our story & mission')}</h2><p>${E(data.about?.story||'')}</p><p>${E(data.about?.values||'')}</p><ul>${bullets}</ul></div><div class="card"><div class="kicker">What we value</div><h2 class="section-title">${E(data.about?.values_title||'Empathy • Dignity • Solidarity • Empowerment')}</h2><p>${E(data.about?.values_para||'')}</p><div class="card" style="margin-top:10px"><h3 style="margin:0 0 6px">${E(data.about?.cta_title||'Need support?')}</h3><p class="notice" style="margin:0 0 10px">${E(data.about?.cta_note||'We’ll listen and connect you to the right activity or service.')}</p><a href="contact.html" class="btn">${E(data.about?.cta_label||'Get in touch')}</a></div></div></div>`;
 
       /* PROGRAMMES (including card overrides) */
+
+      // Ensure placeholder cards exist
+      data.programmes = Array.isArray(data.programmes) ? data.programmes : [];
+      ensureProgramme(data.programmes, 'Baraka Thrive', 'Coming soon: employability and life-skills programme.', 'baraka-thrive.html');
+      ensureProgramme(data.programmes, 'EmpowerHer', 'Coming soon: sewing, crochet, and women\'s wellbeing workshops.', 'empowerher.html');
+
+
+
+
+
       const progEl=document.getElementById('programmes');
       const progs=(data.programmes||[]).map(p=>{
         // Family Connection Hub override

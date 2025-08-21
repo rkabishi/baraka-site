@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>EmpowerHer — Baraka Community & Family Centre</title>
+  <meta name="description" content="EmpowerHer — coming soon. Sewing & crochet sessions, wellbeing cafés, and space for women to connect and create."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/site.css">
+  <style>
+    main.container{ padding-top:16px }
+    .wide-hero{ margin: 12px 0 24px }
+    .pill{ display:inline-block; padding:6px 10px; border-radius:999px; background:#f1f5f9; color:#0f172a; font-weight:600; font-size:12px }
+    .two-thirds{ display:grid; grid-template-columns: 1.2fr .8fr; gap:18px }
+    @media (max-width: 900px){ .two-thirds{ grid-template-columns: 1fr } }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container nav">
+      <a class="logo" href="index.html">
+        <img id="logo" src="assets/baraka-logo.png" alt="Baraka logo">
+        <span id="siteName">Baraka Community & Family Centre</span>
+      </a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="site-menu">Menu</button>
+      <nav id="site-menu" class="menu" aria-label="Main menu"></nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Coming soon “slideshow” (single slide placeholder) -->
+    <section class="wide-hero" aria-label="EmpowerHer">
+      <div class="slideshow" id="empowerher-slideshow" aria-label="EmpowerHer slideshow">
+        <div class="slides"></div>
+        <button class="nav prev" data-prev aria-label="Previous slide">‹</button>
+        <button class="nav next" data-next aria-label="Next slide">›</button>
+        <div class="dots"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="kicker">Programmes</div>
+      <h1 class="section-title">EmpowerHer <span class="pill">Coming soon</span></h1>
+      <p class="lead">Creative, supportive sessions for women — sewing & crochet, peer support, and a welcoming space to connect.</p>
+
+      <div class="two-thirds" style="margin-top:12px">
+        <div class="card">
+          <h3 style="margin-top:0">What to expect</h3>
+          <ul>
+            <li>Sewing & crochet skills for all levels (machines & materials provided).</li>
+            <li>Women’s wellbeing cafés and peer-support circles.</li>
+            <li>Show-and-tell & community craft projects.</li>
+            <li>Pathways into micro-enterprise, pop-ups, or markets.</li>
+            <li>Child-friendly space whenever possible.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0">Be first to hear</h3>
+          <p class="notice">Dates and sign-up are opening soon.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <a class="btn" href="mailto:hello@baraka-centre.org?subject=EmpowerHer%20updates">Register interest</a>
+            <a class="btn secondary" href="programmes.html">All programmes</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (same layout as other pages) -->
+  <footer class="footer">
+    <div class="container footer-row">
+      <div>© <span id="year"></span> <span id="footerName">Baraka Community & Family Centre</span><br><span class="notice">Registered SCIO <span id="scio"></span></span></div>
+
+      <!-- Use the SAME founders block you already confirmed working on index.html -->
+      <div class="founder-logos">
+        <!-- COPY the three founder <img> tags from your working index.html footer here -->
+        <!-- Example structure (keep your exact working URLs): -->
+        <!--
+        <img class="footer-logo" src="https://…/tnl-logo.png" alt="The National Lottery Community Fund">
+        <img class="footer-logo" src="https://…/corra-logo.svg" alt="Corra Foundation">
+        <img class="footer-logo" src="https://…/fareshare-logo.png" alt="FareShare">
+        -->
+      </div>
+
+      <div class="oscr">
+        <img id="oscrBadge" class="footer-logo" src="assets/oscr-badge.jpg" alt="OSCR badge">
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/site.js"></script>
+  <script>
+    const E = (s)=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const EMPOWER_PLACEHOLDER =
+      "data:image/svg+xml;utf8," +
+      "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'>" +
+      "<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop stop-color='%23EAF7F1' offset='0'/>" +
+      "<stop stop-color='%23e9e7ff' offset='1'/></linearGradient></defs>" +
+      "<rect fill='url(%23g)' width='800' height='450'/>" +
+      "<text x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' " +
+      "font-family='Inter,Arial' font-size='44' fill='%230f172a' opacity='0.85'>EmpowerHer — Coming Soon</text></svg>";
+
+    function initSlides(){
+      const rootId = "empowerher-slideshow";
+      const slidesEl = document.querySelector("#"+rootId+" .slides");
+      const dotsEl   = document.querySelector("#"+rootId+" .dots");
+      const imgs = [{ src: EMPOWER_PLACEHOLDER, alt: "EmpowerHer — Coming Soon" }];
+
+      if (slidesEl && dotsEl) {
+        slidesEl.innerHTML = imgs.map((g,i)=>`
+          <div class="slide ${i===0?'active':''}">
+            <img src="${E(g.src)}" alt="${E(g.alt)}" loading="lazy">
+          </div>`).join('');
+        dotsEl.innerHTML = imgs.map((_,i)=>`<button class="dot ${i===0?'active':''}" aria-label="Slide ${i+1}"></button>`).join('');
+
+        const init = (window.SITE && SITE.initSlideshow) ? SITE.initSlideshow : null;
+        if (init) init(rootId, imgs, { interval: 4000 });
+      }
+    }
+
+    (window.SITE?.buildHeader||(()=>{}))({});
+    (window.SITE?.buildFooter||(()=>{}))({});
+    initSlides();
+  </script>
+</body>
+</html>
