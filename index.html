@@ -450,20 +450,20 @@ contact.innerHTML = `
 `;
 
 /* Build/insert the separate socials section */
-const socialsHtml = buildSocialsSection(E, { facebook: fb, instagram: ig, whatsapp: wa });
-let socialsSection = document.getElementById('socials');
-if (socialsHtml) {
-  if (!socialsSection) {
-    socialsSection = document.createElement('section');
-    socialsSection.id = 'socials';
-    socialsSection.setAttribute('aria-label','Follow Baraka');
-    // put socials right AFTER the contact block
-    contact.insertAdjacentElement('afterend', socialsSection);
-  }
-  socialsSection.innerHTML = socialsHtml;
-} else if (socialsSection) {
-  socialsSection.remove();
-}
+    const socialsHtml = buildSocialsSection(E, { facebook: fb, instagram: ig, whatsapp: wa });
+    let socialsSection = document.getElementById('socials');
+    if (socialsHtml) {
+      if (!socialsSection) {
+        socialsSection = document.createElement('section');
+        socialsSection.id = 'socials';
+        socialsSection.setAttribute('aria-label','Follow Baraka');
+        // put socials right AFTER the contact block
+        contact.insertAdjacentElement('afterend', socialsSection);
+      }
+      socialsSection.innerHTML = socialsHtml;
+    } else if (socialsSection) {
+      socialsSection.remove();
+    }
     }
 
 
