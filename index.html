@@ -245,6 +245,30 @@
       return out;
     }
 
+    function buildSocialsSection(E, links={}){
+    const items=[];
+    const add=(href,label,emoji)=>{
+      if(!href || href==='#') return;
+      items.push(
+        `<a class="social-pill" href="${E(href)}" target="_blank" rel="noopener">
+           <span class="ico">${emoji}</span><span>${E(label)}</span>
+         </a>`
+      );
+    };
+    add(links.facebook, 'Facebook',  '📘');
+    add(links.instagram,'Instagram', '📸');
+    add(links.whatsapp, 'WhatsApp',  '💬');
+
+    if(!items.length) return '';
+    return `
+      <div class="card">
+        <h2 class="section-title" style="text-align:center">Follow us</h2>
+        <div class="social-grid">${items.join('')}</div>
+      </div>`;
+  }
+
+
+
     /********************** PAGE RENDER ***************************************/
     async function renderHome(data){
       const E = F_E();
@@ -381,13 +405,67 @@
       }
 
       /* CONTACT */
-      const contact=document.getElementById('contact');
-      const fb=data.contact?.socials?.facebook?`<a href="${E(data.contact.socials.facebook)}">Facebook</a>`:'';
-      const ig=data.contact?.socials?.instagram?`<a href="${E(data.contact.socials.instagram)}">Instagram</a>`:'';
-      const wa=data.contact?.socials?.whatsapp?`<a href="${E(data.contact.socials.whatsapp)}">WhatsApp</a>`:'';
-      const socials=[fb,ig,wa].filter(Boolean).join(' · ');
-      contact.innerHTML=`<div class="kicker">Contact</div><h2 class="section-title">${E(data.contact_title||'Get in touch')}</h2><div class="two"><div class="card"><h3>Message us</h3><form action="mailto:${E(data.contact?.email||'')}" method="post" enctype="text/plain" onsubmit="alert('Thanks! We\\'ll reply soon.');"><div class="two"><div><label class="notice">Name</label><input required placeholder="Your name"></div><div><label class="notice">Email</label><input required type="email" placeholder="you@example.com"></div></div><div style="margin-top:10px"><label class="notice">Your message</label><textarea rows="4" placeholder="How can we help?"></textarea></div><div style="margin-top:12px"><button class="btn" type="submit">Send</button></div></form>${data.contact?.email?`<p class="notice" style="margin-top:8px">Email: <a href="mailto:${E(data.contact.email)}">${E(data.contact.email)}</a></p>`:''}</div><div class="card"><h3>Visit</h3><p>${E(data.contact?.visit_note||'West Glasgow (meetings by appointment).')}</p>${data.contact?.map_embed||''}${socials?`<p class="notice">Follow us: ${socials}</p>`:''}</div></div>`;
+      /* CONTACT (homepage block) — socials moved to their own section */
+const contact = document.getElementById('contact');
+const fb = data.contact?.socials?.facebook || '';
+const ig = data.contact?.socials?.instagram || '';
+const wa = data.contact?.socials?.whatsapp || '';
+
+contact.innerHTML = `
+  <div class="kicker">Contact</div>
+  <h2 class="section-title">${E(data.contact_title||'Get in touch')}</h2>
+
+  <div class="two">
+    <div class="card">
+      <h3>Message us</h3>
+      <form action="mailto:${E(data.contact?.email||'')}" method="post" enctype="text/plain"
+            onsubmit="alert('Thanks! We\\'ll reply soon.');">
+        <div>
+          <label class="notice">Name</label>
+          <input required placeholder="Your name">
+        </div>
+        <div>
+          <label class="notice">Email</label>
+          <input required type="email" placeholder="you@example.com">
+        </div>
+        <div style="margin-top:10px">
+          <label class="notice">Your message</label>
+          <textarea rows="4" placeholder="How can we help?"></textarea>
+        </div>
+        <div style="margin-top:12px">
+          <button class="btn" type="submit">Send</button>
+        </div>
+      </form>
+      ${data.contact?.email?`<p class="notice" style="margin-top:8px">
+        Email: <a href="mailto:${E(data.contact.email)}">${E(data.contact.email)}</a>
+      </p>`:''}
+    </div>
+
+    <div class="card">
+      <h3>Visit</h3>
+      <p>${E(data.contact?.visit_note||'West Glasgow (meetings by appointment).')}</p>
+      ${data.contact?.map_embed || ''}
+    </div>
+  </div>
+`;
+
+/* Build/insert the separate socials section */
+const socialsHtml = buildSocialsSection(E, { facebook: fb, instagram: ig, whatsapp: wa });
+let socialsSection = document.getElementById('socials');
+if (socialsHtml) {
+  if (!socialsSection) {
+    socialsSection = document.createElement('section');
+    socialsSection.id = 'socials';
+    socialsSection.setAttribute('aria-label','Follow Baraka');
+    // put socials right AFTER the contact block
+    contact.insertAdjacentElement('afterend', socialsSection);
+  }
+  socialsSection.innerHTML = socialsHtml;
+} else if (socialsSection) {
+  socialsSection.remove();
+}
     }
+
 
     /********************** BOOTSTRAP ***************************************/
     (async function boot(){

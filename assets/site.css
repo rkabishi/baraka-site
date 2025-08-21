@@ -328,6 +328,27 @@ header.site-header{
 #contact .two .card:first-child form .btn {
   display: inline-block;
 }
+/* === Socials section ====================================================== */
+#socials .card { padding: 18px; }
+#socials .social-grid{
+  display:flex; align-items:center; justify-content:center;
+  gap:14px; flex-wrap:wrap;
+}
+#socials .social-pill{
+  display:flex; align-items:center; gap:10px;
+  padding:10px 14px; border-radius:999px;
+  background:#fff; border:1px solid var(--card-border);
+  box-shadow:0 2px 10px rgba(15,23,42,.06);
+  font-weight:700; color:var(--ink);
+}
+#socials .social-pill .ico{
+  width:28px; height:28px; border-radius:999px;
+  display:grid; place-items:center;
+  background:var(--bg);
+  font-size:16px; line-height:1;
+}
+#socials .social-pill:hover{ transform:translateY(-1px); }
+
 
 
 
