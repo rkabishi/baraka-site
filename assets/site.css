@@ -254,5 +254,50 @@ header.site-header{
   text-align: center;
 }
 
+/* === Contact: make "Message us" fields horizontal (Name | Email | Message | Send) === */
+#contact .two .card:first-child form {
+  display: grid;
+  grid-template-columns: minmax(140px, 1fr) minmax(200px, 1fr) minmax(320px, 2fr) auto;
+  gap: 12px;
+  align-items: end;                 /* line bottoms up (button with inputs) */
+}
+
+/* Flatten the inner two-column wrapper so Name + Email become separate columns */
+#contact .two .card:first-child form > .two {
+  display: contents;
+}
+
+/* Remove the inline top margins the template puts on the message + button rows */
+#contact .two .card:first-child form > :nth-child(2),
+#contact .two .card:first-child form > :nth-child(3) {
+  margin: 0 !important;
+}
+
+/* Inputs fill their grid cells neatly */
+#contact .two .card:first-child form input,
+#contact .two .card:first-child form textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Keep the textarea a sensible height in the row */
+#contact .two .card:first-child form textarea {
+  min-height: 44px;
+  resize: vertical; /* still allow taller messages */
+}
+
+/* On small screens, stack gracefully */
+@media (max-width: 800px) {
+  #contact .two .card:first-child form {
+    grid-template-columns: 1fr;   /* stack */
+    align-items: stretch;
+  }
+  #contact .two .card:first-child form > .two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+}
+
 
 
