@@ -348,6 +348,26 @@ header.site-header{
   font-size:16px; line-height:1;
 }
 #socials .social-pill:hover{ transform:translateY(-1px); }
+/* === Edge-to-edge layout (no side gaps) =============================== */
+:root{
+  /* tweak this if you ever want a tiny gutter instead of zero */
+  --page-gutter: 0px; /* e.g. 8px */
+}
+
+/* Make containers full-width with no side padding */
+.container{
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding-left: var(--page-gutter) !important;
+  padding-right: var(--page-gutter) !important;
+}
+
+/* Remove horizontal padding on <main class="container"> too */
+main.container{
+  padding-left: var(--page-gutter) !important;
+  padding-right: var(--page-gutter) !important;
+}
 
 
 
