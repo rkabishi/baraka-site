@@ -357,7 +357,7 @@ header.site-header{
 /* Make containers full-width with no side padding */
 .container{
   max-width: none !important;
-  width: 100% !important;
+  width: 90% !important;
   margin: 0 !important;
   padding-left: var(--page-gutter) !important;
   padding-right: var(--page-gutter) !important;
