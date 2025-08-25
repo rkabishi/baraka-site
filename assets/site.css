@@ -351,7 +351,7 @@ header.site-header{
 /* === Global side gutter (small left/right gap on every page) ============ */
 :root{
   /* Responsive gutter: ~12px on phones → ~24px on large screens */
-  --page-gutter: clamp(12px, 4.5vw, 24px);
+  --page-gutter: clamp(12px, 2.5vw, 24px);
 }
 
 /* Containers go full-width but keep a small side gap */
