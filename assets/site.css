@@ -373,6 +373,23 @@ main.container{
 }
 
 
+/* === Page side padding (small, then halved) ============================ */
+:root{
+  /* half the previous gap */
+  --page-pad: clamp(10px, 2.5vw, 20px);
+}
+
+/* Force containers to use the variable (beats earlier rules) */
+.container{
+  padding-left: var(--page-pad) !important;
+  padding-right: var(--page-pad) !important;
+}
+
+/* Some pages set their own padding in HTML; override here */
+main.container{
+  padding-left: var(--page-pad) !important;
+  padding-right: var(--page-pad) !important;
+}
 
 
 
