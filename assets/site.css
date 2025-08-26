@@ -290,6 +290,21 @@ header.site-header{
 #socials .social-pill.is-placeholder{ opacity:.6; cursor:not-allowed }
 
 
+/* === FINAL EDGE-GUTTER OVERRIDE (wins everywhere) ======================= */
+:root{
+  /* small, responsive side padding (about half of what you had) */
+  --page-pad: clamp(8px, 1.25vw, 12px);
+}
+
+/* Force all pages/sections to use the new side gap */
+.container{
+  padding-left: var(--page-pad) !important;
+  padding-right: var(--page-pad) !important;
+}
+main.container{
+  padding-left: var(--page-pad) !important;
+  padding-right: var(--page-pad) !important;
+}
 
 
 
