@@ -24,6 +24,9 @@
 
   /* Footer logos (2.5× bigger than the old tiny ones) */
   --footer-logo-h: 100px; /* tweak to 120px if you want even bigger */
+
+  /* global page padding on left/right */
+  --page-pad: clamp(20px, 5vw, 40px);
 }
 
 /* ---------- Base ---------- */
@@ -356,12 +359,12 @@ header.site-header{
 
 /* Containers go full-width but keep a small side gap */
 .container{
-  max-width: none !important;
-  width: 100% !important;
-  margin: 0 !important;
-  padding-left: var(--page-gutter) !important;
-  padding-right: var(--page-gutter) !important;
+  max-width:1100px;
+  margin:0 auto;
+  padding-left: var(--page-pad);
+  padding-right: var(--page-pad);
 }
+
 
 /* Make sure <main class="container"> also respects the side gutter */
 main.container{
