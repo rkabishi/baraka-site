@@ -104,7 +104,6 @@
             src="https://images.brandfetch.io/asdafoundation.org/logo"
             onerror="this.onerror=null;this.src='https://logo.clearbit.com/asdafoundation.org'">
         </a>
-
       </div>
 
       <!-- Right: OSCR (same size as founders) -->
@@ -194,12 +193,17 @@
   <!-- Shared helpers -->
   <script src="assets/site.js"></script>
 
+  <!-- PayPal SDK (load once) -->
+  <script 
+    src="https://www.paypal.com/sdk/js?client-id=BAA72cNCR5x-CX6UMVn_xU3_fdAXg4o92T6y-wrwV9PG8UaXNdcWi7GpzUHfyxsU6hmQoUwn0AVA-LpAXk&components=hosted-buttons&disable-funding=venmo&currency=GBP">
+  </script>
+
   <!-- Homepage render -->
   <script>
     /************ FALLBACK HELPERS (used only if SITE isn't ready) ************/
     const F_ESC = (s)=>String(s??'').replace(/[&<>\\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
     const F_HEX=(n)=>n.toString(16).padStart(2,'0');
-    function F_hexToRgb(h){ const m=/^#?([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(h||''); return m?{r:parseInt(m[1],16),g:parseInt(m[2],16),b:parseInt(m[3],16)}:{r:255,g:255,b:255}; }
+    function F_hexToRgb(h){ const m=/^#?([\\da-f]{2})([\\da-f]{2})([\\da-f]{2})$/i.exec(h||''); return m?{r:parseInt(m[1],16),g:parseInt(m[2],16),b:parseInt(m[3],16)}:{r:255,g:255,b:255}; }
     function F_mix(a,b,t){ const A=F_hexToRgb(a),B=F_hexToRgb(b); const r=Math.round(A.r*(1-t)+B.r*t),g=Math.round(A.g*(1-t)+B.g*t),b2=Math.round(A.b*(1-t)+B.b*t); return `#${F_HEX(r)}${F_HEX(g)}${F_HEX(b2)}`; }
     function F_applyBrand(brand={}){ const root=document.documentElement; const primary=brand.primary||getComputedStyle(root).getPropertyValue('--brand').trim()||'#6B3F18'; const accent=brand.accent||getComputedStyle(root).getPropertyValue('--accent').trim()||'#22C55E'; const bg=brand.bg||getComputedStyle(root).getPropertyValue('--bg').trim()||'#EAF7F1'; root.style.setProperty('--brand',primary); root.style.setProperty('--brand-dark',primary); root.style.setProperty('--accent',accent); root.style.setProperty('--bg',bg); const card=F_mix(bg,accent,0.08), border=F_mix(F_mix(bg,accent,0.08),accent,0.15); root.style.setProperty('--card',card); root.style.setProperty('--card-border',border); }
     function F_buildHeader(d){
@@ -237,8 +241,7 @@
     async function F_loadContent(){ try{ const r=await fetch('data/content.json',{cache:'no-store'}); if(!r.ok) throw 0; return await r.json(); }catch{ return F_parseDefault(); } }
     function F_E(){ return (window.SITE && SITE.esc) ? SITE.esc : F_ESC; }
 
-    /* === FIX for data:image/svg+xml placeholders ============================
-       Ensure inline SVG data-URLs are properly encoded and not escaped. */
+    /* === FIX for data:image/svg+xml placeholders ============================ */
     function normalizeImageUrl(u){
       if(!u) return '';
       if (/^data:image\/svg\+xml/i.test(u)) {
@@ -273,8 +276,7 @@
       return out;
     }
 
-    /* Build separate socials section (emoji icons).
-       We render items even if links are "#" (placeholders). */
+    /* Build separate socials section (emoji icons). */
     function buildSocialsSection(E, links={}){
       const defs = [
         {key:'facebook',  label:'Facebook',  emoji:'📘'},
@@ -301,22 +303,18 @@
         </div>`;
     }
 
-
-        /* … existing helpers … */
-
-  // Build a safe inline SVG data URL that always renders
-  function comingSoonDataUrl(label){
-    const svg =
-      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
-         <rect width="800" height="450" fill="#EAF7F1"/>
-         <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle"
-               font-family="Inter, Arial, sans-serif" font-size="42" fill="#718597">
-           ${label}
-         </text>
-       </svg>`;
-    return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
-  }
-
+    // Build a safe inline SVG data URL that always renders
+    function comingSoonDataUrl(label){
+      const svg =
+        `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+           <rect width="800" height="450" fill="#EAF7F1"/>
+           <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle"
+                 font-family="Inter, Arial, sans-serif" font-size="42" fill="#718597">
+             ${label}
+           </text>
+         </svg>`;
+      return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+    }
 
     /********************** PAGE RENDER ***************************************/
     async function renderHome(data){
@@ -382,8 +380,7 @@
         if(p.title && /food distribution/i.test(p.title)){
           p={...p,image:'assets/Fareshare_Food/50.jpg',image_alt:'Food Distribution',link:'food-distribution.html'};
         }
-
-        // BARAKA THRIVE override (force Coming Soon image + link)
+        // BARAKA THRIVE override
         if (p.title && /baraka\s*thrive/i.test(p.title)) {
           p = {
             ...p,
@@ -392,8 +389,7 @@
             link: 'baraka-thrive.html'
           };
         }
-
-        // EMPOWERHER override (force Coming Soon image + link)
+        // EMPOWERHER override
         if (p.title && /(empower\s*her|empowerher)/i.test(p.title)) {
           p = {
             ...p,
@@ -402,10 +398,6 @@
             link: 'empowerher.html'
           };
         }
-
-
-
-
 
         const inner=`${p.image?`<img class="prog-img" src="${SRC(p.image)}" alt="${E(p.image_alt||p.title||'Programme image')}" loading="lazy">`:''}<h3>${E(p.title||'')}</h3><p>${E(p.description||'')}</p>${p.bullets?`<ul>${p.bullets.map(li=>`<li>${E(li)}</li>`).join('')}</ul>`:''}`;
         return p.link
@@ -440,7 +432,27 @@
         <p>${E(data.donate?.intro || 'Your donation helps us run weekly food support, skills workshops, and safe community spaces.')}</p>
         <div class="donate-row" style="margin:14px 0 6px">${dlinks.join(' ')}</div>
         <p class="notice">${E(data.donate?.note || '')}</p>
+        <!-- PayPal hosted button target -->
+        <div id="paypal-container-VW9KM25H3B4XY" style="display:flex;justify-content:center;margin-top:12px"></div>
       `;
+
+      /* Mount PayPal Hosted Button (retry until SDK is ready) */
+      (function mountPayPalHostedButton(){
+        const mount = () => {
+          const el = document.querySelector('#paypal-container-VW9KM25H3B4XY');
+          if (!el) return false;
+          if (!window.paypal || !window.paypal.HostedButtons) return false;
+          paypal.HostedButtons({ hostedButtonId: "VW9KM25H3B4XY" })
+            .render("#paypal-container-VW9KM25H3B4XY");
+          return true;
+        };
+        if (!mount()) {
+          let tries = 0;
+          const iv = setInterval(() => {
+            if (mount() || ++tries > 20) clearInterval(iv); // ~5s total
+          }, 250);
+        }
+      })();
 
       /* GALLERY → slideshow (JSON first, then auto-discover) */
       const gal=document.getElementById('gallery');
@@ -526,6 +538,7 @@
   </script>
 </body>
 </html>
+
 
 
 
