@@ -1,5 +1,5 @@
 /* ========================================================================== */
-/* Baraka — Site styles                                                       */
+/* Baraka — Clean site styles                                                 */
 /* ========================================================================== */
 
 /* ---------- Theme variables ---------- */
@@ -22,15 +22,15 @@
   --nav-pad-x: clamp(10px, 1.6vw, 16px);
   --nav-fs: clamp(13px, 1.4vw, 16px);
 
-  /* Footer logos (2.5× bigger than the old tiny ones) */
-  --footer-logo-h: 100px; /* tweak to 120px if you want even bigger */
+  /* Global side gutter (small left/right gap on every page) */
+  --page-pad: clamp(10px, 1.8vw, 16px);
 
-  /* global page padding on left/right */
-  --page-pad: clamp(10px, 2.5vw, 20px);
+  /* Footer logos (uniform size for funders + OSCR) */
+  --footer-logo-h: 100px; /* increase/decrease to taste */
 }
 
 /* ---------- Base ---------- */
-*{box-sizing:border-box}
+*{ box-sizing:border-box }
 html,body{
   margin:0; padding:0;
   font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
@@ -40,17 +40,26 @@ html,body{
 a{ color:var(--brand-dark); text-decoration:none }
 
 /* ---------- Layout utilities ---------- */
-.container{ max-width:1100px; margin:0 auto; padding:0 20px }
-main.container{ padding:32px 20px }
+.container{
+  max-width:1100px;
+  margin:0 auto;
+  padding-left:var(--page-pad) !important;
+  padding-right:var(--page-pad) !important;
+}
+main.container{
+  /* keep your vertical spacing, but use the variable on the sides */
+  padding:32px var(--page-pad) !important;
+}
+
 .kicker{
   color:var(--muted); font-weight:700; text-transform:uppercase;
-  letter-spacing:.3px; margin-bottom:8px; font-size:12px
+  letter-spacing:.3px; margin-bottom:8px; font-size:12px;
 }
 .section-title{ font-size:28px; margin:0 0 12px }
 .card{
   background:var(--card); border:1px solid var(--card-border);
   border-radius:18px; padding:18px;
-  box-shadow:0 10px 30px rgba(15,23,42,.06)
+  box-shadow:0 10px 30px rgba(15,23,42,.06);
 }
 .grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px }
 .two{ display:grid; grid-template-columns:1fr 1fr; gap:18px }
@@ -59,14 +68,14 @@ main.container{ padding:32px 20px }
 .btn{
   display:inline-block; padding:12px 18px; border-radius:12px; font-weight:700;
   background:var(--brand); color:#fff;
-  box-shadow:0 6px 16px rgba(2,132,199,.25)
+  box-shadow:0 6px 16px rgba(2,132,199,.25);
 }
 .btn.secondary{
   background:var(--accent);
-  box-shadow:0 6px 16px rgba(34,197,94,.25)
+  box-shadow:0 6px 16px rgba(34,197,94,.25);
 }
 .prog-img{
-  width:100%; height:160px; object-fit:cover; border-radius:12px; margin-bottom:8px
+  width:100%; height:160px; object-fit:cover; border-radius:12px; margin-bottom:8px;
 }
 
 @media (max-width:900px){
@@ -80,9 +89,7 @@ header.site-header{
   background:rgba(248,250,252,.85); backdrop-filter:blur(8px);
   border-bottom:1px solid #e2e8f0;
 }
-.nav{
-  display:flex; align-items:center; justify-content:space-between; height:64px
-}
+.nav{ display:flex; align-items:center; justify-content:space-between; height:64px }
 .logo{ display:flex; align-items:center; gap:10px; font-weight:800; color:var(--ink) }
 .logo img{ width:36px; height:36px; border-radius:8px; object-fit:cover; background:#e2e8f0 }
 #siteName{ font-size:clamp(16px,2.2vw,20px) }
@@ -95,7 +102,7 @@ header.site-header{
   background:var(--accent); color:#fff;
   border:1px solid color-mix(in srgb, var(--accent) 70%, transparent);
   box-shadow:0 6px 16px rgba(34,197,94,.25);
-  transition:transform .05s ease, filter .15s ease
+  transition:transform .05s ease, filter .15s ease;
 }
 .menu a:hover{ filter:brightness(.95); transform:translateY(-1px) }
 .menu a.active{ outline:2px solid var(--brand) }
@@ -104,7 +111,6 @@ header.site-header{
   display:none; appearance:none; border:1px solid #cbd5e1; background:#fff;
   border-radius:10px; padding:8px 10px; font-weight:700; color:#0f172a;
 }
-
 @media (max-width:900px){
   .menu-toggle{ display:inline-block }
   .menu{ display:none; width:100%; margin-top:10px }
@@ -115,7 +121,7 @@ header.site-header{
 /* ---------- Slideshow (shared) ---------- */
 .slideshow{
   position:relative; border-radius:16px; border:1px solid var(--card-border);
-  background:var(--card); overflow:hidden; aspect-ratio:16/9; min-height:320px
+  background:var(--card); overflow:hidden; aspect-ratio:16/9; min-height:320px;
 }
 .slideshow .slides{ position:relative; width:100%; height:100% }
 .slideshow .slide{ position:absolute; inset:0; opacity:0; transition:opacity .5s ease-in-out }
@@ -123,23 +129,23 @@ header.site-header{
 .slideshow .slide img{ width:100%; height:100%; object-fit:cover; display:block }
 .slideshow .caption{
   position:absolute; left:12px; bottom:12px;
-  background:rgba(0,0,0,.45); color:#fff; padding:6px 10px; border-radius:8px; font-size:12px
+  background:rgba(0,0,0,.45); color:#fff; padding:6px 10px; border-radius:8px; font-size:12px;
 }
 .slideshow .nav{
   position:absolute; top:50%; transform:translateY(-50%);
   width:42px; height:42px; border-radius:999px; border:1px solid rgba(255,255,255,.6);
   background:rgba(0,0,0,.25); color:#fff; font-size:22px; font-weight:800;
-  display:grid; place-items:center; cursor:pointer; z-index:2
+  display:grid; place-items:center; cursor:pointer; z-index:2;
 }
 .slideshow .nav.prev{ left:10px }
 .slideshow .nav.next{ right:10px }
 .slideshow .dots{
   position:absolute; left:0; right:0; bottom:10px;
-  display:flex; justify-content:center; gap:8px; z-index:2
+  display:flex; justify-content:center; gap:8px; z-index:2;
 }
 .slideshow .dot{
   width:8px; height:8px; border-radius:999px; background:rgba(255,255,255,.6);
-  border:0; padding:0; cursor:pointer
+  border:0; padding:0; cursor:pointer;
 }
 .slideshow .dot.active{ background:#fff }
 @media (max-width:900px){ .slideshow{ min-height:240px } }
@@ -183,7 +189,7 @@ header.site-header{
   display:block;
 }
 
-/* If OSCR accidentally lacks .footer-logo on some page, normalize it here */
+/* Normalize any OSCR badge without .footer-logo */
 .footer .oscr img{
   height:var(--footer-logo-h);
   width:auto;
@@ -211,128 +217,58 @@ header.site-header{
   }
 }
 
-/* === Center Updates/Latest News section === */
+/* ---------- Center: Updates / Latest News ---------- */
 #news .kicker,
 #news .section-title,
 #news p,
-#news .notice {
-  text-align: center;
+#news .notice{ text-align:center }
+
+#news .grid{
+  grid-template-columns:1fr;   /* single column */
+  justify-items:center;        /* center the cards */
+}
+#news .grid .card{
+  width:100%;
+  max-width:720px;
+  text-align:center;           /* centers “New: Weekly Food Collection” */
 }
 
-#news .grid {
-  /* override the generic .grid (3 cols) just for News */
-  grid-template-columns: 1fr;     /* single column, centered */
-  justify-items: center;          /* center the cards */
-}
-
-#news .grid .card {
-  width: 100%;
-  max-width: 720px;               /* readable line length */
-}
-
-/* === Center Donate / Support our work section === */
+/* ---------- Center: Donate / Support our work ---------- */
 #donate .kicker,
 #donate .section-title,
 #donate p,
-#donate .notice {
-  text-align: center;
+#donate .notice{ text-align:center }
+
+#donate .donate-row{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
 }
 
-#donate .donate-row {
-  justify-content: center;        /* center the buttons row */
-  align-items: center;
+/* ---------- Contact: “Message us” stacked vertically ---------- */
+#contact .two .card:first-child form{
+  display:block;
 }
-
-#donate .donate-row .btn {
-  margin: 0 6px;
+#contact .two .card:first-child form > .two{
+  display:block;               /* stack Name + Email */
 }
-
-/* Optional: on wider screens you can still center neatly */
-@media (min-width: 900px) {
-  #news .grid { justify-items: center; }
-  #donate .donate-row { justify-content: center; }
-}
-/* Center the content of each news card (incl. "New: Weekly Food Collection") */
-#news .grid .card {
-  text-align: center;
-}
-
-/* === Contact: make "Message us" fields horizontal (Name | Email | Message | Send) === */
-#contact .two .card:first-child form {
-  display: grid;
-  grid-template-columns: minmax(140px, 1fr) minmax(200px, 1fr) minmax(320px, 2fr) auto;
-  gap: 12px;
-  align-items: end;                 /* line bottoms up (button with inputs) */
-}
-
-/* Flatten the inner two-column wrapper so Name + Email become separate columns */
-#contact .two .card:first-child form > .two {
-  display: contents;
-}
-
-/* Remove the inline top margins the template puts on the message + button rows */
-#contact .two .card:first-child form > :nth-child(2),
-#contact .two .card:first-child form > :nth-child(3) {
-  margin: 0 !important;
-}
-
-/* Inputs fill their grid cells neatly */
-#contact .two .card:first-child form input,
-#contact .two .card:first-child form textarea {
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* Keep the textarea a sensible height in the row */
-#contact .two .card:first-child form textarea {
-  min-height: 44px;
-  resize: vertical; /* still allow taller messages */
-}
-
-/* On small screens, stack gracefully */
-@media (max-width: 800px) {
-  #contact .two .card:first-child form {
-    grid-template-columns: 1fr;   /* stack */
-    align-items: stretch;
-  }
-  #contact .two .card:first-child form > .two {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-}
-
-/* === Contact: stack "Message us" fields vertically ======================= */
-#contact .two .card:first-child form {
-  display: block !important;              /* no grid row */
-}
-
-#contact .two .card:first-child form > .two {
-  display: block !important;              /* stack Name + Email */
-}
-
 #contact .two .card:first-child form > .two > div,
-#contact .two .card:first-child form > div {
-  margin: 0 0 12px 0 !important;          /* even vertical spacing */
+#contact .two .card:first-child form > div{
+  margin:0 0 12px 0;
 }
-
 #contact .two .card:first-child form input,
-#contact .two .card:first-child form textarea {
-  width: 100% !important;                  /* fill card width */
-  box-sizing: border-box;
+#contact .two .card:first-child form textarea{
+  width:100%;
+  box-sizing:border-box;
+}
+#contact .two .card:first-child form textarea{
+  min-height:120px;
+  resize:vertical;
 }
 
-#contact .two .card:first-child form textarea {
-  min-height: 120px;                       /* comfortable message box */
-  resize: vertical;
-}
-
-/* Button sits on its own line */
-#contact .two .card:first-child form .btn {
-  display: inline-block;
-}
-/* === Socials section ====================================================== */
-#socials .card { padding: 18px; }
+/* ---------- Socials section ---------- */
+#socials .card{ padding:18px }
 #socials .social-grid{
   display:flex; align-items:center; justify-content:center;
   gap:14px; flex-wrap:wrap;
@@ -350,46 +286,9 @@ header.site-header{
   background:var(--bg);
   font-size:16px; line-height:1;
 }
-#socials .social-pill:hover{ transform:translateY(-1px); }
-/* === Global side gutter (small left/right gap on every page) ============ */
-:root{
-  /* Responsive gutter: ~12px on phones → ~24px on large screens */
-  --page-gutter: clamp(12px, 2.5vw, 24px);
-}
+#socials .social-pill:hover{ transform:translateY(-1px) }
+#socials .social-pill.is-placeholder{ opacity:.6; cursor:not-allowed }
 
-/* Containers go full-width but keep a small side gap */
-.container{
-  max-width:1100px;
-  margin:0 auto;
-  padding-left: var(--page-pad);
-  padding-right: var(--page-pad);
-}
-
-
-/* Make sure <main class="container"> also respects the side gutter */
-main.container{
-  padding-left: var(--page-gutter) !important;
-  padding-right: var(--page-gutter) !important;
-}
-
-
-/* === Page side padding (small, then halved) ============================ */
-:root{
-  /* half the previous gap */
-  --page-pad: clamp(10px, 2.5vw, 20px);
-}
-
-/* Force containers to use the variable (beats earlier rules) */
-.container{
-  padding-left: var(--page-pad) !important;
-  padding-right: var(--page-pad) !important;
-}
-
-/* Some pages set their own padding in HTML; override here */
-main.container{
-  padding-left: var(--page-pad) !important;
-  padding-right: var(--page-pad) !important;
-}
 
 
 
