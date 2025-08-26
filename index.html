@@ -301,6 +301,23 @@
         </div>`;
     }
 
+
+        /* … existing helpers … */
+
+  // Build a safe inline SVG data URL that always renders
+  function comingSoonDataUrl(label){
+    const svg =
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+         <rect width="800" height="450" fill="#EAF7F1"/>
+         <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle"
+               font-family="Inter, Arial, sans-serif" font-size="42" fill="#718597">
+           ${label}
+         </text>
+       </svg>`;
+    return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+  }
+
+
     /********************** PAGE RENDER ***************************************/
     async function renderHome(data){
       const E = F_E();
@@ -365,6 +382,31 @@
         if(p.title && /food distribution/i.test(p.title)){
           p={...p,image:'assets/Fareshare_Food/50.jpg',image_alt:'Food Distribution',link:'food-distribution.html'};
         }
+
+        // BARAKA THRIVE override (force Coming Soon image + link)
+        if (p.title && /baraka\s*thrive/i.test(p.title)) {
+          p = {
+            ...p,
+            image: comingSoonDataUrl('Baraka Thrive — Coming Soon'),
+            image_alt: 'Coming Soon',
+            link: 'baraka-thrive.html'
+          };
+        }
+
+        // EMPOWERHER override (force Coming Soon image + link)
+        if (p.title && /(empower\s*her|empowerher)/i.test(p.title)) {
+          p = {
+            ...p,
+            image: comingSoonDataUrl('EmpowerHer — Coming Soon'),
+            image_alt: 'Coming Soon',
+            link: 'empowerher.html'
+          };
+        }
+
+
+
+
+
         const inner=`${p.image?`<img class="prog-img" src="${SRC(p.image)}" alt="${E(p.image_alt||p.title||'Programme image')}" loading="lazy">`:''}<h3>${E(p.title||'')}</h3><p>${E(p.description||'')}</p>${p.bullets?`<ul>${p.bullets.map(li=>`<li>${E(li)}</li>`).join('')}</ul>`:''}`;
         return p.link
           ? `<a class="card program" href="${E(p.link)}" aria-label="${E(p.title)}" style="display:block">${inner}</a>`
