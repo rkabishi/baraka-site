@@ -26,7 +26,7 @@
   --footer-logo-h: 100px; /* tweak to 120px if you want even bigger */
 
   /* global page padding on left/right */
-  --page-pad: clamp(10px, 3vw, 20px);
+  --page-pad: clamp(20px, 5vw, 40px);
 }
 
 /* ---------- Base ---------- */
