@@ -25,8 +25,22 @@
     .stat h3{margin:0;font-size:24px}
     .donate-row{display:flex;gap:12px;flex-wrap:wrap}
     .prog-img{width:100%;height:160px;object-fit:cover;border-radius:12px;margin-bottom:8px}
+
+    /* Minimal inline donate layout safety (works even without extra CSS) */
+    #donate { text-align:center }
+    #donate .donate-inner{ max-width:760px; margin:0 auto }
+    #donate .donate-card{ background:var(--card); border:1px solid var(--card-border); border-radius:18px; padding:18px; box-shadow:0 10px 30px rgba(15,23,42,.06) }
+    #donate .donate-actions{ display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin:14px 0 6px }
+    #paypal-container-VW9KM25H3B4XY{ display:inline-block; margin-top:12px }
+
     @media (max-width:900px){ .hero{grid-template-columns:1fr} }
   </style>
+
+  <!-- PayPal SDK (load once, before we try to render the button) -->
+  <script id="paypal-sdk"
+    src="https://www.paypal.com/sdk/js?client-id=BAA72cNCR5x-CX6UMVn_xU3_fdAXg4o92T6y-wrwV9PG8UaXNdcWi7GpzUHfyxsU6hmQoUwn0AVA-LpAXk&components=hosted-buttons&disable-funding=venmo&currency=GBP"
+    defer>
+  </script>
 </head>
 <body>
 
@@ -191,19 +205,17 @@
   </script>
 
   <!-- Shared helpers -->
-  <script src="assets/site.js"></script>
-
-  <!-- PayPal SDK (load once) -->
-  <script 
-    src="https://www.paypal.com/sdk/js?client-id=BAA72cNCR5x-CX6UMVn_xU3_fdAXg4o92T6y-wrwV9PG8UaXNdcWi7GpzUHfyxsU6hmQoUwn0AVA-LpAXk&components=hosted-buttons&disable-funding=venmo&currency=GBP">
-  </script>
+  <script src="assets/site.js" defer></script>
 
   <!-- Homepage render -->
   <script>
     /************ FALLBACK HELPERS (used only if SITE isn't ready) ************/
     const F_ESC = (s)=>String(s??'').replace(/[&<>\\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
     const F_HEX=(n)=>n.toString(16).padStart(2,'0');
-    function F_hexToRgb(h){ const m=/^#?([\\da-f]{2})([\\da-f]{2})([\\da-f]{2})$/i.exec(h||''); return m?{r:parseInt(m[1],16),g:parseInt(m[2],16),b:parseInt(m[3],16)}:{r:255,g:255,b:255}; }
+    function F_hexToRgb(h){
+      const m=/^#?([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(h||'');
+      return m?{r:parseInt(m[1],16),g:parseInt(m[2],16),b:parseInt(m[3],16)}:{r:255,g:255,b:255};
+    }
     function F_mix(a,b,t){ const A=F_hexToRgb(a),B=F_hexToRgb(b); const r=Math.round(A.r*(1-t)+B.r*t),g=Math.round(A.g*(1-t)+B.g*t),b2=Math.round(A.b*(1-t)+B.b*t); return `#${F_HEX(r)}${F_HEX(g)}${F_HEX(b2)}`; }
     function F_applyBrand(brand={}){ const root=document.documentElement; const primary=brand.primary||getComputedStyle(root).getPropertyValue('--brand').trim()||'#6B3F18'; const accent=brand.accent||getComputedStyle(root).getPropertyValue('--accent').trim()||'#22C55E'; const bg=brand.bg||getComputedStyle(root).getPropertyValue('--bg').trim()||'#EAF7F1'; root.style.setProperty('--brand',primary); root.style.setProperty('--brand-dark',primary); root.style.setProperty('--accent',accent); root.style.setProperty('--bg',bg); const card=F_mix(bg,accent,0.08), border=F_mix(F_mix(bg,accent,0.08),accent,0.15); root.style.setProperty('--card',card); root.style.setProperty('--card-border',border); }
     function F_buildHeader(d){
@@ -241,7 +253,7 @@
     async function F_loadContent(){ try{ const r=await fetch('data/content.json',{cache:'no-store'}); if(!r.ok) throw 0; return await r.json(); }catch{ return F_parseDefault(); } }
     function F_E(){ return (window.SITE && SITE.esc) ? SITE.esc : F_ESC; }
 
-    /* === FIX for data:image/svg+xml placeholders ============================ */
+    /* Encode inline SVG data-urls so they render everywhere */
     function normalizeImageUrl(u){
       if(!u) return '';
       if (/^data:image\/svg\+xml/i.test(u)) {
@@ -276,7 +288,6 @@
       return out;
     }
 
-    /* Build separate socials section (emoji icons). */
     function buildSocialsSection(E, links={}){
       const defs = [
         {key:'facebook',  label:'Facebook',  emoji:'📘'},
@@ -303,7 +314,6 @@
         </div>`;
     }
 
-    // Build a safe inline SVG data URL that always renders
     function comingSoonDataUrl(label){
       const svg =
         `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
@@ -365,7 +375,7 @@
         upsert({ title:'EmpowerHer', description:'Coming soon: sewing, crochet, and women’s wellbeing workshops.', link:'empowerher.html', image:svgDataUrl, image_alt:'Coming soon' });
       })();
 
-      /* PROGRAMMES (overrides + clickable tiles, using SRC for images) */
+      /* PROGRAMMES */
       const progEl=document.getElementById('programmes');
       const progs=(data.programmes||[]).map(p=>{
         if(p.title && /family connection/i.test(p.title)){
@@ -380,25 +390,12 @@
         if(p.title && /food distribution/i.test(p.title)){
           p={...p,image:'assets/Fareshare_Food/50.jpg',image_alt:'Food Distribution',link:'food-distribution.html'};
         }
-        // BARAKA THRIVE override
         if (p.title && /baraka\s*thrive/i.test(p.title)) {
-          p = {
-            ...p,
-            image: comingSoonDataUrl('Baraka Thrive — Coming Soon'),
-            image_alt: 'Coming Soon',
-            link: 'baraka-thrive.html'
-          };
+          p = { ...p, image: comingSoonDataUrl('Baraka Thrive — Coming Soon'), image_alt: 'Coming Soon', link: 'baraka-thrive.html' };
         }
-        // EMPOWERHER override
         if (p.title && /(empower\s*her|empowerher)/i.test(p.title)) {
-          p = {
-            ...p,
-            image: comingSoonDataUrl('EmpowerHer — Coming Soon'),
-            image_alt: 'Coming Soon',
-            link: 'empowerher.html'
-          };
+          p = { ...p, image: comingSoonDataUrl('EmpowerHer — Coming Soon'), image_alt: 'Coming Soon', link: 'empowerher.html' };
         }
-
         const inner=`${p.image?`<img class="prog-img" src="${SRC(p.image)}" alt="${E(p.image_alt||p.title||'Programme image')}" loading="lazy">`:''}<h3>${E(p.title||'')}</h3><p>${E(p.description||'')}</p>${p.bullets?`<ul>${p.bullets.map(li=>`<li>${E(li)}</li>`).join('')}</ul>`:''}`;
         return p.link
           ? `<a class="card program" href="${E(p.link)}" aria-label="${E(p.title)}" style="display:block">${inner}</a>`
@@ -420,7 +417,7 @@
         <div class="grid">${newsCards}</div>
       `;
 
-     /* DONATE */
+      /* DONATE (visible text first, then mount PayPal Hosted Button) */
       const donate = document.getElementById('donate');
       const dlinks = [];
       if (data.donate?.paypal)     dlinks.push(`<a class="btn"           href="${E(data.donate.paypal)}">Donate via PayPal</a>`);
@@ -430,37 +427,39 @@
       donate.innerHTML = `
         <div class="kicker">Donate</div>
         <h2 class="section-title">${E(data.donate_title || 'Support our work')}</h2>
-
         <div class="donate-inner donate-card">
           <p>${E(data.donate?.intro || 'Your donation helps us run weekly food support, skills workshops, and safe community spaces.')}</p>
-
           ${dlinks.length ? `<div class="donate-actions">${dlinks.join(' ')}</div>` : ''}
-
-          <!-- PayPal hosted button target -->
-          <div id="paypal-container-VW9KM25H3B4XY"></div>
-
+          <div id="paypal-container-VW9KM25H3B4XY" aria-live="polite"></div>
           <p class="notice">${E(data.donate?.note || '')}</p>
         </div>
       `;
 
-      /* Mount PayPal Hosted Button (retry until SDK is ready) */
-      (function mountPayPalHostedButton(){
+      // Mount PayPal Hosted Button using your provided snippet, with safe retry
+      (function mountPayPal(){
         const mount = () => {
-          const el = document.querySelector('#paypal-container-VW9KM25H3B4XY');
-          if (!el) return false;
+          const target = document.getElementById("paypal-container-VW9KM25H3B4XY");
+          if (!target) return false;
           if (!window.paypal || !window.paypal.HostedButtons) return false;
-          paypal.HostedButtons({ hostedButtonId: "VW9KM25H3B4XY" })
-            .render("#paypal-container-VW9KM25H3B4XY");
+          try{
+            paypal.HostedButtons({
+              hostedButtonId: "VW9KM25H3B4XY",
+            }).render("#paypal-container-VW9KM25H3B4XY");
+          }catch(e){
+            console.error("PayPal HostedButtons error:", e);
+            return false;
+          }
           return true;
         };
+
+        // Try immediately; if SDK not ready (because of defer), try again soon.
         if (!mount()) {
           let tries = 0;
-          const iv = setInterval(() => {
-            if (mount() || ++tries > 20) clearInterval(iv);
-          }, 250);
+          const iv = setInterval(()=>{
+            if (mount() || ++tries > 30) clearInterval(iv);
+          }, 200);
         }
       })();
-
 
       /* GALLERY → slideshow (JSON first, then auto-discover) */
       const gal=document.getElementById('gallery');
@@ -485,7 +484,6 @@
       contact.innerHTML = `
         <div class="kicker">Contact</div>
         <h2 class="section-title">${E(data.contact_title||'Get in touch')}</h2>
-
         <div class="two">
           <div class="card">
             <h3>Message us</h3>
@@ -511,7 +509,6 @@
               Email: <a href="mailto:${E(data.contact.email)}">${E(data.contact.email)}</a>
             </p>`:''}
           </div>
-
           <div class="card">
             <h3>Visit</h3>
             <p>${E(data.contact?.visit_note||'West Glasgow (meetings by appointment).')}</p>
@@ -520,7 +517,7 @@
         </div>
       `;
 
-      /* Build/insert the separate socials section (always render, placeholders allowed) */
+      /* Socials section */
       const socialsHtml = buildSocialsSection(E, { facebook: fb, instagram: ig, whatsapp: wa });
       let socialsSection = document.getElementById('socials');
       if (!socialsSection) {
@@ -546,6 +543,7 @@
   </script>
 </body>
 </html>
+
 
 
 
