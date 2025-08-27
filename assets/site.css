@@ -305,6 +305,38 @@ main.container{
   padding-left: var(--page-pad) !important;
   padding-right: var(--page-pad) !important;
 }
+/* --- Donate section layout --- */
+#donate { text-align: center; }
+
+#donate .donate-inner {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+#donate .donate-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 10px 30px rgba(15,23,42,.06);
+}
+
+#donate .donate-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 14px 0 6px;
+}
+
+#donate p { margin: 8px 0; }
+#donate .notice { margin-top: 8px; }
+
+/* Make the PayPal button sit centered on its own line */
+#paypal-container-VW9KM25H3B4XY {
+  display: inline-block;
+  margin-top: 12px;
+}
 
 
 

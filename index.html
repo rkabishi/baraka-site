@@ -420,20 +420,27 @@
         <div class="grid">${newsCards}</div>
       `;
 
-      /* DONATE */
+     /* DONATE */
       const donate = document.getElementById('donate');
       const dlinks = [];
       if (data.donate?.paypal)     dlinks.push(`<a class="btn"           href="${E(data.donate.paypal)}">Donate via PayPal</a>`);
       if (data.donate?.stripe)     dlinks.push(`<a class="btn secondary" href="${E(data.donate.stripe)}">Donate via Stripe</a>`);
       if (data.donate?.justgiving) dlinks.push(`<a class="btn"           href="${E(data.donate.justgiving)}">JustGiving</a>`);
+
       donate.innerHTML = `
         <div class="kicker">Donate</div>
         <h2 class="section-title">${E(data.donate_title || 'Support our work')}</h2>
-        <p>${E(data.donate?.intro || 'Your donation helps us run weekly food support, skills workshops, and safe community spaces.')}</p>
-        <div class="donate-row" style="margin:14px 0 6px">${dlinks.join(' ')}</div>
-        <p class="notice">${E(data.donate?.note || '')}</p>
-        <!-- PayPal hosted button target -->
-        <div id="paypal-container-VW9KM25H3B4XY" style="display:flex;justify-content:center;margin-top:12px"></div>
+
+        <div class="donate-inner donate-card">
+          <p>${E(data.donate?.intro || 'Your donation helps us run weekly food support, skills workshops, and safe community spaces.')}</p>
+
+          ${dlinks.length ? `<div class="donate-actions">${dlinks.join(' ')}</div>` : ''}
+
+          <!-- PayPal hosted button target -->
+          <div id="paypal-container-VW9KM25H3B4XY"></div>
+
+          <p class="notice">${E(data.donate?.note || '')}</p>
+        </div>
       `;
 
       /* Mount PayPal Hosted Button (retry until SDK is ready) */
@@ -449,10 +456,11 @@
         if (!mount()) {
           let tries = 0;
           const iv = setInterval(() => {
-            if (mount() || ++tries > 20) clearInterval(iv); // ~5s total
+            if (mount() || ++tries > 20) clearInterval(iv);
           }, 250);
         }
       })();
+
 
       /* GALLERY → slideshow (JSON first, then auto-discover) */
       const gal=document.getElementById('gallery');
