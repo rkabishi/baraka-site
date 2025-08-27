@@ -305,15 +305,25 @@ main.container{
   padding-left: var(--page-pad) !important;
   padding-right: var(--page-pad) !important;
 }
-/* --- Donate section layout --- */
+/* --- DONATE layout: guarantee enough width for the PayPal widget --- */
 #donate { text-align: center; }
 
-#donate .donate-inner {
-  max-width: 760px;
+#donate .donate-grid{
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) minmax(340px, 1fr); /* copy | PayPal */
+  gap: 18px;
+  align-items: start;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
-#donate .donate-card {
+/* On phones, stack so PayPal gets full width */
+@media (max-width: 900px){
+  #donate .donate-grid{ grid-template-columns: 1fr; }
+}
+
+/* Card look (unchanged) */
+#donate .donate-card{
   background: var(--card);
   border: 1px solid var(--card-border);
   border-radius: 18px;
@@ -321,21 +331,26 @@ main.container{
   box-shadow: 0 10px 30px rgba(15,23,42,.06);
 }
 
-#donate .donate-actions {
+/* Right-hand column that holds PayPal */
+#donate .donate-cta{
   display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin: 14px 0 6px;
+  flex-direction: column;
+  align-items: center;        /* center content, do not compress width */
 }
 
-#donate p { margin: 8px 0; }
-#donate .notice { margin-top: 8px; }
+/* Any manual links row you add */
+#donate .donate-actions{
+  display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+  margin: 6px 0 10px;
+}
 
-/* Make the PayPal button sit centered on its own line */
-#paypal-container-VW9KM25H3B4XY {
-  display: inline-block;
-  margin-top: 12px;
+/* The PayPal mount target: give it comfortable width */
+#paypal-container-VW9KM25H3B4XY{
+  display: block;
+  width: 100%;
+  max-width: 420px;           /* plenty of space for the form */
+  min-width: 320px;           /* prevents vertical text */
+  margin: 8px auto 0;
 }
 
 
