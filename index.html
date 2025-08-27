@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/site.css">
 
-  <!-- Page-specific (hero + stats + gallery layout only) -->
+  <!-- Page-specific (hero + stats + gallery + donate layout only) -->
   <style>
     :root{ --bg:#EAF7F1; }
     html,body{ background:var(--bg) }
@@ -23,20 +23,43 @@
     .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
     .stat{background:var(--card);border:1px solid var(--card-border);border-radius:14px;padding:14px;text-align:center}
     .stat h3{margin:0;font-size:24px}
-    .donate-row{display:flex;gap:12px;flex-wrap:wrap}
     .prog-img{width:100%;height:160px;object-fit:cover;border-radius:12px;margin-bottom:8px}
 
-    /* Minimal inline donate layout safety (works even without extra CSS) */
+    /* --- Donate: 2-column layout on desktop, stacked on mobile --- */
     #donate { text-align:center }
-    #donate .donate-inner{ max-width:760px; margin:0 auto }
-    #donate .donate-card{ background:var(--card); border:1px solid var(--card-border); border-radius:18px; padding:18px; box-shadow:0 10px 30px rgba(15,23,42,.06) }
-    #donate .donate-actions{ display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin:14px 0 6px }
-    #paypal-container-VW9KM25H3B4XY{ display:inline-block; margin-top:12px }
-
-    @media (max-width:900px){ .hero{grid-template-columns:1fr} }
+    #donate .donate-grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:18px;
+      align-items:start;
+      max-width:1100px;
+      margin:0 auto;
+    }
+    @media (max-width:900px){
+      .hero{grid-template-columns:1fr}
+      #donate .donate-grid{ grid-template-columns:1fr }
+    }
+    #donate .donate-card{
+      background:var(--card);
+      border:1px solid var(--card-border);
+      border-radius:18px;
+      padding:18px;
+      box-shadow:0 10px 30px rgba(15,23,42,.06);
+    }
+    #donate .donate-cta{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-start;
+    }
+    #donate .donate-actions{
+      display:flex; gap:12px; flex-wrap:wrap; justify-content:center;
+      margin:6px 0 10px;
+    }
+    #paypal-container-VW9KM25H3B4XY{ display:inline-block; margin-top:8px }
   </style>
 
-  <!-- PayPal SDK (load once, before we try to render the button) -->
+  <!-- PayPal SDK (load once) -->
   <script id="paypal-sdk"
     src="https://www.paypal.com/sdk/js?client-id=BAA72cNCR5x-CX6UMVn_xU3_fdAXg4o92T6y-wrwV9PG8UaXNdcWi7GpzUHfyxsU6hmQoUwn0AVA-LpAXk&components=hosted-buttons&disable-funding=venmo&currency=GBP"
     defer>
@@ -88,13 +111,11 @@
   <!-- FOOTER -->
   <footer class="footer">
     <div class="container footer-row">
-      <!-- Left: copy -->
       <div class="footer-copy">
         © <span id="year"></span> <span id="footerName">Baraka Community & Family Centre</span> · All rights reserved.
         <br><span class="notice">Registered SCIO <span id="scio"></span></span>
       </div>
 
-      <!-- Middle: founders (web logos, uniform size) -->
       <div class="founder-logos" aria-label="Funders">
         <a href="https://www.tnlcommunityfund.org.uk/" target="_blank" rel="noopener">
           <img class="footer-logo" alt="The National Lottery Community Fund"
@@ -120,7 +141,6 @@
         </a>
       </div>
 
-      <!-- Right: OSCR (same size as founders) -->
       <div class="oscr">
         <img id="oscrBadge" class="footer-logo" src="assets/oscr-badge.jpg" alt="OSCR badge">
       </div>
@@ -209,13 +229,10 @@
 
   <!-- Homepage render -->
   <script>
-    /************ FALLBACK HELPERS (used only if SITE isn't ready) ************/
+    /************ Helpers ************/
     const F_ESC = (s)=>String(s??'').replace(/[&<>\\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
     const F_HEX=(n)=>n.toString(16).padStart(2,'0');
-    function F_hexToRgb(h){
-      const m=/^#?([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(h||'');
-      return m?{r:parseInt(m[1],16),g:parseInt(m[2],16),b:parseInt(m[3],16)}:{r:255,g:255,b:255};
-    }
+    function F_hexToRgb(h){ const m=/^#?([\\da-f]{2})([\\da-f]{2})([\\da-f]{2})$/i.exec(h||''); return m?{r:parseInt(m[1],16),g:parseInt(m[2],16),b:parseInt(m[3],16)}:{r:255,g:255,b:255}; }
     function F_mix(a,b,t){ const A=F_hexToRgb(a),B=F_hexToRgb(b); const r=Math.round(A.r*(1-t)+B.r*t),g=Math.round(A.g*(1-t)+B.g*t),b2=Math.round(A.b*(1-t)+B.b*t); return `#${F_HEX(r)}${F_HEX(g)}${F_HEX(b2)}`; }
     function F_applyBrand(brand={}){ const root=document.documentElement; const primary=brand.primary||getComputedStyle(root).getPropertyValue('--brand').trim()||'#6B3F18'; const accent=brand.accent||getComputedStyle(root).getPropertyValue('--accent').trim()||'#22C55E'; const bg=brand.bg||getComputedStyle(root).getPropertyValue('--bg').trim()||'#EAF7F1'; root.style.setProperty('--brand',primary); root.style.setProperty('--brand-dark',primary); root.style.setProperty('--accent',accent); root.style.setProperty('--bg',bg); const card=F_mix(bg,accent,0.08), border=F_mix(F_mix(bg,accent,0.08),accent,0.15); root.style.setProperty('--card',card); root.style.setProperty('--card-border',border); }
     function F_buildHeader(d){
@@ -253,7 +270,6 @@
     async function F_loadContent(){ try{ const r=await fetch('data/content.json',{cache:'no-store'}); if(!r.ok) throw 0; return await r.json(); }catch{ return F_parseDefault(); } }
     function F_E(){ return (window.SITE && SITE.esc) ? SITE.esc : F_ESC; }
 
-    /* Encode inline SVG data-urls so they render everywhere */
     function normalizeImageUrl(u){
       if(!u) return '';
       if (/^data:image\/svg\+xml/i.test(u)) {
@@ -272,7 +288,6 @@
       return /^data:image\//i.test(v) ? v : (window.SITE?.esc || F_ESC)(v);
     }
 
-    // Auto-discover gallery-#.ext if JSON gallery is empty
     function checkImage(src){ return new Promise(res=>{const i=new Image(); i.onload=()=>res(true); i.onerror=()=>res(false); i.src=src;}); }
     async function autoDiscoverGallery({prefix='assets/gallery-',exts=['.jpg','.jpeg','.png','.webp'],max=50,stopAfterMisses=8}={}){
       const out=[]; let misses=0;
@@ -314,23 +329,10 @@
         </div>`;
     }
 
-    function comingSoonDataUrl(label){
-      const svg =
-        `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
-           <rect width="800" height="450" fill="#EAF7F1"/>
-           <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle"
-                 font-family="Inter, Arial, sans-serif" font-size="42" fill="#718597">
-             ${label}
-           </text>
-         </svg>`;
-      return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
-    }
-
     /********************** PAGE RENDER ***************************************/
     async function renderHome(data){
       const E = F_E();
 
-      // Brand + header/footer
       (window.SITE?.applyBrand || F_applyBrand)(data.site?.brand||{});
       (window.SITE?.buildHeader || F_buildHeader)(data);
       (window.SITE?.buildFooter || F_buildFooter)(data);
@@ -353,7 +355,7 @@
       const bullets=(data.about?.bullets||[]).map(b=>`<li>${E(b)}</li>`).join('');
       about.innerHTML=`<div class="two"><div class="card"><div class="kicker">About us</div><h2 class="section-title">${E(data.about?.title||'Our story & mission')}</h2><p>${E(data.about?.story||'')}</p><p>${E(data.about?.values||'')}</p><ul>${bullets}</ul></div><div class="card"><div class="kicker">What we value</div><h2 class="section-title">${E(data.about?.values_title||'Empathy • Dignity • Solidarity • Empowerment')}</h2><p>${E(data.about?.values_para||'')}</p><div class="card" style="margin-top:10px"><h3 style="margin:0 0 6px">${E(data.about?.cta_title||'Need support?')}</h3><p class="notice" style="margin:0 0 10px">${E(data.about?.cta_note||'We’ll listen and connect you to the right activity or service.')}</p><a href="contact.html" class="btn">${E(data.about?.cta_label||'Get in touch')}</a></div></div></div>`;
 
-      /* Ensure "Baraka Thrive" & "EmpowerHer" cards exist even if omitted */
+      /* Ensure "Coming Soon" cards exist */
       (function ensureComingSoonCards(){
         const svgDataUrl = "data:image/svg+xml;utf8," +
           "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'>" +
@@ -391,10 +393,10 @@
           p={...p,image:'assets/Fareshare_Food/50.jpg',image_alt:'Food Distribution',link:'food-distribution.html'};
         }
         if (p.title && /baraka\s*thrive/i.test(p.title)) {
-          p = { ...p, image: comingSoonDataUrl('Baraka Thrive — Coming Soon'), image_alt: 'Coming Soon', link: 'baraka-thrive.html' };
+          p = { ...p, image: 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450"><rect width="800" height="450" fill="#EAF7F1"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-family="Inter, Arial, sans-serif" font-size="42" fill="#718597">Baraka Thrive — Coming Soon</text></svg>`), image_alt: 'Coming Soon', link: 'baraka-thrive.html' };
         }
         if (p.title && /(empower\s*her|empowerher)/i.test(p.title)) {
-          p = { ...p, image: comingSoonDataUrl('EmpowerHer — Coming Soon'), image_alt: 'Coming Soon', link: 'empowerher.html' };
+          p = { ...p, image: 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450"><rect width="800" height="450" fill="#EAF7F1"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-family="Inter, Arial, sans-serif" font-size="42" fill="#718597">EmpowerHer — Coming Soon</text></svg>`), image_alt: 'Coming Soon', link: 'empowerher.html' };
         }
         const inner=`${p.image?`<img class="prog-img" src="${SRC(p.image)}" alt="${E(p.image_alt||p.title||'Programme image')}" loading="lazy">`:''}<h3>${E(p.title||'')}</h3><p>${E(p.description||'')}</p>${p.bullets?`<ul>${p.bullets.map(li=>`<li>${E(li)}</li>`).join('')}</ul>`:''}`;
         return p.link
@@ -417,7 +419,7 @@
         <div class="grid">${newsCards}</div>
       `;
 
-      /* DONATE (visible text first, then mount PayPal Hosted Button) */
+      /* DONATE — now 2 columns */
       const donate = document.getElementById('donate');
       const dlinks = [];
       if (data.donate?.paypal)     dlinks.push(`<a class="btn"           href="${E(data.donate.paypal)}">Donate via PayPal</a>`);
@@ -427,41 +429,42 @@
       donate.innerHTML = `
         <div class="kicker">Donate</div>
         <h2 class="section-title">${E(data.donate_title || 'Support our work')}</h2>
-        <div class="donate-inner donate-card">
-          <p>${E(data.donate?.intro || 'Your donation helps us run weekly food support, skills workshops, and safe community spaces.')}</p>
-          ${dlinks.length ? `<div class="donate-actions">${dlinks.join(' ')}</div>` : ''}
-          <div id="paypal-container-VW9KM25H3B4XY" aria-live="polite"></div>
-          <p class="notice">${E(data.donate?.note || '')}</p>
+
+        <div class="donate-grid">
+          <div class="donate-card donate-copy">
+            <p>${E(data.donate?.intro || 'Your donation helps us run weekly food support, skills workshops, and safe community spaces.')}</p>
+            <p class="notice">${E(data.donate?.note || '')}</p>
+          </div>
+
+          <div class="donate-card donate-cta">
+            ${dlinks.length ? `<div class="donate-actions">${dlinks.join(' ')}</div>` : ''}
+            <div id="paypal-container-VW9KM25H3B4XY" aria-live="polite"></div>
+          </div>
         </div>
       `;
 
-      // Mount PayPal Hosted Button using your provided snippet, with safe retry
+      // PayPal Hosted Button (safe retry until SDK is ready)
       (function mountPayPal(){
         const mount = () => {
-          const target = document.getElementById("paypal-container-VW9KM25H3B4XY");
-          if (!target) return false;
+          const el = document.getElementById("paypal-container-VW9KM25H3B4XY");
+          if (!el) return false;
           if (!window.paypal || !window.paypal.HostedButtons) return false;
           try{
-            paypal.HostedButtons({
-              hostedButtonId: "VW9KM25H3B4XY",
-            }).render("#paypal-container-VW9KM25H3B4XY");
+            paypal.HostedButtons({ hostedButtonId: "VW9KM25H3B4XY" })
+              .render("#paypal-container-VW9KM25H3B4XY");
           }catch(e){
             console.error("PayPal HostedButtons error:", e);
             return false;
           }
           return true;
         };
-
-        // Try immediately; if SDK not ready (because of defer), try again soon.
         if (!mount()) {
           let tries = 0;
-          const iv = setInterval(()=>{
-            if (mount() || ++tries > 30) clearInterval(iv);
-          }, 200);
+          const iv = setInterval(()=>{ if (mount() || ++tries > 30) clearInterval(iv); }, 200);
         }
       })();
 
-      /* GALLERY → slideshow (JSON first, then auto-discover) */
+      /* GALLERY */
       const gal=document.getElementById('gallery');
       let imgs=data.gallery?.images||[];
       if(!imgs.length){ imgs = await autoDiscoverGallery(); }
@@ -475,7 +478,7 @@
         gal.innerHTML=`<div class="kicker">${E(data.gallery?.title||'Photos')}</div><h2 class="section-title">${E(data.gallery?.subtitle||'A glimpse of life at Baraka')}</h2><p class="notice">Add images to <code>data/content.json → gallery.images</code> or upload files named <code>assets/gallery-1.jpg</code>, <code>gallery-2.jpg</code>, …</p>`;
       }
 
-      /* CONTACT (socials moved to their own section) */
+      /* CONTACT */
       const contact = document.getElementById('contact');
       const fb = data.contact?.socials?.facebook || '#';
       const ig = data.contact?.socials?.instagram || '#';
@@ -529,7 +532,6 @@
       socialsSection.innerHTML = socialsHtml;
     }
 
-    /********************** BOOTSTRAP ***************************************/
     (async function boot(){
       let data = window.__SITE__;
       if(!data){
@@ -543,6 +545,7 @@
   </script>
 </body>
 </html>
+
 
 
 
