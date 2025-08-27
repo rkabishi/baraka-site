@@ -381,3 +381,30 @@ main.container{
   width: 100% !important;
   max-width: none !important;
 }
+/* ===== FINAL OVERRIDES: PayPal-like side gutters ========================= */
+/* Wider content and responsive side gap — this wins because it's last */
+:root{
+  /* ~16px on phones → ~48px on large screens */
+  --page-pad: clamp(16px, 4vw, 48px);
+}
+
+/* Wider content width like paypal.com (~1240px) */
+.container{
+  max-width: 1240px !important;
+  padding-left: var(--page-pad) !important;
+  padding-right: var(--page-pad) !important;
+}
+
+/* Ensure <main> also uses the same gutters */
+main.container{
+  padding-left: var(--page-pad) !important;
+  padding-right: var(--page-pad) !important;
+}
+
+/* Header/footer containers use the same gutter and width */
+header .container,
+footer .container{
+  max-width: 1240px !important;
+  padding-left: var(--page-pad) !important;
+  padding-right: var(--page-pad) !important;
+}
