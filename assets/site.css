@@ -273,4 +273,9 @@ header.site-header{
 #socials .social-pill:hover{ transform:translateY(-1px) }
 #socials .social-pill.is-placeholder{ opacity:.6; cursor:not-allowed }
 
-/* ---------- Center: Donate / Support our work ---------- */ #donate .kicker, #donate .section-title, #donate p, #donate .notice{ text-align:center } #donate .donate-row{ display:flex; justify-content:center; align-items:center; gap:12px; }
+/* ---------- Center: Donate / Support our work ---------- */ 
+#donate .kicker, 
+#donate .section-title, 
+#donate p, 
+#donate .notice{ text-align:center } 
+#donate .donate-row{ display:flex; justify-content:center; align-items:center; gap:12px; }
