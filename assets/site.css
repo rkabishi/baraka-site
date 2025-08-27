@@ -1,5 +1,5 @@
 /* ========================================================================== */
-/* Baraka — Clean site styles                                                 */
+/* Baraka — Clean site styles (single source of truth)                        */
 /* ========================================================================== */
 
 /* ---------- Theme variables ---------- */
@@ -16,17 +16,15 @@
   --card-border:#d1e7dd;
   --ring:rgba(14,165,233,.35);
 
-  /* nav sizing that "fits the space" */
+  /* Nav sizing */
   --nav-gap: clamp(8px, 1.2vw, 14px);
   --nav-h: clamp(36px, 4.2vw, 44px);
   --nav-pad-x: clamp(10px, 1.6vw, 16px);
   --nav-fs: clamp(13px, 1.4vw, 16px);
 
-  /* Global side gutter (small left/right gap on every page) */
-  --page-pad: clamp(10px, 1.8vw, 16px);
-
-  /* Footer logos (uniform size for funders + OSCR) */
-  --footer-logo-h: 100px; /* increase/decrease to taste */
+  /* PayPal-like gutters + content width */
+  --gutter: clamp(16px, 4vw, 48px);  /* side gap each side */
+  --content-max: 1240px;             /* main content width */
 }
 
 /* ---------- Base ---------- */
@@ -39,18 +37,23 @@ html,body{
 }
 a{ color:var(--brand-dark); text-decoration:none }
 
-/* ---------- Layout utilities ---------- */
-.container{
-  max-width:1100px;
-  margin:0 auto;
-  padding-left:var(--page-pad) !important;
-  padding-right:var(--page-pad) !important;
-}
+/* ---------- Containers (SINGLE RULE) ---------- */
+/* This creates the side gutters by limiting width, NOT by padding */
+.container,
+header .container,
+footer .container,
 main.container{
-  /* keep your vertical spacing, but use the variable on the sides */
-  padding:32px var(--page-pad) !important;
+  width: min(var(--content-max), calc(100% - (2 * var(--gutter))));
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 0 !important;   /* never add side padding here */
+  padding-right: 0 !important;
 }
 
+/* Keep only vertical padding on <main> for breathing room */
+main.container{ padding-block: 32px }
+
+/* ---------- Reusable UI ---------- */
 .kicker{
   color:var(--muted); font-weight:700; text-transform:uppercase;
   letter-spacing:.3px; margin-bottom:8px; font-size:12px;
@@ -118,7 +121,7 @@ header.site-header{
   .menu.open{ display:flex }
 }
 
-/* ---------- Slideshow (shared) ---------- */
+/* ---------- Slideshow ---------- */
 .slideshow{
   position:relative; border-radius:16px; border:1px solid var(--card-border);
   background:var(--card); overflow:hidden; aspect-ratio:16/9; min-height:320px;
@@ -150,35 +153,29 @@ header.site-header{
 .slideshow .dot.active{ background:#fff }
 @media (max-width:900px){ .slideshow{ min-height:240px } }
 
-/* ---------- Footer (uniform founders + OSCR, aligned with copyright) ---------- */
+/* ---------- Footer (funders + OSCR uniform) ---------- */
 .footer{
   padding:28px 0 40px;
   color:var(--muted);
   font-size:14px;
   border-top:1px solid #e2e8f0;
 }
-
-/* 3 columns: COPY • LOGOS • OSCR */
 .footer-row{
   display:grid;
   grid-template-columns: 1fr auto auto;
   align-items:center;
   gap:16px;
 }
-
-/* Founders block: even spacing, wraps when needed */
 .founder-logos{
   display:flex;
   align-items:center;
   justify-content:space-evenly;
   gap:16px;
   flex-wrap:wrap;
-  min-width:360px; /* prevents squashing at mid widths */
+  min-width:360px;
 }
-
-/* All footer logos (including OSCR) are the same visual size */
 .footer-logo{
-  height:var(--footer-logo-h);
+  height:100px;
   width:auto;
   object-fit:contain;
   background:#fff;
@@ -188,33 +185,13 @@ header.site-header{
   box-shadow:0 2px 10px rgba(15,23,42,.06);
   display:block;
 }
-
-/* Normalize any OSCR badge without .footer-logo */
 .footer .oscr img{
-  height:var(--footer-logo-h);
-  width:auto;
-  object-fit:contain;
-  border-radius:10px;
-  display:block;
+  height:100px; width:auto; object-fit:contain; border-radius:10px; display:block;
 }
-
-/* Mobile: stack nicely and center */
 @media (max-width:900px){
-  .footer-row{
-    grid-template-columns:1fr;
-    justify-items:center;
-    text-align:center;
-    gap:14px;
-  }
-  .founder-logos{
-    min-width:0;
-    justify-content:center;
-  }
-  .footer-logo,
-  .footer .oscr img{
-    height:84px; /* slightly smaller on phones, still big */
-    padding:8px;
-  }
+  .footer-row{ grid-template-columns:1fr; justify-items:center; text-align:center; gap:14px }
+  .founder-logos{ min-width:0; justify-content:center }
+  .footer-logo, .footer .oscr img{ height:84px; padding:8px }
 }
 
 /* ---------- Center: Updates / Latest News ---------- */
@@ -222,56 +199,63 @@ header.site-header{
 #news .section-title,
 #news p,
 #news .notice{ text-align:center }
-
 #news .grid{
-  grid-template-columns:1fr;   /* single column */
-  justify-items:center;        /* center the cards */
+  grid-template-columns:1fr;
+  justify-items:center;
 }
 #news .grid .card{
   width:100%;
   max-width:720px;
-  text-align:center;           /* centers “New: Weekly Food Collection” */
+  text-align:center;
 }
 
-/* ---------- Center: Donate / Support our work ---------- */
-#donate .kicker,
-#donate .section-title,
-#donate p,
-#donate .notice{ text-align:center }
-
-#donate .donate-row{
+/* ---------- Donate (2 equal-height cards + PayPal widget fit) ---------- */
+#donate { text-align:center }
+#donate .donate-grid{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(320px, 1fr));
+  gap:18px;
+  align-items:stretch; /* equal heights */
+  max-width:var(--content-max);
+  margin:0 auto;
+}
+#donate .donate-card{
+  background:var(--card);
+  border:1px solid var(--card-border);
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 10px 30px rgba(15,23,42,.06);
   display:flex;
-  justify-content:center;
-  align-items:center;
+  flex-direction:column;
   gap:12px;
+}
+#donate .donate-actions{
+  display:flex; gap:12px; flex-wrap:wrap; justify-content:center;
+}
+#paypal-container-VW9KM25H3B4XY{
+  display:block;
+  width:100%;
+  max-width:420px;
+  min-width:320px;
+  margin: 6px auto 0;
+}
+@media (max-width:900px){
+  #donate .donate-grid{ grid-template-columns:1fr }
 }
 
 /* ---------- Contact: “Message us” stacked vertically ---------- */
-#contact .two .card:first-child form{
-  display:block;
-}
-#contact .two .card:first-child form > .two{
-  display:block;               /* stack Name + Email */
-}
+#contact .two .card:first-child form{ display:block }
+#contact .two .card:first-child form > .two{ display:block }
 #contact .two .card:first-child form > .two > div,
-#contact .two .card:first-child form > div{
-  margin:0 0 12px 0;
-}
+#contact .two .card:first-child form > div{ margin:0 0 12px 0 }
 #contact .two .card:first-child form input,
-#contact .two .card:first-child form textarea{
-  width:100%;
-  box-sizing:border-box;
-}
-#contact .two .card:first-child form textarea{
-  min-height:120px;
-  resize:vertical;
-}
+#contact .two .card:first-child form textarea{ width:100%; box-sizing:border-box }
+#contact .two .card:first-child form textarea{ min-height:120px; resize:vertical }
 
 /* ---------- Socials section ---------- */
 #socials .card{ padding:18px }
 #socials .social-grid{
-  display:flex; align-items:center; justify-content:center;
-  gap:14px; flex-wrap:wrap;
+  display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap;
 }
 #socials .social-pill{
   display:flex; align-items:center; gap:10px;
@@ -288,123 +272,3 @@ header.site-header{
 }
 #socials .social-pill:hover{ transform:translateY(-1px) }
 #socials .social-pill.is-placeholder{ opacity:.6; cursor:not-allowed }
-
-
-/* === FINAL EDGE-GUTTER OVERRIDE (wins everywhere) ======================= */
-:root{
-  /* small, responsive side padding (about half of what you had) */
-  --page-pad: clamp(8px, 1.25vw, 12px);
-}
-
-/* Force all pages/sections to use the new side gap */
-.container{
-  padding-left: var(--page-pad) !important;
-  padding-right: var(--page-pad) !important;
-}
-main.container{
-  padding-left: var(--page-pad) !important;
-  padding-right: var(--page-pad) !important;
-}
-
-
-/* --- DONATE layout: two equal cards, same height --- */
-#donate { text-align: center; }
-
-#donate .donate-grid{
-  display: grid;
-  grid-template-columns: repeat(2, minmax(360px, 1fr)); /* equal widths */
-  gap: 18px;
-  align-items: stretch;     /* children stretch to same height */
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-#donate .donate-card{
-  background: var(--card);
-  border: 1px solid var(--card-border);
-  border-radius: 18px;
-  padding: 18px;
-  box-shadow: 0 10px 30px rgba(15,23,42,.06);
-
-  /* make both cards equal height */
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; /* keeps note/button nicely placed */
-}
-
-#donate .donate-actions{
-  display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
-  margin: 8px 0 10px;
-}
-
-/* Give the PayPal widget comfortable width so text doesn't go vertical */
-#paypal-container-VW9KM25H3B4XY{
-  display: block;
-  width: 100%;
-  max-width: 420px;
-  min-width: 320px;
-  margin: 8px auto 0;
-}
-
-/* Stack on phones */
-@media (max-width: 900px){
-  #donate .donate-grid{ grid-template-columns: 1fr; }
-}
-
-/* ===== PayPal-like page gutters & container width ======================== */
-/* ~16px on small screens → ~48px on large; max content ~1240px */
-:root{
-  --pp-gutter: clamp(16px, 4vw, 48px);
-  --pp-max: 1240px; /* tweak to 1280 if you want a touch wider */
-}
-
-/* All main containers use the same width calc and no side padding */
-.container,
-header .container,
-footer .container {
-  width: min(var(--pp-max), calc(100% - 2 * var(--pp-gutter)));
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-
-/* Some pages added their own padding to <main>; cancel it here */
-main.container{
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-
-/* Optional helper for edge-to-edge sections (if you ever want full bleed) */
-.full-bleed{
-  width: 100% !important;
-  max-width: none !important;
-}
-/* ===== FINAL OVERRIDES: PayPal-like side gutters ========================= */
-/* Wider content and responsive side gap — this wins because it's last */
-:root{
-  /* ~16px on phones → ~48px on large screens */
-  --page-pad: clamp(16px, 4vw, 48px);
-}
-
-/* Wider content width like paypal.com (~1240px) */
-.container{
-  max-width: 1240px !important;
-  padding-left: var(--page-pad) !important;
-  padding-right: var(--page-pad) !important;
-}
-
-/* Ensure <main> also uses the same gutters */
-main.container{
-  padding-left: var(--page-pad) !important;
-  padding-right: var(--page-pad) !important;
-}
-
-/* Header/footer containers use the same gutter and width */
-header .container,
-footer .container{
-  max-width: 1240px !important;
-  padding-left: var(--page-pad) !important;
-  padding-right: var(--page-pad) !important;
-}
