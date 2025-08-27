@@ -352,3 +352,32 @@ main.container{
   #donate .donate-grid{ grid-template-columns: 1fr; }
 }
 
+/* ===== PayPal-like page gutters & container width ======================== */
+/* ~16px on small screens → ~48px on large; max content ~1240px */
+:root{
+  --pp-gutter: clamp(16px, 4vw, 48px);
+  --pp-max: 1240px; /* tweak to 1280 if you want a touch wider */
+}
+
+/* All main containers use the same width calc and no side padding */
+.container,
+header .container,
+footer .container {
+  width: min(var(--pp-max), calc(100% - 2 * var(--pp-gutter)));
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Some pages added their own padding to <main>; cancel it here */
+main.container{
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Optional helper for edge-to-edge sections (if you ever want full bleed) */
+.full-bleed{
+  width: 100% !important;
+  max-width: none !important;
+}
